@@ -1,0 +1,94 @@
+<ul class="maintabmenu multipletabmenu">
+    <li><a href="/admin/content/">Stránky</a></li>
+    <li class="current"><a href="#">Editovat stránku</a></li>
+</ul><!--maintabmenu-->
+
+<div class="content">
+    <div class="two_third">
+        <div class="widgetbox">
+            <div class="contenttitle">
+                <h2 class="form"><span>Editovat obsah {echo $content->pageName}</span></h2>
+            </div>
+
+            <form class="stdform stdform2" method="post" action="#">
+                <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+                <p>
+                    <label>Název stránky*</label>
+                    <span class="field">
+                        <input type="text" name="page" required class="longinput" value="{echo $content->pageName}"/>
+                        {if isset($errors["pageName"])}
+                        <label class="error">{echo join("<br/>", $errors["pageName"])}</label>
+                        {/if}
+                    </span>
+                </p>
+                <p>
+                    <label>Text*<small>Max. 80 000 znaků</small></label>
+                    <span class="field">
+                        <textarea rows="20" name="text" id="ckeditor">{echo $content->body}</textarea>
+                        {if isset($errors["body"])}
+                        <label class="error">{echo join("<br/>", $errors["body"])}</label>
+                        {/if}
+                    </span>
+                </p>
+                <p>
+                    <label>Meta-Název</label>
+                    <span class="field" >
+                        <input class="longinput" type="text" name="metatitle" 
+                               value="{echo $content->metaTitle}" />
+                        {if isset($errors["metaTitle"])}
+                        <label class="error">{echo join("<br/>", $errors["metaTitle"])}</label>
+                        {/if}
+                    </span>
+                </p>
+                <p>
+                    <label>Meta-Popis<small>Max. 10 000 znaků</small></label>
+                    <span class="field">
+                        <textarea rows="5" name="metadescription" class="longinput">{echo $content->metaDescription}</textarea>
+                        {if isset($errors["metaDescription"])}
+                        <label class="error">{echo join("<br/>", $errors["metaDescription"])}</label>
+                        {/if}
+                    </span>
+                </p>
+                <p>
+                    <label>Aktivní</label>
+                    <span class="field">
+                        <select name="active" class="longinput">
+                            {if $content->active}
+                            <option value="0">Neaktivní</option>
+                            <option value="1" selected>Aktivní</option>
+                            {/if}
+                            {else}
+                            <option value="0" selected>Neaktivní</option>
+                            <option value="1">Aktivní</option>
+                            {/else}
+                        </select>
+                    </span>
+                </p>
+                <p class="stdformbutton">
+                    <input name="submitEditContent" type="submit" value="Uložit" class="submit radius2" />
+                    <input type="reset" class="reset radius2" value="Reset" />
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div class="one_third last">
+        <div class="widgetbox">
+            <div class="contenttitle radiusbottom0">
+                <h2 class="table"><span>Foto</span></h2>
+            </div><!--contenttitle-->
+            <div class="news-photos">
+                {if ($photos && !empty($photos))}
+                {foreach $photo in $photos}
+                <span class="news-photo">
+                    <img src="{echo $photo->getImgThumb()}" alt="{echo $photo->getPhotoName()}" width="200px"/>
+                    <button class="stdbtn img-to-text" value="{echo $photo->getId()}">Vložit</button>
+                </span>
+                {/foreach}
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+<br class="clear-all"/>
+<script type="text/javascript" src="/public/js/custom/news.js"></script>

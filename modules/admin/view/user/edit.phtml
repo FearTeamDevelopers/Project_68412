@@ -1,0 +1,117 @@
+<ul class="maintabmenu multipletabmenu">
+    <li><a href="/admin/user/">Uživatelé</a></li>
+    <li><a href="/admin/user/add/">Nový uživatel</a></li>
+    <li class="current"><a href="#">Editovat uživatele</a></li>
+</ul>
+
+<div class="content">
+    <div class="contenttitle radiusbottom0">
+        <h2 class="form"><span>Informace o uživateli</span></h2>
+    </div>
+    
+    <form class="stdform stdform2" method="post" action="#">
+        <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+        <p>
+            <label>Jméno*</label>
+            <span class="field">
+                <input required type="text" name="firstname" class="longinput" required value="{echo $user->firstname}"/>
+            </span>
+            {if isset($errors["firstname"])}
+            <label class="error">
+                {echo join("<br/>", $errors["firstname"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Příjmení*</label>
+            <span class="field">
+                <input required type="text" name="lastname" class="longinput" required value="{echo $user->lastname}"/>
+            </span>
+            {if isset($errors["lastname"])}
+            <label class="error">
+                {echo join("<br/>", $errors["lastname"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Email*</label>
+            <span class="field">
+                <input required type="email" name="email" class="longinput" required value="{echo $user->email}"/>
+            </span>
+            {if isset($errors["email"])}
+            <label class="error">
+                {echo join("<br/>", $errors["email"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Heslo</label>
+            <span class="field">
+                <input type="password" name="password" class="longinput" value=""/>
+            </span>
+            {if isset($errors["password"])}
+            <label class="error">
+                {echo join("<br/>", $errors["password"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Potvrdit heslo</label>
+            <span class="field">
+                <input type="password" name="password2" class="longinput" value=""/>
+            </span>
+            {if isset($errors["password2"])}
+            <label class="error">
+                {echo join("<br/>", $errors["password2"])}
+            </label>
+            {/if}
+        </p>
+        
+        <p>
+            <label>Role</label>
+            <span class="field">
+                <select name="role" class="longinput">
+                    {if $user->role == "role_superadmin"}
+                    <option value="role_member">Member</option>
+                    <option value="role_admin">Admin</option>
+                    <option value="role_superadmin" selected>Super Admin</option>
+                    {/if}
+                    {elseif $user->role == "role_admin"}
+                    <option value="role_member">Member</option>
+                    <option value="role_admin" selected>Admin</option>
+                    <option value="role_superadmin">Super Admin</option>
+                    {/elseif}
+                    {else}
+                    <option value="role_member" selected>Member</option>
+                    <option value="role_admin">Admin</option>
+                    <option value="role_superadmin">Super Admin</option>
+                    {/else}
+                </select>
+            </span>
+            {if isset($errors["role"])}
+            <label class="error">
+                {echo join("<br/>", $errors["role"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Aktivní</label>
+            <span class="field">
+                <select name="active" class="longinput">
+                    {if $user->active == 1}
+                    <option value="0">Neaktivní</option>
+                    <option value="1" selected>Aktivní</option>
+                    {/if}
+                    {else}
+                    <option value="0" selected>Neaktivní</option>
+                    <option value="1">Aktivní</option>
+                    {/else}
+                </select>
+            </span>
+        </p>
+
+        <p class="stdformbutton">
+            <input type="submit" name="submitEditUser" value="Uložit změny" />
+        </p>
+    </form>
+</div>

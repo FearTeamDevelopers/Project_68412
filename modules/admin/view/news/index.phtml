@@ -1,0 +1,70 @@
+<ul class="maintabmenu multipletabmenu">
+    <li class="current"><a href="#">News list</a></li>
+    <li><a href="/admin/news/add/">Add News</a></li>
+</ul><!--maintabmenu-->
+
+<div class="content">
+    <div class="contenttitle radiusbottom0">
+        <h2 class="image"><span>News List</span></h2>
+    </div><!--contenttitle-->
+    
+    <form method="post" class="massActionForm" action="/admin/news/massAction/">
+        <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+        <table cellpadding="0" cellspacing="0" border="0" class="stdtable">
+            <colgroup>
+                <col class="con0" /> <col class="con1" />
+                <col class="con0" /> <col class="con1" />
+                <col class="con0" /> <col class="con1" />
+                <col class="con0" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <td class="head0 width50"><input type="checkbox" class="checkall" /></td>
+                    <td class="head1">Title</td>
+                    <td class="head0">Url Key</td>
+                    <td class="head1">Author</td>
+                    <td class="head0">Expiration Date</td>
+                    <td class="head1">Created</td>
+                    <td class="head0">&nbsp;</td>
+                </tr>
+            </thead>
+            <tbody>
+                {if !empty($news)}
+                    {foreach $_news in $news}
+                        {if ($_news->active)}
+                            <tr class="rowActive">
+                        {/if} 
+                        {else}
+                            <tr>
+                        {/else}
+                            <td class="center">
+                                <input type="checkbox" name="newsids[]" value="{echo $_news->getId()}" />
+                            </td>
+                            <td>{echo $_news->getTitle()}</td>
+                            <td>{echo $_news->getUrlKey()}</td>
+                            <td>{echo $_news->getAuthor()}</td>
+                            <td>{echo $_news->getExpirationDate()}</td>
+                            <td>{echo $_news->getCreated()}</td>
+                            <td>
+                                <a href="/admin/news/edit/{echo $_news->id}" class="btn btn3 btn_pencil" title="Edit"></a>
+                                {if $isAdmin}<a href="/admin/news/delete/{echo $_news->id}" class="btn btn3 btn_trash deleteRow" title="Delete"></a>{/if}
+                            </td>
+                        </tr>
+                    {/foreach}
+                {/if}
+            </tbody>
+        </table>
+        {if $isAdmin}
+        <div class="tableoptions">
+            Selected:
+            <select class="radius3" name="action">
+                <option value="activate">Activate</option>
+                <option value="deactivate">Deactivate</option>
+                <option value="delete">Delete</option>
+            </select> &nbsp;
+            <input class="radius3" type="submit" name="performNewsAction" value="Execute"/>
+        </div><!--tableoptions-->
+        {/if}
+    </form>
+</div>
+<br class="clear-all"/><br />

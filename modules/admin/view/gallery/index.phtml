@@ -1,0 +1,52 @@
+<ul class="maintabmenu multipletabmenu">
+    <li class="current"><a href="#">Galerie</a></li>
+    <li><a href="/admin/gallery/add/">Nová Galerie</a></li>
+</ul><!--maintabmenu-->
+
+<div class="content">
+    <div class="contenttitle radiusbottom0">
+        <h2 class="table"><span>Galerie</span></h2>
+    </div><!--contenttitle-->
+
+    <table class="stdtable">
+        <colgroup>
+            <col class="con0" /> <col class="con1" />
+            <col class="con0" /> <col class="con1" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="head0">Název</th>
+                <th class="head1">Typ</th>
+                <th class="head0">Vytvořeno</th>
+                <th class="head1">&nbsp;</th>
+            </tr> 
+        </thead>
+
+        <tbody>
+            {if !empty($galleries)}
+                {foreach $gallery in $galleries}
+                    {if ($gallery->active)}
+                        <tr class="rowActive">
+                    {/if}{else}
+                        <tr>
+                    {/else}
+                        <td>{echo $gallery->getTitle()}</td>
+                        <td>
+                            {if $gallery->isPublic == 0}
+                            Soukromá
+                            {/if}{else}
+                            Veřejná
+                            {/else}
+                        </td>
+                        <td>{echo $gallery->getCreated()}</td>
+                        <td>
+                            <a href="/admin/gallery/detail/{echo $gallery->id}" class="btn btn_image2">
+                                <span>Vstoupit do galerie</span>
+                            </a>
+                        </td>
+                    </tr>
+                {/foreach}
+            {/if}
+        </tbody>
+    </table>
+</div>

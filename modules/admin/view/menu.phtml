@@ -1,0 +1,13 @@
+<ul>
+    <li class="current"><a href="/admin/" class="dashboard"><span>Dashboard</span></a></li>
+    <li><a href="/admin/news/" class="tables"><span>Novinky</span></a></li>
+    <li><a href="/admin/dog/" class="grid"><span>Psi</span></a></li>
+    <li><a href="/admin/contest/" class="media"><span>Soutěže</span></a></li>
+    <li><a href="/admin/gallery/" class="media"><span>Galerie</span></a></li>
+    <li><a href="/admin/content/" class="editor"><span>Obsah webu</span></a></li>
+    {if $isAdmin || $isSuperAdmin}
+    <li><a href="/admin/analytics/" class="charts"><span>Analytika</span></a></li>
+    <li><a href="/admin/user/" class="users"><span>Uživatelé</span></a></li>
+    <li><a href="/admin/system/" class="error"><span>Nastavení</span></a></li>
+    {/if}
+</ul>

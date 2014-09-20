@@ -1,0 +1,72 @@
+<ul class="maintabmenu multipletabmenu">
+    <li class="current"><a href="#">Můj profil</a></li>
+</ul>
+
+<div class="content">
+    <div class="contenttitle">
+        <h2 class="form"><span>Můj profil</span></h2>
+    </div>
+    
+    <form class="stdform stdform2" method="post" action="#">
+        <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+        <p>
+            <label>Jméno*</label>
+            <span class="field">
+                <input required type="text" name="firstname" class="longinput" required value="{echo $user->firstname}"/>
+            </span>
+            {if isset($errors["firstname"])}
+            <label class="error">
+                {echo join("<br/>", $errors["firstname"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Příjmení*</label>
+            <span class="field">
+                <input required type="text" name="lastname" class="longinput" required value="{echo $user->lastname}"/>
+            </span>
+            {if isset($errors["lastname"])}
+            <label class="error">
+                {echo join("<br/>", $errors["lastname"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Email*</label>
+            <span class="field">
+                <input required type="email" name="email" class="longinput" required value="{echo $user->email}"/>
+            </span>
+            {if isset($errors["email"])}
+            <label class="error">
+                {echo join("<br/>", $errors["email"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Heslo</label>
+            <span class="field">
+                <input type="password" name="password" class="longinput" value=""/>
+            </span>
+            {if isset($errors["password"])}
+            <label class="error">
+                {echo join("<br/>", $errors["password"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Potvrdit heslo</label>
+            <span class="field">
+                <input type="password" name="password2" class="longinput" value=""/>
+            </span>
+            {if isset($errors["password2"])}
+            <label class="error">
+                {echo join("<br/>", $errors["password2"])}
+            </label>
+            {/if}
+        </p>
+      
+        <p class="stdformbutton">
+            <input type="submit" name="submitUpdateProfile" value="Uložit změny" />
+        </p>
+    </form>
+</div>

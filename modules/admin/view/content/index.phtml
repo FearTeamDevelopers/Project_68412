@@ -1,0 +1,38 @@
+<ul class="maintabmenu">
+    <li class="current"><a href="#">Stránky</a></li>
+</ul><!--maintabmenu-->
+
+<div class="content">
+    <div class="contenttitle radiusbottom0">
+        <h2 class="table"><span>Obsah Webu</span></h2>
+    </div><!--contenttitle-->
+
+    <table cellpadding="0" cellspacing="0" border="0" class="stdtable" >
+        <colgroup>
+            <col class="con0" /><col class="con1" />
+            <col class="con0" /><col class="con1" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th class="head0">Název stránky</th>
+                <th class="head1">Poslední změna</th>
+                <th class="head0">Text</th>
+                <th class="head1">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {if !empty($content)}
+                {foreach $page in $content}
+                    <tr>
+                        <td>{echo $page->pageName}</td>
+                        <td>{echo $page->modified}</td>
+                        <td>{echo $page->body}</td>
+                        <td>
+                            {if $isAdmin}<a href="/admin/content/edit/{echo $page->id}" class="btn btn3 btn_pencil" title="Editovat"></a>{/if}
+                        </td>
+                    </tr>
+                {/foreach}
+            {/if}
+        </tbody>
+    </table>
+</div>
