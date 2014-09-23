@@ -4,13 +4,14 @@
 </ul>
 
 <div class="content">
-    <div class="contenttitle radiusbottom0">
-        <h2 class="form"><span>Informace o uživateli</span></h2>
-    </div>
-    
-    <form class="stdform stdform2" method="post" action="#">
+
+    <form class="stdform stdform2" method="post" action="#" enctype="multipart/form-data">
         <input type="hidden" name="tk" id="tk" value="{echo $token}" />
         <input type="hidden" name="submstoken" id="submstoken" value="{echo $submstoken}" />
+
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Osobní údaje</span></h2>
+        </div>
         <p>
             <label>Jméno*</label>
             <span class="field">
@@ -33,6 +34,11 @@
             </label>
             {/if}
         </p>
+
+        <br/>
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Přihlašovací údaje</span></h2>
+        </div>
         <p>
             <label>Email*</label>
             <span class="field">
@@ -66,6 +72,7 @@
             </label>
             {/if}
         </p>
+        {if $isSuperAdmin}
         <p>
             <label>Role</label>
             <span class="field">
@@ -81,9 +88,71 @@
             </label>
             {/if}
         </p>
+        {/if}
+
+        <br/>
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Pes</span></h2>
+        </div>
+        <p>
+            <label>Jméno psa*</label>
+            <span class="field">
+                <input required type="text" name="dogname" class="longinput" value="{echo isset($dog)? $dog->dogName: ""}" />
+            </span>
+            {if isset($errors["dogName"])}
+            <label class="error">
+                {echo join("<br/>", $errors["dogName"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Foto*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
+            <span class="field">
+                <input type="file" name="dogphoto[]"/>
+            </span> 
+            {if isset($errors["dogphoto"])}
+            <label class="error">
+                {echo join("<br/>", $errors["dogphoto"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Rasa*</label>
+            <span class="field">
+                <input required type="text" name="dograce" class="longinput" value="{echo isset($dog)? $dog->race: ""}" />
+            </span>
+            {if isset($errors["race"])}
+            <label class="error">
+                {echo join("<br/>", $errors["race"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Datum narození*</label>
+            <span class="field">
+                <input required type="text" name="dogdob" class="longinput datepicker" value="{echo isset($dog)? $dog->dob: ""}" />
+            </span>
+            {if isset($errors["dob"])}
+            <label class="error">
+                {echo join("<br/>", $errors["dob"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Další informace</label>
+            <span class="field">
+                <textarea name="doginfo" class="longinput" rows="5">{echo isset($dog)? $dog->information : ""}</textarea>
+            </span>
+            {if isset($errors["information"])}
+            <label class="error">
+                {echo join("<br/>", $errors["information"])}
+            </label>
+            {/if}
+        </p>
+
 
         <p class="stdformbutton">
-            <input type="submit" name="submitAddUser" value="Vytvořit účet" />
+            <input type="submit" name="submitAddUser" value="Vytvořit" />
         </p>
     </form>
 </div>

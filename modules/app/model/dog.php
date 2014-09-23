@@ -90,6 +90,28 @@ class App_Model_Dog extends Model
     /**
      * @column
      * @readwrite
+     * @type text
+     * @length 250
+     * 
+     * @validate path, max(250)
+     * @label photo path
+     */
+    protected $_imgMain;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 250
+     * 
+     * @validate path, max(250)
+     * @label thum path
+     */
+    protected $_imgThumb;
+
+    /**
+     * @column
+     * @readwrite
      * @type datetime
      */
     protected $_created;
@@ -116,6 +138,44 @@ class App_Model_Dog extends Model
         $this->setModified(date('Y-m-d H:i:s'));
     }
 
+        /**
+     * 
+     * @return type
+     */
+    public function getUnlinkPath($type = true)
+    {
+        if ($type) {
+            if (file_exists(APP_PATH . $this->_imgMain)) {
+                return APP_PATH . $this->_imgMain;
+            } elseif (file_exists('.' . $this->_imgMain)) {
+                return '.' . $this->_imgMain;
+            } elseif (file_exists('./' . $this->_imgMain)) {
+                return './' . $this->_imgMain;
+            }
+        } else {
+            return $this->_imgMain;
+        }
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getUnlinkThumbPath($type = true)
+    {
+        if ($type) {
+            if (file_exists(APP_PATH . $this->_imgThumb)) {
+                return APP_PATH . $this->_imgThumb;
+            } elseif (file_exists('.' . $this->_imgThumb)) {
+                return '.' . $this->_imgThumb;
+            } elseif (file_exists('./' . $this->_imgThumb)) {
+                return './' . $this->_imgThumb;
+            }
+        } else {
+            return $this->_imgThumb;
+        }
+    }
+    
     /**
      * 
      * @return array
@@ -123,16 +183,13 @@ class App_Model_Dog extends Model
     public static function fetchAll()
     {
         $query = App_Model_Dog::getQuery(array('do.*'))
-                ->join('tb_dogphoto', 'dp.dogId = do.id', 'dp', 
-                        array('dp.photoId', 'dp.statusMain'))
-                ->join('tb_photo', 'dp.photoId = ph.id', 'ph', 
-                        array('ph.imgThumb'))
                 ->join('tb_doguser', 'du.dogId = do.id', 'du', 
                         array('du.userId'))
                 ->join('tb_user', 'du.userId = us.id', 'us', 
                         array('us.firstname', 'us.lastname'));
-        
+
         $dogs = App_Model_Dog::initialize($query);
         return $dogs;
     }
+
 }

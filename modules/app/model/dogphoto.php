@@ -26,16 +26,6 @@ class App_Model_DogPhoto extends Model
     /**
      * @column
      * @readwrite
-     * @type boolean
-     * @index
-     * 
-     * @validate max(3)
-     */
-    protected $_statusMain;
-
-    /**
-     * @column
-     * @readwrite
      * @type integer
      * @index
      * @unique

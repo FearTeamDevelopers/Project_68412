@@ -5,16 +5,16 @@
 </ul>
 
 <div class="content">
-    <div class="contenttitle radiusbottom0">
-        <h2 class="form"><span>Informace o uživateli</span></h2>
-    </div>
-    
-    <form class="stdform stdform2" method="post" action="#">
+    <form class="stdform stdform2" method="post" action="#" enctype="multipart/form-data">
         <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Osobní údaje</span></h2>
+        </div>
         <p>
             <label>Jméno*</label>
             <span class="field">
-                <input required type="text" name="firstname" class="longinput" required value="{echo $user->firstname}"/>
+                <input required type="text" name="firstname" class="longinput" value="{echo isset($user)? $user->firstname: ""}" />
             </span>
             {if isset($errors["firstname"])}
             <label class="error">
@@ -25,7 +25,7 @@
         <p>
             <label>Příjmení*</label>
             <span class="field">
-                <input required type="text" name="lastname" class="longinput" required value="{echo $user->lastname}"/>
+                <input required type="text" name="lastname" class="longinput" value="{echo isset($user)? $user->lastname: ""}" />
             </span>
             {if isset($errors["lastname"])}
             <label class="error">
@@ -33,10 +33,15 @@
             </label>
             {/if}
         </p>
+
+        <br/>
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Přihlašovací údaje</span></h2>
+        </div>
         <p>
             <label>Email*</label>
             <span class="field">
-                <input required type="email" name="email" class="longinput" required value="{echo $user->email}"/>
+                <input required type="email" name="email" class="longinput" value="{echo isset($user)? $user->email: ""}" />
             </span>
             {if isset($errors["email"])}
             <label class="error">
@@ -45,9 +50,9 @@
             {/if}
         </p>
         <p>
-            <label>Heslo</label>
+            <label>Heslo*</label>
             <span class="field">
-                <input type="password" name="password" class="longinput" value=""/>
+                <input required type="password" name="password" class="longinput" value=""/>
             </span>
             {if isset($errors["password"])}
             <label class="error">
@@ -56,9 +61,9 @@
             {/if}
         </p>
         <p>
-            <label>Potvrdit heslo</label>
+            <label>Potvrdit heslo*</label>
             <span class="field">
-                <input type="password" name="password2" class="longinput" value=""/>
+                <input required type="password" name="password2" class="longinput" value=""/>
             </span>
             {if isset($errors["password2"])}
             <label class="error">
@@ -66,7 +71,23 @@
             </label>
             {/if}
         </p>
-        
+        <p>
+            <label>Aktivní</label>
+            <span class="field">
+                <select name="active" class="longinput">
+                    {if $user->active == 1}
+                    <option value="0">Neaktivní</option>
+                    <option value="1" selected>Aktivní</option>
+                    {/if}
+                    {else}
+                    <option value="0" selected>Neaktivní</option>
+                    <option value="1">Aktivní</option>
+                    {/else}
+                </select>
+            </span>
+        </p>
+
+        {if $isSuperAdmin}
         <p>
             <label>Role</label>
             <span class="field">
@@ -94,21 +115,50 @@
             </label>
             {/if}
         </p>
-        <p>
-            <label>Aktivní</label>
-            <span class="field">
-                <select name="active" class="longinput">
-                    {if $user->active == 1}
-                    <option value="0">Neaktivní</option>
-                    <option value="1" selected>Aktivní</option>
+        {/if}
+
+        <br/>
+        <div class="contenttitle radiusbottom0">
+            <h2 class="table"><span>Psi</span></h2>
+        </div>
+        <table cellpadding="0" cellspacing="0" border="0" class="stdtable" >
+            <colgroup>
+                <col class="con0" /><col class="con1" />
+                <col class="con0" /><col class="con1" />
+                <col class="con0" /><col class="con1" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="head0">Jméno</th><th class="head1">Foto</th>
+                    <th class="head0">Rasa</th><th class="head1">Narozen</th>
+                    <th class="head0">Aktivní</th><th class="head1">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {if (!empty($dogs))}
+                {foreach $dog in $dogs}
+                <tr>
+                    <td>{echo $dog->getDogName()}</td>
+                    <td><img src="{echo $dog->getImgThumb()}" alt="" /></td>
+                    <td>{echo $dog->getRace()}</td>
+                    <td>{echo $dog->getDob()}</td>
+                    {if $dog->active}
+                    <td>Active</td>
                     {/if}
                     {else}
-                    <option value="0" selected>Neaktivní</option>
-                    <option value="1">Aktivní</option>
+                    <td>Inactive</td>
                     {/else}
-                </select>
-            </span>
-        </p>
+
+                    <td>
+                        <a href="/admin/dog/edit/{echo $dog->id}" class="btn btn3 btn_pencil"></a> 
+                        {if $isAdmin}<a href="/admin/dog/delete/{echo $dog->id}" class="btn btn3 btn_trash deleteRow"></a>{/if}
+                    </td>
+                </tr>
+                {/foreach}
+                {/if}
+            </tbody>
+        </table>
 
         <p class="stdformbutton">
             <input type="submit" name="submitEditUser" value="Uložit změny" />

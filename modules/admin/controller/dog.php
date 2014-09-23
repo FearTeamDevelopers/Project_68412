@@ -60,42 +60,16 @@ class Admin_Controller_Dog extends Controller
                 'race' => RequestMethods::post('race'),
                 'dob' => RequestMethods::post('dob'),
                 'information' => RequestMethods::post('info'),
+                'imgMain' => trim($uploadedFile->file->path, '.'),
+                'imgThumb' => trim($uploadedFile->thumb->path, '.')
             ));
 
             if ($dog->validate()) {
                 $id = $dog->save();
 
-                $photo = new App_Model_Photo(array(
-                    'galleryId' => 2,
-                    'description' => RequestMethods::post('photoDesc'),
-                    'imgMain' => trim($uploadedFile->file->path, '.'),
-                    'imgThumb' => trim($uploadedFile->thumb->path, '.'),
-                    'photoName' => $uploadedFile->file->filename,
-                    'mime' => $uploadedFile->file->ext,
-                    'sizeMain' => $uploadedFile->file->size,
-                    'sizeThumb' => $uploadedFile->thumb->size
-                ));
-
-                if ($photo->validate()) {
-                    $photoId = $photo->save();
-
-                    $dp = new App_Model_DogPhoto(array(
-                        'statusMain' => 1,
-                        'dogId' => $id,
-                        'photoId' => $photoId
-                    ));
-
-                    $dp->save();
-
-                    Event::fire('admin.log', array('success', 'Dog Id: ' . $id));
-                    $view->successMessage('Pes' . self::SUCCESS_MESSAGE_1);
-                    self::redirect('/admin/dog/');
-                } else {
-                    Event::fire('admin.log', array('fail'));
-                    $view->set('errors', $errors + $photo->getErrors())
-                            ->set('submstoken', $this->revalidateMutliSubmissionProtectionToken())
-                            ->set('dog', $dog);
-                }
+                Event::fire('admin.log', array('success', 'Dog Id: ' . $id));
+                $view->successMessage('Pes' . self::SUCCESS_MESSAGE_1);
+                self::redirect('/admin/dog/');
             } else {
                 Event::fire('admin.log', array('fail'));
                 $view->set('errors', $errors + $dog->getErrors())
@@ -143,38 +117,16 @@ class Admin_Controller_Dog extends Controller
                 'race' => RequestMethods::post('race'),
                 'dob' => RequestMethods::post('dob'),
                 'information' => RequestMethods::post('info'),
+                'imgMain' => trim($uploadedFile->file->path, '.'),
+                'imgThumb' => trim($uploadedFile->thumb->path, '.')
             ));
 
             if (empty($errors) && $dog->validate()) {
                 $id = $dog->save();
 
-                $photo = new App_Model_Photo(array(
-                    'galleryId' => 2,
-                    'description' => RequestMethods::post('photoDesc'),
-                    'imgMain' => trim($uploadedFile->file->path, '.'),
-                    'imgThumb' => trim($uploadedFile->thumb->path, '.'),
-                    'photoName' => $uploadedFile->file->filename,
-                    'mime' => $uploadedFile->file->ext,
-                    'sizeMain' => $uploadedFile->file->size,
-                    'sizeThumb' => $uploadedFile->thumb->size
-                ));
-
-                if ($photo->validate()) {
-                    $photoId = $photo->save();
-
-                    $dp = new App_Model_DogPhoto(array(
-                        'statusMain' => 1,
-                        'dogId' => $id,
-                        'photoId' => $photoId
-                    ));
-
-                    $dp->save();
-                    Event::fire('admin.log', array('success', 'Dog Id: ' . $id));
-                    echo $id;
-                } else {
-                    Event::fire('admin.log', array('fail'));
-                    echo self::ERROR_MESSAGE_5;
-                }
+                $dp->save();
+                Event::fire('admin.log', array('success', 'Dog Id: ' . $id));
+                echo $id;
             } else {
                 Event::fire('admin.log', array('fail'));
                 echo self::ERROR_MESSAGE_5;
@@ -221,37 +173,8 @@ class Admin_Controller_Dog extends Controller
                     $errors['dogphoto'] = array($ex->getMessage());
                 }
 
-                $photo = new App_Model_Photo(array(
-                    'galleryId' => 2,
-                    'description' => RequestMethods::post('photoDesc'),
-                    'imgMain' => trim($uploadedFile->file->path, '.'),
-                    'imgThumb' => trim($uploadedFile->thumb->path, '.'),
-                    'photoName' => $uploadedFile->file->filename,
-                    'mime' => $uploadedFile->file->ext,
-                    'sizeMain' => $uploadedFile->file->size,
-                    'sizeThumb' => $uploadedFile->thumb->size
-                ));
-
-                if ($photo->validate()) {
-                    $photoId = $photo->save();
-
-                    $allDogPhotos = App_Model_DogPhoto::all(array('dogId = ?' => $dog->getId()));
-
-                    foreach ($allDogPhotos as $dogPhoto) {
-                        $dogPhoto->statusMain = 0;
-                        $dogPhoto->save();
-                    }
-
-                    $dp = new App_Model_DogPhoto(array(
-                        'statusMain' => 1,
-                        'dogId' => $dog->getId(),
-                        'photoId' => $photoId
-                    ));
-
-                    $dp->save();
-                } else {
-                    $errors = $errors + $photo->getErrors();
-                }
+                $dog->imgMain = trim($uploadedFile->file->path, '.');
+                $dog->imgThumb = trim($uploadedFile->thumb->path, '.');
             }
 
             $dog->isActive = RequestMethods::post('isActive');
@@ -295,35 +218,6 @@ class Admin_Controller_Dog extends Controller
                     echo 'ok';
                 } else {
                     Event::fire('admin.log', array('fail', 'Dog Id: ' . $id));
-                    echo self::ERROR_MESSAGE_1;
-                }
-            }
-        } else {
-            echo self::ERROR_MESSAGE_1;
-        }
-    }
-
-    /**
-     * @before _secured, _admin
-     */
-    public function changeMainPhoto($dogId, $photoId)
-    {
-        $this->willRenderActionView = false;
-        $this->willRenderLayoutView = false;
-
-        if ($this->checkToken()) {
-            $dogPhoto = App_Model_DogPhoto::first(array('dogId = ?' => (int) $dogId, 'photoId = ?' => (int)$photoId));
-
-            if (NULL === $dogPhoto) {
-                echo self::ERROR_MESSAGE_2;
-            } else {
-                $dogPhoto->statusMain = 1;
-                if ($dogPhoto->validate()) {
-                    $dogPhoto->save();
-                    Event::fire('admin.log', array('success', 'DogPhoto Id: ' . $dogPhoto->getId()));
-                    echo 'ok';
-                } else {
-                    Event::fire('admin.log', array('fail', 'DogPhoto Id: ' . $dogPhoto->getId()));
                     echo self::ERROR_MESSAGE_1;
                 }
             }

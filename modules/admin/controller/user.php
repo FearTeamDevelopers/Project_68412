@@ -4,6 +4,8 @@ use Admin\Etc\Controller;
 use THCFrame\Registry\Registry;
 use THCFrame\Request\RequestMethods;
 use THCFrame\Events\Events as Event;
+use THCFrame\Filesystem\FileManager;
+use THCFrame\Core\ArrayMethods;
 
 /**
  * Description of Admin_Controller_User
@@ -84,9 +86,7 @@ class Admin_Controller_User extends Controller
         $superAdmin = $security->isGranted('role_superadmin');
 
         $users = App_Model_User::all(
-                    array('role <> ?' => 'role_superadmin'), 
-                    array('id', 'firstname', 'lastname', 'email', 'role', 'active', 'created'), 
-                    array('id' => 'asc')
+                        array('role <> ?' => 'role_superadmin'), array('id', 'firstname', 'lastname', 'email', 'role', 'active', 'created'), array('id' => 'asc')
         );
 
         $view->set('users', $users)
@@ -100,15 +100,15 @@ class Admin_Controller_User extends Controller
     {
         $security = Registry::get('security');
         $view = $this->getActionView();
-        
+
         $view->set('submstoken', $this->mutliSubmissionProtectionToken());
-        
+
         if (RequestMethods::post('submitAddUser')) {
-            if($this->checkToken() !== true && 
-                    $this->checkMutliSubmissionProtectionToken(RequestMethods::post('submstoken')) !== true){
+            if ($this->checkToken() !== true &&
+                    $this->checkMutliSubmissionProtectionToken(RequestMethods::post('submstoken')) !== true) {
                 self::redirect('/admin/user/');
             }
-            
+
             $errors = array();
 
             if (RequestMethods::post('password') !== RequestMethods::post('password2')) {
@@ -124,6 +124,24 @@ class Admin_Controller_User extends Controller
             $salt = $security->createSalt();
             $hash = $security->getSaltedHash(RequestMethods::post('password'), $salt);
 
+            $fileManager = new FileManager(array(
+                'thumbWidth' => $this->loadConfigFromDb('thumb_width'),
+                'thumbHeight' => $this->loadConfigFromDb('thumb_height'),
+                'thumbResizeBy' => $this->loadConfigFromDb('thumb_resizeby'),
+                'maxImageWidth' => $this->loadConfigFromDb('photo_maxwidth'),
+                'maxImageHeight' => $this->loadConfigFromDb('photo_maxheight')
+            ));
+
+            try {
+                $data = $fileManager->upload('dogphoto', 'dog', time() . '_');
+                foreach ($data['files'] as $file) {
+                    $uploadedFile = ArrayMethods::toObject($file);
+                    break;
+                }
+            } catch (Exception $ex) {
+                $errors['dogphoto'] = array($ex->getMessage());
+            }
+
             $user = new App_Model_User(array(
                 'firstname' => RequestMethods::post('firstname'),
                 'lastname' => RequestMethods::post('lastname'),
@@ -131,18 +149,42 @@ class Admin_Controller_User extends Controller
                 'password' => $hash,
                 'salt' => $salt,
                 'role' => RequestMethods::post('role', 'role_member'),
+                'loginLockdownTime' => '',
+                'loginAttempCounter' => 0
             ));
 
-            if (empty($errors) && $user->validate()) {
-                $id = $user->save();
+            $dog = new App_Model_Dog(array(
+                'isActive' => 1,
+                'dogName' => RequestMethods::post('dogname'),
+                'race' => RequestMethods::post('dograce'),
+                'dob' => RequestMethods::post('dogdob'),
+                'information' => RequestMethods::post('doginfo'),
+                'imgMain' => trim($uploadedFile->file->path, '.'),
+                'imgThumb' => trim($uploadedFile->thumb->path, '.')
+            ));
 
-                Event::fire('admin.log', array('success', 'ID: ' . $id));
-                $view->successMessage('Účet'.self::SUCCESS_MESSAGE_1);
+            if (empty($errors) && $user->validate() && $dog->validate()) {
+                $userId = $user->save();
+                $dogId = $dog->save();
+
+                App_Model_DogUser::updateAll(array('statusMain = ?' => 1), array('statusMain' => 0));
+
+                $dogUser = new App_Model_DogUser(array(
+                    'statusMain' => 1,
+                    'dogId' => $dogId,
+                    'userId' => $userId
+                ));
+
+                $dogUser->save();
+
+                Event::fire('admin.log', array('success', 'User id: ' . $userId.' Dog id: '.$dogId));
+                $view->successMessage('Účet' . self::SUCCESS_MESSAGE_1);
                 self::redirect('/admin/user/');
             } else {
                 Event::fire('admin.log', array('fail'));
-                $view->set('errors', $errors + $user->getErrors())
+                $view->set('errors', $errors + $user->getErrors() + $dog->getErrors())
                         ->set('submstoken', $this->revalidateMutliSubmissionProtectionToken())
+                        ->set('dog', $dog)
                         ->set('user', $user);
             }
         }
@@ -157,7 +199,7 @@ class Admin_Controller_User extends Controller
         $loggedUser = $this->getUser();
 
         $user = App_Model_User::first(
-                array('active = ?' => true, 'id = ?' => $loggedUser->getId()));
+                        array('active = ?' => true, 'id = ?' => $loggedUser->getId()));
 
         if (NULL === $user) {
             $view->warningMessage(self::ERROR_MESSAGE_2);
@@ -166,10 +208,10 @@ class Admin_Controller_User extends Controller
         $view->set('user', $user);
 
         if (RequestMethods::post('submitUpdateProfile')) {
-            if($this->checkToken() !== true){
+            if ($this->checkToken() !== true) {
                 self::redirect('/admin/user/');
             }
-            
+
             $security = Registry::get('security');
 
             if (RequestMethods::post('password') !== RequestMethods::post('password2')) {
@@ -178,8 +220,7 @@ class Admin_Controller_User extends Controller
 
             if (RequestMethods::post('email') != $user->email) {
                 $email = App_Model_User::first(
-                                array('email = ?' => RequestMethods::post('email', $user->email)), 
-                                array('email')
+                                array('email = ?' => RequestMethods::post('email', $user->email)), array('email')
                 );
 
                 if ($email) {
@@ -227,7 +268,7 @@ class Admin_Controller_User extends Controller
         $view = $this->getActionView();
         $security = Registry::get('security');
 
-        $user = App_Model_User::first(array('id = ?' => (int)$id));
+        $user = App_Model_User::first(array('id = ?' => (int) $id));
 
         if (NULL === $user) {
             $view->warningMessage(self::ERROR_MESSAGE_2);
@@ -236,14 +277,23 @@ class Admin_Controller_User extends Controller
             $view->errorMessage(self::ERROR_MESSAGE_4);
             self::redirect('/admin/user/');
         }
+        
+        $dogQuery = App_Model_Dog::getQuery(array('do.*'))
+                ->join('tb_doguser', 'do.id = du.dogId', 'du', 
+                        array('du.userId', 'du.dogId'))
+                ->join('tb_user', 'du.userId = us.id', 'us', 
+                        array('us.id'))
+                ->where('us.id = ?', (int)$id);
+        $dogs = App_Model_Dog::initialize($dogQuery);
 
-        $view->set('user', $user);
+        $view->set('user', $user)
+                ->set('dogs', $dogs);
 
         if (RequestMethods::post('submitEditUser')) {
-            if($this->checkToken() !== true){
+            if ($this->checkToken() !== true) {
                 self::redirect('/admin/user/');
             }
-            
+
             $errors = array();
 
             if (RequestMethods::post('password') !== RequestMethods::post('password2')) {
@@ -252,8 +302,7 @@ class Admin_Controller_User extends Controller
 
             if (RequestMethods::post('email') != $user->email) {
                 $email = App_Model_User::first(
-                                array('email = ?' => RequestMethods::post('email', $user->email)), 
-                                array('email')
+                                array('email = ?' => RequestMethods::post('email', $user->email)), array('email')
                 );
 
                 if ($email) {
@@ -276,7 +325,7 @@ class Admin_Controller_User extends Controller
             $user->email = RequestMethods::post('email');
             $user->password = $hash;
             $user->salt = $salt;
-            $user->role = RequestMethods::post('role');
+            $user->role = RequestMethods::post('role', 'role_member');
             $user->active = RequestMethods::post('active');
 
             if (empty($errors) && $user->validate()) {
