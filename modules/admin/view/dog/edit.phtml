@@ -1,0 +1,182 @@
+<ul class="maintabmenu multipletabmenu">
+    <li><a href="/admin/dog/">Psi</a></li>
+    <li><a href="/admin/dog/add/">Nový pes</a></li>
+    <li class="current"><a href="#">Editovat psa</a></li>
+</ul>
+
+<div class="content">
+    <form class="stdform stdform2 uploadCollectionPhotoForm" method="post" action="#" enctype="multipart/form-data">
+        <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Pes</span></h2>
+        </div>
+        <p>
+            <label>Jméno psa*</label>
+            <span class="field">
+                <input required type="text" name="dogname" class="longinput" value="{echo $dog->dogName}" />
+            </span>
+            {if isset($errors["dogName"])}
+            <label class="error">
+                {echo join("<br/>", $errors["dogName"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Majitel*</label>
+            <span class="field">
+                <select name="user" class="longinput">
+                    {if !empty($users)}
+                        {foreach $user in $users}
+                            {script $sel=""}
+                            {if $dog->userId == $user->id}
+                                {script $sel="selected"}
+                            {/if}
+                            <option value="{echo $user->id}" {echo $sel}>{echo $user->firstname."".$user->lastname}</option>
+                        {/foreach}
+                    {/if}
+                </select>
+            </span>
+            {if isset($errors["user"])}
+            <label class="error">
+                {echo join("<br/>", $errors["user"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Hlavní foto*</label>
+            {if $dog->imgMain != ""}
+            <span class="field" id="currentLogo">
+                <img src="{echo $dog->imgThumb}" alt="" height="100" />
+                <a href="/admin/dog/deletemainphoto/{echo $dog->id}" id="delImg" class="btn btn3 btn_trash" title="Smazat"></a>
+            </span> 
+
+            <span class="field nodisplay" id="uploadLogo" >
+                <input type="file" name="mainfile" />
+                {if isset($errors["mainfile"])}
+                <label class="error">{echo join("<br/>", $errors["mainfile"])}</label>
+                {/if}
+                {if isset($errors["imgMain"])}
+                <label class="error">{echo join("<br/>", $errors["imgMain"])}</label>
+                {/if}
+            </span>
+            {/if}{else}
+            <span class="field" id="uploadLogo">
+                <input type="file" name="mainfile" />
+                {if isset($errors["mainfile"])}
+                <label class="error">{echo join("<br/>", $errors["mainfile"])}</label>
+                {/if}
+                {if isset($errors["imgMain"])}
+                <label class="error">{echo join("<br/>", $errors["imgMain"])}</label>
+                {/if}
+            </span> 
+            {/else}
+        </p>
+        <p>
+            <label>Rasa*</label>
+            <span class="field">
+                <input required type="text" name="dograce" class="longinput" value="{echo $dog->race}" />
+            </span>
+            {if isset($errors["race"])}
+            <label class="error">
+                {echo join("<br/>", $errors["race"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Datum narození*</label>
+            <span class="field">
+                <input required type="text" name="dogdob" class="longinput datepicker" value="{echo $dog->dob}" />
+            </span>
+            {if isset($errors["dob"])}
+            <label class="error">
+                {echo join("<br/>", $errors["dob"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Další informace</label>
+            <span class="field">
+                <textarea name="doginfo" class="longinput" rows="5">{echo $dog->information}</textarea>
+            </span>
+            {if isset($errors["information"])}
+            <label class="error">
+                {echo join("<br/>", $errors["information"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Aktivní</label>
+            <span class="field">
+                <select name="active" class="longinput">
+                    {if $dog->active == 1}
+                    <option value="0">Neaktivní</option>
+                    <option value="1" selected>Aktivní</option>
+                    {/if}{else}
+                    <option value="0" selected>Neaktivní</option>
+                    <option value="1">Aktivní</option>
+                    {/else}
+                </select>
+            </span>
+        </p>
+        
+        <br/>
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Další fotografie</span></h2>
+        </div>
+        <p>
+            <label>Nahrát více fotografií</label>
+            <span class="field">
+                <select name="uploadmorephotos" class="longinput">
+                    <option value="0">Ne</option>
+                    <option value="1">Ano</option>
+                </select>
+            </span>
+        </p>
+        <p>
+            <label>Foto<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
+            <span class="field">
+                <a href="#" class="btn btn_folder multi_upload"><span>+</span></a>
+                <a href="#" class="btn btn_folder multi_upload_dec"><span>-</span></a>
+            </span>
+            <span class="field file_inputs">
+                <input type="file" name="secondfile[]"/>
+            </span> 
+            {if isset($errors["secondfile"])}
+            <label class="error">
+                {echo join("<br/>", $errors["secondfile"])}
+            </label>
+            {/if}
+        </p>
+
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Aktualni fotky</span></h2>
+        </div>
+        {if !empty($photos)}
+        <div style="overflow:hidden;">
+            <ul class="imagelist">
+                {foreach $photo in $photos}
+                {if $photo->active}
+                <li class="photoactive">
+                    {/if}{else}
+                <li class="photoinactive">
+                    {/else}
+                    <img src="{echo $photo->imgThumb}" alt="" height="120px" />
+                    <span>
+                        <a href="{echo $photo->imgMain}" class="view"></a>
+                        <a href="/admin/gallery/changephotostatus/{echo $photo->id}" class="activate" value="Změnit stav foto"></a>
+                        <a href="/admin/gallery/deletephoto/{echo $photo->id}" class="delete" value="Smazat foto"></a>
+                    </span>
+                </li>
+                {/foreach}
+            </ul>
+        </div>
+        {/if}{else}
+        <div class="notification msginfo"><a class="close"></a><p>Žádné foto</p></div>
+        {/else}
+
+        <p class="stdformbutton">
+            <input type="submit" name="submitEditDog" value="Uložit změny" />
+        </p>
+    </form>
+</div>

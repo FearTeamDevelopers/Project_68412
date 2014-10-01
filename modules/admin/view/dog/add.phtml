@@ -1,0 +1,121 @@
+<ul class="maintabmenu multipletabmenu">
+    <li><a href="/admin/dog/">Psi</a></li>
+    <li class="current"><a href="#">Nový pes</a></li>
+</ul>
+
+<div class="content">
+
+    <form class="stdform stdform2 uploadCollectionPhotoForm" method="post" action="#" enctype="multipart/form-data">
+        <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+        <input type="hidden" name="submstoken" id="submstoken" value="{echo $submstoken}" />
+
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Pes</span></h2>
+        </div>
+        <p>
+            <label>Jméno psa*</label>
+            <span class="field">
+                <input required type="text" name="dogname" class="longinput" value="{echo isset($dog)? $dog->dogName: ""}" />
+            </span>
+            {if isset($errors["dogName"])}
+            <label class="error">
+                {echo join("<br/>", $errors["dogName"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Majitel*</label>
+            <span class="field">
+                <select name="user" class="longinput">
+                    {if !empty($users)}
+                        {foreach $user in $users}
+                            <option value="{echo $user->id}">{echo $user->firstname."".$user->lastname}</option>
+                        {/foreach}
+                    {/if}
+                </select>
+            </span>
+            {if isset($errors["user"])}
+            <label class="error">
+                {echo join("<br/>", $errors["user"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Foto*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
+            <span class="field">
+                <input type="file" name="dogphoto[]"/>
+            </span> 
+            {if isset($errors["dogphoto"])}
+            <label class="error">
+                {echo join("<br/>", $errors["dogphoto"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Rasa*</label>
+            <span class="field">
+                <input required type="text" name="dograce" class="longinput" value="{echo isset($dog)? $dog->race: ""}" />
+            </span>
+            {if isset($errors["race"])}
+            <label class="error">
+                {echo join("<br/>", $errors["race"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Datum narození*</label>
+            <span class="field">
+                <input required type="text" name="dogdob" class="longinput datepicker" value="{echo isset($dog)? $dog->dob: ""}" />
+            </span>
+            {if isset($errors["dob"])}
+            <label class="error">
+                {echo join("<br/>", $errors["dob"])}
+            </label>
+            {/if}
+        </p>
+        <p>
+            <label>Další informace</label>
+            <span class="field">
+                <textarea name="doginfo" class="longinput" rows="5">{echo isset($dog)? $dog->information : ""}</textarea>
+            </span>
+            {if isset($errors["information"])}
+            <label class="error">
+                {echo join("<br/>", $errors["information"])}
+            </label>
+            {/if}
+        </p>
+
+        <br/>
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Další fotografie</span></h2>
+        </div>
+        <p>
+            <label>Nahrát více fotografií</label>
+            <span class="field">
+                <select name="uploadmorephotos" class="longinput">
+                    <option value="0">Ne</option>
+                    <option value="1">Ano</option>
+                </select>
+            </span>
+        </p>
+        <p>
+            <label>Foto<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
+            <span class="field">
+                <a href="#" class="btn btn_folder multi_upload"><span>+</span></a>
+                <a href="#" class="btn btn_folder multi_upload_dec"><span>-</span></a>
+            </span>
+            <span class="field file_inputs">
+                <input type="file" name="secondfile[]"/>
+            </span> 
+            {if isset($errors["secondfile"])}
+            <label class="error">
+                {echo join("<br/>", $errors["secondfile"])}
+            </label>
+            {/if}
+        </p>
+
+        <p class="stdformbutton">
+            <input type="submit" name="submitAddDog" value="Vytvořit" />
+        </p>
+    </form>
+</div>

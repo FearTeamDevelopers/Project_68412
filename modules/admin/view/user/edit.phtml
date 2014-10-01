@@ -5,8 +5,9 @@
 </ul>
 
 <div class="content">
-    <form class="stdform stdform2" method="post" action="#" enctype="multipart/form-data">
+    <form class="stdform stdform2 cropit-form" method="post" action="#">
         <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+        <input type="hidden" name="croppedimage" class="cropit-hidden-resized-image" value="" />
 
         <div class="contenttitle radiusbottom0">
             <h2 class="form"><span>Osobní údaje</span></h2>
@@ -14,7 +15,7 @@
         <p>
             <label>Jméno*</label>
             <span class="field">
-                <input required type="text" name="firstname" class="longinput" value="{echo isset($user)? $user->firstname: ""}" />
+                <input required type="text" name="firstname" class="longinput" value="{echo $user->firstname}" />
             </span>
             {if isset($errors["firstname"])}
             <label class="error">
@@ -25,13 +26,56 @@
         <p>
             <label>Příjmení*</label>
             <span class="field">
-                <input required type="text" name="lastname" class="longinput" value="{echo isset($user)? $user->lastname: ""}" />
+                <input required type="text" name="lastname" class="longinput" value="{echo $user->lastname}" />
             </span>
             {if isset($errors["lastname"])}
             <label class="error">
                 {echo join("<br/>", $errors["lastname"])}
             </label>
             {/if}
+        </p>
+        <p class="uploadImageWrapper">
+            <label>Profilová fotka*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
+            {if $user->imgMain != ""}
+                <span class="field" id="currentLogo">
+                    <img src="{echo $user->imgThumb}" alt="" height="100" />
+                    <a href="/admin/user/deleteusermainphoto/{echo $user->id}" class="btn btn3 btn_trash deleteImg" title="Smazat"></a>
+                </span>
+
+                <div id="image-cropper" class="uploadNewImage nodisplay">
+                    <input type="file" class="cropit-image-input" accept="image/*"/>
+                    <div class="cropit-image-preview-container">
+                        <div class="cropit-image-background-container">
+                            <img class="cropit-image-background" />
+                        </div>
+                        <div class="cropit-image-preview"></div>
+                    </div>
+
+                    <input type="range" class="cropit-image-zoom-input" />
+                    {if isset($errors["croppedimage"])}
+                    <label class="error">
+                        {echo join("<br/>", $errors["croppedimage"])}
+                    </label>
+                    {/if}
+                </div>
+            {/if}{else}
+                <div id="image-cropper" class="uploadNewImage">
+                    <input type="file" class="cropit-image-input" accept="image/*"/>
+                    <div class="cropit-image-preview-container">
+                        <div class="cropit-image-background-container">
+                            <img class="cropit-image-background" />
+                        </div>
+                        <div class="cropit-image-preview"></div>
+                    </div>
+
+                    <input type="range" class="cropit-image-zoom-input" />
+                    {if isset($errors["croppedimage"])}
+                    <label class="error">
+                        {echo join("<br/>", $errors["croppedimage"])}
+                    </label>
+                    {/if}
+                </div>
+            {/else}
         </p>
 
         <br/>
@@ -41,7 +85,7 @@
         <p>
             <label>Email*</label>
             <span class="field">
-                <input required type="email" name="email" class="longinput" value="{echo isset($user)? $user->email: ""}" />
+                <input required type="email" name="email" class="longinput" value="{echo $user->email}" />
             </span>
             {if isset($errors["email"])}
             <label class="error">
@@ -52,7 +96,7 @@
         <p>
             <label>Heslo*</label>
             <span class="field">
-                <input required type="password" name="password" class="longinput" value=""/>
+                <input type="password" name="password" class="longinput" value=""/>
             </span>
             {if isset($errors["password"])}
             <label class="error">
@@ -63,7 +107,7 @@
         <p>
             <label>Potvrdit heslo*</label>
             <span class="field">
-                <input required type="password" name="password2" class="longinput" value=""/>
+                <input type="password" name="password2" class="longinput" value=""/>
             </span>
             {if isset($errors["password2"])}
             <label class="error">
@@ -137,25 +181,24 @@
             <tbody>
 
                 {if (!empty($dogs))}
-                {foreach $dog in $dogs}
-                <tr>
-                    <td>{echo $dog->getDogName()}</td>
-                    <td><img src="{echo $dog->getImgThumb()}" alt="" /></td>
-                    <td>{echo $dog->getRace()}</td>
-                    <td>{echo $dog->getDob()}</td>
-                    {if $dog->active}
-                    <td>Active</td>
-                    {/if}
-                    {else}
-                    <td>Inactive</td>
-                    {/else}
+                    {foreach $dog in $dogs}
+                        <tr>
+                            <td>{echo $dog->getDogName()}</td>
+                            <td><img src="{echo $dog->getImgThumb()}" alt="" /></td>
+                            <td>{echo $dog->getRace()}</td>
+                            <td>{echo $dog->getDob()}</td>
+                            {if $dog->active}
+                                <td>Active</td>
+                            {/if}{else}
+                                <td>Inactive</td>
+                            {/else}
 
-                    <td>
-                        <a href="/admin/dog/edit/{echo $dog->id}" class="btn btn3 btn_pencil"></a> 
-                        {if $isAdmin}<a href="/admin/dog/delete/{echo $dog->id}" class="btn btn3 btn_trash deleteRow"></a>{/if}
-                    </td>
-                </tr>
-                {/foreach}
+                            <td>
+                                <a href="/admin/dog/edit/{echo $dog->id}" class="btn btn3 btn_pencil"></a> 
+                                <a href="/admin/dog/delete/{echo $dog->id}" class="btn btn3 btn_trash deleteRow"></a>
+                            </td>
+                        </tr>
+                    {/foreach}
                 {/if}
             </tbody>
         </table>

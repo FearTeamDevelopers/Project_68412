@@ -26,6 +26,16 @@ class App_Model_Dog extends Model
     /**
      * @column
      * @readwrite
+     * @type integer
+     * @index
+     * 
+     * @validate required, numeric, max(8)
+     */
+    protected $_userId;
+
+    /**
+     * @column
+     * @readwrite
      * @type boolean
      * @index
      * 
@@ -105,7 +115,7 @@ class App_Model_Dog extends Model
      * @length 250
      * 
      * @validate path, max(250)
-     * @label thum path
+     * @label thumb path
      */
     protected $_imgThumb;
 
@@ -138,7 +148,7 @@ class App_Model_Dog extends Model
         $this->setModified(date('Y-m-d H:i:s'));
     }
 
-        /**
+    /**
      * 
      * @return type
      */
@@ -175,7 +185,7 @@ class App_Model_Dog extends Model
             return $this->_imgThumb;
         }
     }
-    
+
     /**
      * 
      * @return array
@@ -183,10 +193,24 @@ class App_Model_Dog extends Model
     public static function fetchAll()
     {
         $query = App_Model_Dog::getQuery(array('do.*'))
-                ->join('tb_doguser', 'du.dogId = do.id', 'du', 
-                        array('du.userId'))
-                ->join('tb_user', 'du.userId = us.id', 'us', 
+                ->leftjoin('tb_user', 'do.userId = us.id', 'us', 
                         array('us.firstname', 'us.lastname'));
+
+        $dogs = App_Model_Dog::initialize($query);
+        return $dogs;
+    }
+
+    /**
+     * 
+     * @param type $id
+     * @return type
+     */
+    public static function fetchDogsByUserId($id)
+    {
+        $query = App_Model_Dog::getQuery(array('do.*'))
+                ->join('tb_user', 'do.userId = us.id', 'us', 
+                        array('us.firstname', 'us.lastname'))
+                ->where('us.id = ?', (int) $id);
 
         $dogs = App_Model_Dog::initialize($query);
         return $dogs;

@@ -1,11 +1,11 @@
 jQuery.noConflict();
 
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
 
-    jQuery(window).load(function() {
+    jQuery(window).load(function () {
         jQuery("#loader, .loader").hide();
 
-        jQuery.post('/admin/system/showprofiler/', function(msg) {
+        jQuery.post('/admin/system/showprofiler/', function (msg) {
             jQuery('body').append(msg);
         });
     });
@@ -20,6 +20,28 @@ jQuery(document).ready(function() {
     jQuery('a.view').lightBox();
     jQuery('#tabs, .tabs').tabs();
 
+    jQuery('#image-cropper, #image-cropper2').cropit({
+        imageBackground: true,
+        imageBackgroundBorderSize: 15
+    });
+    
+    jQuery('.cropit-form').submit(function(){
+        var hi = jQuery(this).find('.cropit-hidden-resized-image');
+        var a = jQuery('#image-cropper').cropit('export');
+        hi.val(a);
+        return true;
+    });
+    
+    jQuery('.cropit-form-dual').submit(function(){
+        var hi = jQuery(this).find('.cropit-hidden-resized-image');
+        var hi2 = jQuery(this).find('.cropit-hidden-resized-image2');
+        var a = jQuery('#image-cropper').cropit('export');
+        var b = jQuery('#image-cropper2').cropit('export');
+        hi.val(a);
+        hi2.val(b);
+        return true;
+    });
+
     jQuery('.datepicker').datepicker({
         changeMonth: true,
         changeYear: true,
@@ -27,7 +49,7 @@ jQuery(document).ready(function() {
         firstDay: 1
     });
 
-    jQuery('button.dialog, a.dialog').click(function() {
+    jQuery('button.dialog, a.dialog').click(function () {
         var href = jQuery(this).attr('href');
         var val = jQuery(this).attr('value');
 
@@ -39,7 +61,7 @@ jQuery(document).ready(function() {
             modal: true,
             position: {my: 'center', at: 'top', of: window},
             buttons: {
-                Close: function() {
+                Close: function () {
                     jQuery(this).dialog('close');
                 }
             }
@@ -49,7 +71,7 @@ jQuery(document).ready(function() {
 
 
     // DATA TABLES
-    jQuery.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+    jQuery.fn.dataTableExt.oApi.fnPagingInfo = function (oSettings)
     {
         return {
             "iStart": oSettings._iDisplayStart,
@@ -79,10 +101,10 @@ jQuery(document).ready(function() {
         "sServerMethod": "POST",
         "sAjaxDataProp": "data",
         "sAjaxSource": "/admin/product/load/",
-        "fnServerParams": function(aoData) {
+        "fnServerParams": function (aoData) {
             aoData.push({"name": "page", "value": this.fnPagingInfo().iPage});
         },
-        "rowCallback": function(row, data, displayIndex) {
+        "rowCallback": function (row, data, displayIndex) {
             if (jQuery.inArray(data[0], selected) !== -1) {
                 jQuery(row).addClass('togglerow');
             }
@@ -100,7 +122,7 @@ jQuery(document).ready(function() {
         ]
     });
 
-    jQuery('.stdtable2 tbody').on('click', 'tr', function() {
+    jQuery('.stdtable2 tbody').on('click', 'tr', function () {
         var id = jQuery(this).find('td:first').text();
         var index = jQuery.inArray(id, selected);
 
@@ -113,7 +135,7 @@ jQuery(document).ready(function() {
         jQuery(this).toggleClass('togglerow');
     });
 
-    jQuery('.tableoptions select').change(function() {
+    jQuery('.tableoptions select').change(function () {
         var val = jQuery(this).children('option:selected').val();
         var name = jQuery(this).attr('name');
 
@@ -122,14 +144,14 @@ jQuery(document).ready(function() {
         if (val == 2) {
             var tr = jQuery('.stdtable2 tbody tr');
 
-            tr.each(function() {
+            tr.each(function () {
                 var id = jQuery(this).find('td:first').text();
                 var index = jQuery.inArray(id, selected);
 
                 if (index === -1) {
                     selected.push(id);
-                } 
-                
+                }
+
                 jQuery(this).addClass('togglerow');
             });
         } else if (val == 1) {
@@ -138,12 +160,12 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery('.tableoptions select[name=action]').change(function() {
+    jQuery('.tableoptions select[name=action]').change(function () {
         var selected = jQuery(this).children('option:selected').val();
 
         if (selected == 'overprice') {
             jQuery('.overprice-option').removeClass('nodisplay');
-            jQuery('.overprice-option input[name=price]').blur(function() {
+            jQuery('.overprice-option input[name=price]').blur(function () {
                 var price = jQuery(this).val();
                 jQuery('.overprice-option input[name=price]').val(price);
             });
@@ -152,7 +174,7 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery('a.ajax-massaction').click(function(event) {
+    jQuery('a.ajax-massaction').click(function (event) {
         event.preventDefault();
 
         var url = jQuery(this).attr('href');
@@ -163,7 +185,7 @@ jQuery(document).ready(function() {
             var operation = jQuery('.overprice-option select').children('option:selected').val();
             var price = jQuery('.overprice-option').children('input.microinput').val();
 
-            jQuery.post(url, {tk: tk, action: action, productsids: selected, price: price, operation: operation}, function(msg) {
+            jQuery.post(url, {tk: tk, action: action, productsids: selected, price: price, operation: operation}, function (msg) {
                 jQuery('#dialog p').text(msg);
 
                 jQuery('#dialog').dialog({
@@ -172,7 +194,7 @@ jQuery(document).ready(function() {
                     modal: true,
                     position: {my: 'center', at: 'top', of: window},
                     buttons: {
-                        Close: function() {
+                        Close: function () {
                             jQuery(this).dialog('close');
                             jQuery('.stdtable2 tbody tr.togglerow').removeClass('togglerow');
                             jQuery('.tableoptions select[name=selection]').val('1');
@@ -183,7 +205,7 @@ jQuery(document).ready(function() {
                 });
             });
         } else {
-            jQuery.post(url, {tk: tk, action: action, productsids: selected}, function(msg) {
+            jQuery.post(url, {tk: tk, action: action, productsids: selected}, function (msg) {
                 jQuery('#dialog p').text(msg);
 
                 jQuery('#dialog').dialog({
@@ -192,7 +214,7 @@ jQuery(document).ready(function() {
                     modal: true,
                     position: {my: 'center', at: 'top', of: window},
                     buttons: {
-                        Close: function() {
+                        Close: function () {
                             jQuery(this).dialog('close');
                             jQuery('.stdtable2 tbody tr.togglerow').removeClass('togglerow');
                             jQuery('.tableoptions select[name=selection]').val('1');
@@ -208,7 +230,7 @@ jQuery(document).ready(function() {
     });
 
     //userinfo
-    jQuery('.userinfo').click(function() {
+    jQuery('.userinfo').click(function () {
         if (!jQuery(this).hasClass('userinfodrop')) {
             var t = jQuery(this);
             jQuery('.userdrop').width(t.width() + 30);
@@ -228,13 +250,13 @@ jQuery(document).ready(function() {
     });
 
     //notification onclick
-    jQuery('.notialert').click(function() {
+    jQuery('.notialert').click(function () {
         var t = jQuery(this);
         var url = t.attr('href');
         if (!t.hasClass('notiactive')) {
             jQuery('.notibox').slideDown('fast');
             jQuery('.noticontent').empty();
-            jQuery('.notibox .tabmenu li').each(function() {
+            jQuery('.notibox .tabmenu li').each(function () {
                 jQuery(this).removeClass('current');
             });
             //make first li as default active menu
@@ -243,7 +265,7 @@ jQuery(document).ready(function() {
             t.addClass('notiactive');
 
             jQuery('.notibox .loader').show();
-            jQuery.post(url, function(data) {
+            jQuery.post(url, function (data) {
                 jQuery('.notibox .loader').hide();
                 jQuery('.noticontent').append(data);
             });
@@ -259,7 +281,7 @@ jQuery(document).ready(function() {
         return false;
     });
 
-    jQuery(document).click(function(event) {
+    jQuery(document).click(function (event) {
         var ud = jQuery('.userdrop');
         var nb = jQuery('.notibox');
 
@@ -277,18 +299,18 @@ jQuery(document).ready(function() {
     });
 
     //notification box tab menu
-    jQuery('.tabmenu a').click(function() {
+    jQuery('.tabmenu a').click(function () {
         var url = jQuery(this).attr('href');
 
         //reset active menu
-        jQuery('.tabmenu li').each(function() {
+        jQuery('.tabmenu li').each(function () {
             jQuery(this).removeClass('current');
         });
 
         jQuery('.noticontent').empty();
         jQuery('.notibox .loader').show();
         jQuery(this).parent().addClass('current');
-        jQuery.post(url, function(data) {
+        jQuery.post(url, function (data) {
             jQuery('.notibox .loader').hide();
             jQuery('.noticontent').append(data);
         });
@@ -297,15 +319,15 @@ jQuery(document).ready(function() {
 
     // Widget Box Title on Hover event
     // show arrow image in the right side of the title upon hover
-    jQuery('.widgetbox .title').hover(function() {
+    jQuery('.widgetbox .title').hover(function () {
         if (!jQuery(this).parent().hasClass('uncollapsible'))
             jQuery(this).addClass('titlehover');
-    }, function() {
+    }, function () {
         jQuery(this).removeClass('titlehover');
     });
 
     //show/hide widget content when widget title is clicked
-    jQuery('.widgetbox .title').click(function() {
+    jQuery('.widgetbox .title').click(function () {
         if (!jQuery(this).parent().hasClass('uncollapsible')) {
             if (jQuery(this).next().is(':visible')) {
                 jQuery(this).next().slideUp('fast');
@@ -319,11 +341,11 @@ jQuery(document).ready(function() {
 
     //wrap menu to em when click will return to true
     //this code is required in order the code (next below this code) to work.
-    jQuery('.leftmenu a span').each(function() {
+    jQuery('.leftmenu a span').each(function () {
         jQuery(this).wrapInner('<em />');
     });
 
-    jQuery('.leftmenu a').click(function(e) {
+    jQuery('.leftmenu a').click(function (e) {
         var t = jQuery(this);
         var p = t.parent();
         var ul = p.find('ul');
@@ -365,24 +387,24 @@ jQuery(document).ready(function() {
     });
 
     //show tooltip menu when left menu is collapsed
-    jQuery('.leftmenu a').hover(function() {
+    jQuery('.leftmenu a').hover(function () {
         if (jQuery(this).parents('.lefticon').length > 0) {
             jQuery(this).next().stop(true, true).fadeIn();
         }
-    }, function() {
+    }, function () {
         if (jQuery(this).parents('.lefticon').length > 0) {
             jQuery(this).next().stop(true, true).fadeOut();
         }
     });
 
     //show/hide left menu to switch into full/icon only menu
-    jQuery('#togglemenuleft a').click(function() {
+    jQuery('#togglemenuleft a').click(function () {
         if (jQuery('.mainwrapper').hasClass('lefticon')) {
             jQuery('.mainwrapper').removeClass('lefticon');
             jQuery(this).removeClass('toggle');
 
             //remove all tooltip element upon switching to full menu view
-            jQuery('.leftmenu a').each(function() {
+            jQuery('.leftmenu a').each(function () {
                 jQuery(this).next().remove();
             });
 
@@ -396,7 +418,7 @@ jQuery(document).ready(function() {
 
     function showTooltipLeftMenu() {
         //create tooltip menu upon switching to icon only menu view
-        jQuery('.leftmenu a').each(function() {
+        jQuery('.leftmenu a').each(function () {
             var text = jQuery(this).text();
             jQuery(this).removeClass('active');
             jQuery(this).parent().attr('style', '');
@@ -406,7 +428,7 @@ jQuery(document).ready(function() {
     }
 
     /** FLOAT LEFT SIDEBAR **/
-    jQuery(document).scroll(function() {
+    jQuery(document).scroll(function () {
         var pos = jQuery(document).scrollTop();
         if (pos > 50) {
             jQuery('.floatleft').css({position: 'fixed', top: '10px', right: '10px'});
@@ -416,7 +438,7 @@ jQuery(document).ready(function() {
     });
 
     /** FLOAT RIGHT SIDEBAR **/
-    jQuery(document).scroll(function() {
+    jQuery(document).scroll(function () {
         if (jQuery(this).width() > 580) {
             var pos = jQuery(document).scrollTop();
             if (pos > 50) {
@@ -428,20 +450,20 @@ jQuery(document).ready(function() {
     });
 
     //NOTIFICATION CLOSE BUTTON
-    jQuery('.notification .close').click(function() {
+    jQuery('.notification .close').click(function () {
         jQuery(this).parent().fadeOut();
     });
 
     //buttons in error page
-    jQuery('.errorWrapper a').hover(function() {
+    jQuery('.errorWrapper a').hover(function () {
         jQuery(this).switchClass('default', 'hover');
-    }, function() {
+    }, function () {
         jQuery(this).switchClass('hover', 'default');
     });
 
     //screen resize
     var TO = false;
-    jQuery(window).resize(function() {
+    jQuery(window).resize(function () {
         if (jQuery(this).width() < 1024) {
             jQuery('.mainwrapper').addClass('lefticon');
             jQuery('#togglemenuleft').hide();
@@ -508,7 +530,7 @@ jQuery(document).ready(function() {
 
 
     /* ---------------------- UPLOAD FORMS --------------------------------*/
-    jQuery('.uploadPhotoForm .multi_upload').click(function() {
+    jQuery('.uploadPhotoForm .multi_upload').click(function () {
         if (jQuery('.uploadPhotoForm .file_inputs input[type=file]').length < 7) {
             jQuery('.uploadPhotoForm .file_inputs input[type=file]')
                     .last()
@@ -516,13 +538,13 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery('.uploadPhotoForm .multi_upload_dec').click(function() {
+    jQuery('.uploadPhotoForm .multi_upload_dec').click(function () {
         if (jQuery('.uploadPhotoForm .file_inputs input[type=file]').length > 1) {
             jQuery('.uploadPhotoForm .file_inputs input[type=file]').last().remove();
         }
     });
 
-    jQuery('.uploadCollectionPhotoForm .multi_upload').click(function() {
+    jQuery('.uploadCollectionPhotoForm .multi_upload').click(function () {
         if (jQuery('.uploadCollectionPhotoForm .file_inputs input[type=file]').length < 7) {
             jQuery('.uploadCollectionPhotoForm .file_inputs input[type=file]')
                     .last()
@@ -530,18 +552,18 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery('.uploadCollectionPhotoForm .multi_upload_dec').click(function() {
+    jQuery('.uploadCollectionPhotoForm .multi_upload_dec').click(function () {
         if (jQuery('.uploadCollectionPhotoForm .file_inputs input[type=file]').length > 1) {
             jQuery('.uploadCollectionPhotoForm .file_inputs input[type=file]').last().remove();
         }
     });
 
-    jQuery('.uploadPhotoForm, .uploadCollectionPhotoForm').submit(function() {
+    jQuery('.uploadPhotoForm, .uploadCollectionPhotoForm').submit(function () {
         jQuery('#loader').show();
     });
 
     /* ---------------------- AJAX OPERATIONS --------------------------------*/
-    jQuery('a#delImg').click(function() {
+    jQuery('.deleteImg').click(function() {
         event.preventDefault();
         var url = jQuery(this).attr('href');
         var tk = jQuery('#tk').val();
@@ -549,7 +571,7 @@ jQuery(document).ready(function() {
         jQuery.post(url, {tk: tk}, function(msg) {
             if (msg == 'success') {
                 jQuery('#currentLogo').hide(500);
-                jQuery('#uploadLogo').removeClass('nodisplay');
+                jQuery('.uploadNewImage').removeClass('nodisplay');
             } else {
                 jQuery('#currentLogo').append("<label class='error'>" + msg + "</label>")
             }
@@ -559,7 +581,7 @@ jQuery(document).ready(function() {
     });
 
     //delete image in grid list
-    jQuery('.imagelist a.delete').click(function(event) {
+    jQuery('.imagelist a.delete').click(function (event) {
         event.preventDefault();
         var parent = jQuery(this).parents('li');
         var c = confirm('Delete this image?');
@@ -568,7 +590,7 @@ jQuery(document).ready(function() {
             var url = jQuery(this).attr('href');
             var tk = jQuery('#tk').val();
 
-            jQuery.post(url, {tk: tk}, function(msg) {
+            jQuery.post(url, {tk: tk}, function (msg) {
                 if (msg == 'success') {
                     parent.hide('explode', 500);
                 } else {
@@ -580,13 +602,13 @@ jQuery(document).ready(function() {
     });
 
     //activate/deactivate image in grid list
-    jQuery('.imagelist a.activate').click(function(event) {
+    jQuery('.imagelist a.activate').click(function (event) {
         event.preventDefault();
         var parent = jQuery(this).parents('li');
         var url = jQuery(this).attr('href');
         var tk = jQuery('#tk').val();
 
-        jQuery.post(url, {tk: tk}, function(msg) {
+        jQuery.post(url, {tk: tk}, function (msg) {
             if (msg == 'active') {
                 parent.removeClass('photoinactive').addClass('photoactive');
             } else if (msg == 'inactive') {
@@ -600,7 +622,7 @@ jQuery(document).ready(function() {
     });
 
     //delete image in table list
-    jQuery('.mediatable a.btn_trash').click(function() {
+    jQuery('.mediatable a.btn_trash').click(function () {
         var c = confirm('Opravdu smazat?');
         var parentTr = jQuery(this).parents('tr');
 
@@ -608,7 +630,7 @@ jQuery(document).ready(function() {
             var url = jQuery(this).attr('href');
             var token = jQuery('#tk').val();
 
-            jQuery.post(url, {tk: token}, function(msg) {
+            jQuery.post(url, {tk: token}, function (msg) {
                 if (msg == 'success') {
                     parentTr.fadeOut();
                 } else {
@@ -618,9 +640,9 @@ jQuery(document).ready(function() {
         }
         return false;
     });
-    
-        //delete individual row
-    jQuery('.stdtable a.deleteRow').click(function() {
+
+    //delete individual row
+    jQuery('.stdtable a.deleteRow').click(function () {
         var c = confirm('Opravdu smazat?');
         var parentTr = jQuery(this).parents('tr');
 
@@ -628,7 +650,7 @@ jQuery(document).ready(function() {
             var url = jQuery(this).attr('href');
             var tk = jQuery('#tk').val();
 
-            jQuery.post(url, {tk: tk}, function(msg) {
+            jQuery.post(url, {tk: tk}, function (msg) {
                 if (msg == 'success') {
                     parentTr.fadeOut();
                 } else {
@@ -639,7 +661,7 @@ jQuery(document).ready(function() {
         return false;
     });
 
-    jQuery('.stdtable a.undeleteRow').click(function() {
+    jQuery('.stdtable a.undeleteRow').click(function () {
         var c = confirm('Pokračovat v obnovení?');
         var parentTr = jQuery(this).parents('tr');
 
@@ -647,7 +669,7 @@ jQuery(document).ready(function() {
             var url = jQuery(this).attr('href');
             var tk = jQuery('#tk').val();
 
-            jQuery.post(url, {tk: tk}, function(msg) {
+            jQuery.post(url, {tk: tk}, function (msg) {
                 if (msg == 'success') {
                     parentTr.fadeOut();
                 } else {
@@ -659,7 +681,7 @@ jQuery(document).ready(function() {
     });
 
     /* ------------------ ADD PRODUCT CUSTOM SCRIPT --------------------------*/
-    jQuery('.product-select').change(function() {
+    jQuery('.product-select').change(function () {
         var selected = jQuery(this).children('option:selected').val();
 
         if (selected == 'bez variant') {
@@ -675,24 +697,24 @@ jQuery(document).ready(function() {
 
     /* ------------ MEDIA ---------------*/
     //a little image effectts
-    jQuery('.imagelist img').hover(function() {
+    jQuery('.imagelist img').hover(function () {
         jQuery(this).stop().animate({opacity: 0.75});
-    }, function() {
+    }, function () {
         jQuery(this).stop().animate({opacity: 1});
     });
 
     /* ------------- BUTTONS --------------- */
     //button hover
-    jQuery('.btn').hover(function() {
+    jQuery('.btn').hover(function () {
         jQuery(this).stop().animate({backgroundColor: '#eee'});
-    }, function() {
+    }, function () {
         jQuery(this).stop().animate({backgroundColor: '#f7f7f7'});
     });
 
     //standard button hover
-    jQuery('.stdbtn').hover(function() {
+    jQuery('.stdbtn').hover(function () {
         jQuery(this).stop().animate({opacity: 0.75});
-    }, function() {
+    }, function () {
         jQuery(this).stop().animate({opacity: 1});
     });
 
@@ -728,39 +750,39 @@ jQuery(document).ready(function() {
     });
 
     /* ---------------- CHECKBOXES ---------------------- */
-    jQuery('.stdtable .checkall').click(function() {
+    jQuery('.stdtable .checkall').click(function () {
         var parentTable = jQuery(this).parents('table');
         var ch = parentTable.find('tbody input[type=checkbox]');
         if (jQuery(this).is(':checked')) {
 
             //check all rows in table
-            ch.each(function() {
+            ch.each(function () {
                 jQuery(this).attr('checked', true);
                 jQuery(this).parent().addClass('checked');
                 jQuery(this).parents('tr').addClass('selected');
             });
 
             //check both table header and footer
-            parentTable.find('.checkall').each(function() {
+            parentTable.find('.checkall').each(function () {
                 jQuery(this).attr('checked', true);
             });
 
         } else {
             //uncheck all rows in table
-            ch.each(function() {
+            ch.each(function () {
                 jQuery(this).attr('checked', false);
                 jQuery(this).parent().removeClass('checked');
                 jQuery(this).parents('tr').removeClass('selected');
             });
 
             //uncheck both table header and footer
-            parentTable.find('.checkall').each(function() {
+            parentTable.find('.checkall').each(function () {
                 jQuery(this).attr('checked', false);
             });
         }
     });
 
-    jQuery('.stdtable tbody input[type=checkbox]').click(function() {
+    jQuery('.stdtable tbody input[type=checkbox]').click(function () {
         if (jQuery(this).is(':checked')) {
             jQuery(this).parents('tr').addClass('selected');
         } else {
@@ -769,11 +791,11 @@ jQuery(document).ready(function() {
     });
 
     //check if there is/are selected row in table
-    jQuery('.massActionForm').submit(function() {
+    jQuery('.massActionForm').submit(function () {
         var sel = false;
         var ch = jQuery(this).find('tbody input[type=checkbox]');
 
-        ch.each(function() {
+        ch.each(function () {
             if (jQuery(this).is(':checked')) {
                 sel = true;
             }
@@ -788,10 +810,10 @@ jQuery(document).ready(function() {
     });
 
     //for checkbox
-    jQuery('input[type=checkbox]').each(function() {
+    jQuery('input[type=checkbox]').each(function () {
         var t = jQuery(this);
         t.wrap('<span class="checkbox"></span>');
-        t.click(function() {
+        t.click(function () {
             if (jQuery(this).is(':checked')) {
                 t.attr('checked', true);
                 t.parent().addClass('checked');

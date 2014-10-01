@@ -143,6 +143,28 @@ class App_Model_User extends Model implements UserInterface
     /**
      * @column
      * @readwrite
+     * @type text
+     * @length 250
+     * 
+     * @validate path, max(250)
+     * @label photo path
+     */
+    protected $_imgMain;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 250
+     * 
+     * @validate path, max(250)
+     * @label thumb path
+     */
+    protected $_imgThumb;
+    
+    /**
+     * @column
+     * @readwrite
      * @type datetime
      */
     protected $_created;
@@ -169,6 +191,44 @@ class App_Model_User extends Model implements UserInterface
         $this->setModified(date('Y-m-d H:i:s'));
     }
 
+    /**
+     * 
+     * @return type
+     */
+    public function getUnlinkPath($type = true)
+    {
+        if ($type) {
+            if (file_exists(APP_PATH . $this->_imgMain)) {
+                return APP_PATH . $this->_imgMain;
+            } elseif (file_exists('.' . $this->_imgMain)) {
+                return '.' . $this->_imgMain;
+            } elseif (file_exists('./' . $this->_imgMain)) {
+                return './' . $this->_imgMain;
+            }
+        } else {
+            return $this->_imgMain;
+        }
+    }
+
+    /**
+     * 
+     * @return type
+     */
+    public function getUnlinkThumbPath($type = true)
+    {
+        if ($type) {
+            if (file_exists(APP_PATH . $this->_imgThumb)) {
+                return APP_PATH . $this->_imgThumb;
+            } elseif (file_exists('.' . $this->_imgThumb)) {
+                return '.' . $this->_imgThumb;
+            } elseif (file_exists('./' . $this->_imgThumb)) {
+                return './' . $this->_imgThumb;
+            }
+        } else {
+            return $this->_imgThumb;
+        }
+    }
+    
     /**
      * 
      * @param type $value

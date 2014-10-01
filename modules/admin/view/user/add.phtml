@@ -5,9 +5,11 @@
 
 <div class="content">
 
-    <form class="stdform stdform2" method="post" action="#" enctype="multipart/form-data">
+    <form class="stdform stdform2 cropit-form-dual" method="post" action="#" enctype="multipart/form-data">
         <input type="hidden" name="tk" id="tk" value="{echo $token}" />
         <input type="hidden" name="submstoken" id="submstoken" value="{echo $submstoken}" />
+        <input type="hidden" name="croppedimage" class="cropit-hidden-resized-image" value="" />
+        <input type="hidden" name="croppedimage2" class="cropit-hidden-resized-image2" value="" />
 
         <div class="contenttitle radiusbottom0">
             <h2 class="form"><span>Osobní údaje</span></h2>
@@ -34,7 +36,25 @@
             </label>
             {/if}
         </p>
+        <p>
+            <label>Profilová fotka*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
+            <div id="image-cropper" >
+                <input type="file" class="cropit-image-input" accept="image/*"/>
+                <div class="cropit-image-preview-container">
+                    <div class="cropit-image-background-container">
+                        <img class="cropit-image-background" />
+                    </div>
+                    <div class="cropit-image-preview"></div>
+                </div>
 
+                <input type="range" class="cropit-image-zoom-input" />
+                {if isset($errors["croppedimage"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["croppedimage"])}
+                </label>
+                {/if}
+            </div>
+        </p>
         <br/>
         <div class="contenttitle radiusbottom0">
             <h2 class="form"><span>Přihlašovací údaje</span></h2>
@@ -107,14 +127,22 @@
         </p>
         <p>
             <label>Foto*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
-            <span class="field">
-                <input type="file" name="dogphoto[]"/>
-            </span> 
-            {if isset($errors["dogphoto"])}
-            <label class="error">
-                {echo join("<br/>", $errors["dogphoto"])}
-            </label>
-            {/if}
+            <div id="image-cropper2" >
+                <input type="file" class="cropit-image-input" accept="image/*"/>
+                <div class="cropit-image-preview-container">
+                    <div class="cropit-image-background-container">
+                        <img class="cropit-image-background" />
+                    </div>
+                    <div class="cropit-image-preview"></div>
+                </div>
+
+                <input type="range" class="cropit-image-zoom-input"/>
+                {if isset($errors["croppedimage2"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["croppedimage2"])}
+                </label>
+                {/if}
+            </div> 
         </p>
         <p>
             <label>Rasa*</label>
@@ -149,7 +177,6 @@
             </label>
             {/if}
         </p>
-
 
         <p class="stdformbutton">
             <input type="submit" name="submitAddUser" value="Vytvořit" />

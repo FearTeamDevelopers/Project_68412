@@ -71,7 +71,7 @@ class App_Model_Photo extends Model
      * @type text
      * @length 250
      * 
-     * @validate required, max(250)
+     * @validate required, path, max(250)
      * @label photo path
      */
     protected $_imgMain;
@@ -82,8 +82,8 @@ class App_Model_Photo extends Model
      * @type text
      * @length 250
      * 
-     * @validate required, max(250)
-     * @label thum path
+     * @validate required, path, max(250)
+     * @label thumb path
      */
     protected $_imgThumb;
 
@@ -101,12 +101,23 @@ class App_Model_Photo extends Model
     /**
      * @column
      * @readwrite
+     * @type text
+     * @length 10
+     * 
+     * @validate required, alpha, max(8)
+     * @label format
+     */
+    protected $_format;
+    
+    /**
+     * @column
+     * @readwrite
      * @type integer
      * 
      * @validate required, numeric, max(8)
      * @label size
      */
-    protected $_sizeMain;
+    protected $_size;
 
     /**
      * @column
@@ -114,10 +125,20 @@ class App_Model_Photo extends Model
      * @type integer
      * 
      * @validate required, numeric, max(8)
-     * @label thumb size
+     * @label width
      */
-    protected $_sizeThumb;
+    protected $_width;
 
+    /**
+     * @column
+     * @readwrite
+     * @type integer
+     * 
+     * @validate required, numeric, max(8)
+     * @label height
+     */
+    protected $_height;
+    
     /**
      * @column
      * @readwrite
@@ -206,4 +227,20 @@ class App_Model_Photo extends Model
         }
     }
 
+    /**
+     * 
+     * @param type $id
+     * @return type
+     */
+    public static function fetchPhotosByDogId($id)
+    {
+        $query = App_Model_Photo::getQuery(array('ph.*'))
+                ->join('tb_dogphoto', 'ph.id = dp.photoId', 'dp', 
+                        array('dp.dogId', 'dp.photoId'))
+                ->join('tb_dog', 'dp.dogId = do.id', 'do', 
+                        array('do.id' => 'dogId'))
+                ->where('do.id = ?', (int)$id);
+        $photos = App_Model_Photo::initialize($query);
+        return $photos;
+    }
 }
