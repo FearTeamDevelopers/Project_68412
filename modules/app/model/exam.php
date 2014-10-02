@@ -69,6 +69,16 @@ class App_Model_Exam extends Model
     /**
      * @column
      * @readwrite
+     * @type tinyint
+     * 
+     * @validate numeric, max(2)
+     * @label pořadí
+     */
+    protected $_rank;
+
+    /**
+     * @column
+     * @readwrite
      * @type datetime
      */
     protected $_created;

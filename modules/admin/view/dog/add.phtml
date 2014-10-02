@@ -5,9 +5,10 @@
 
 <div class="content">
 
-    <form class="stdform stdform2 uploadCollectionPhotoForm" method="post" action="#" enctype="multipart/form-data">
+    <form class="stdform stdform2 uploadCollectionPhotoForm cropit-form" method="post" action="#" enctype="multipart/form-data">
         <input type="hidden" name="tk" id="tk" value="{echo $token}" />
         <input type="hidden" name="submstoken" id="submstoken" value="{echo $submstoken}" />
+        <input type="hidden" name="croppedimage" class="cropit-hidden-resized-image" value="" />
 
         <div class="contenttitle radiusbottom0">
             <h2 class="form"><span>Pes</span></h2>
@@ -29,7 +30,7 @@
                 <select name="user" class="longinput">
                     {if !empty($users)}
                         {foreach $user in $users}
-                            <option value="{echo $user->id}">{echo $user->firstname."".$user->lastname}</option>
+                            <option value="{echo $user->id}">{echo $user->firstname." ".$user->lastname}</option>
                         {/foreach}
                     {/if}
                 </select>
@@ -41,16 +42,33 @@
             {/if}
         </p>
         <p>
-            <label>Foto*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
+            <label>Aktuální pes</label>
             <span class="field">
-                <input type="file" name="dogphoto[]"/>
-            </span> 
-            {if isset($errors["dogphoto"])}
-            <label class="error">
-                {echo join("<br/>", $errors["dogphoto"])}
-            </label>
-            {/if}
+                <select name="isactive" class="longinput">
+                    <option value="0">Ne</option>
+                    <option value="1">Ano</option>
+                </select>
+            </span>
         </p>
+        <div class="par">
+            <label>Hlavní fotka*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
+            <div id="image-cropper" class="field">
+                <input type="file" class="cropit-image-input" accept="image/*"/>
+                <div class="cropit-image-preview-container">
+                    <div class="cropit-image-background-container">
+                        <img class="cropit-image-background" />
+                    </div>
+                    <div class="cropit-image-preview"></div>
+                </div>
+
+                <input type="range" class="cropit-image-zoom-input" />
+                {if isset($errors["croppedimage"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["croppedimage"])}
+                </label>
+                {/if}
+            </div>
+        </div>
         <p>
             <label>Rasa*</label>
             <span class="field">
@@ -114,8 +132,31 @@
             {/if}
         </p>
 
+        <br/>
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Zkoušky</span></h2>
+        </div>
+        <div class="par">
+            <label>Zkoušky</label>
+            <div class="field">
+                {if !empty($exams)}
+                    <ul class="category-tree">
+                        {foreach $exam in $exams}
+                            <li>
+                                <input type="checkbox" name="chexam[]" value="{echo $exam->id}" /><span>{echo $exam->title}</span>
+                            </li>
+                        {/foreach}
+                    </ul>
+                {/if}
+                {if isset($errors["exam"])}
+                <label class="error">{echo join("<br/>", $errors["exam"])}</label>
+                {/if}
+            </div>
+        </div>
+
         <p class="stdformbutton">
-            <input type="submit" name="submitAddDog" value="Vytvořit" />
+            <input type="submit" name="submitAddDog" value="Uložit" class="submit radius2" />
+            <input type="reset" class="reset radius2" value="Reset" />
         </p>
     </form>
 </div>

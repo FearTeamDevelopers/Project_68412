@@ -7,6 +7,7 @@
 <div class="content">
     <form class="stdform stdform2 uploadCollectionPhotoForm" method="post" action="#" enctype="multipart/form-data">
         <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+        <input type="hidden" name="croppedimage" class="cropit-hidden-resized-image" value="" />
 
         <div class="contenttitle radiusbottom0">
             <h2 class="form"><span>Pes</span></h2>
@@ -32,7 +33,7 @@
                             {if $dog->userId == $user->id}
                                 {script $sel="selected"}
                             {/if}
-                            <option value="{echo $user->id}" {echo $sel}>{echo $user->firstname."".$user->lastname}</option>
+                            <option value="{echo $user->id}" {echo $sel}>{echo $user->firstname." ".$user->lastname}</option>
                         {/foreach}
                     {/if}
                 </select>
@@ -44,34 +45,62 @@
             {/if}
         </p>
         <p>
-            <label>Hlavní foto*</label>
-            {if $dog->imgMain != ""}
-            <span class="field" id="currentLogo">
-                <img src="{echo $dog->imgThumb}" alt="" height="100" />
-                <a href="/admin/dog/deletemainphoto/{echo $dog->id}" id="delImg" class="btn btn3 btn_trash" title="Smazat"></a>
-            </span> 
-
-            <span class="field nodisplay" id="uploadLogo" >
-                <input type="file" name="mainfile" />
-                {if isset($errors["mainfile"])}
-                <label class="error">{echo join("<br/>", $errors["mainfile"])}</label>
-                {/if}
-                {if isset($errors["imgMain"])}
-                <label class="error">{echo join("<br/>", $errors["imgMain"])}</label>
-                {/if}
+            <label>Aktuální pes</label>
+            <span class="field">
+                <select name="isactive" class="longinput">
+                    {if $dog->isActive == 1}
+                    <option value="0">Ne</option>
+                    <option value="1" selected>Ano</option>
+                    {/if}{else}
+                    <option value="0" selected>Ne</option>
+                    <option value="1">Ano</option>
+                    {/else}
+                </select>
             </span>
-            {/if}{else}
-            <span class="field" id="uploadLogo">
-                <input type="file" name="mainfile" />
-                {if isset($errors["mainfile"])}
-                <label class="error">{echo join("<br/>", $errors["mainfile"])}</label>
-                {/if}
-                {if isset($errors["imgMain"])}
-                <label class="error">{echo join("<br/>", $errors["imgMain"])}</label>
-                {/if}
-            </span> 
-            {/else}
         </p>
+        <div class="par">
+            <label>Hlavní fotka*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
+            {if $user->imgMain != ""}
+                <span class="field" id="currentLogo">
+                    <img src="{echo $user->imgThumb}" alt="" height="100" />
+                    <a href="/admin/user/deleteusermainphoto/{echo $user->id}" class="btn btn3 btn_trash deleteImg" title="Smazat"></a>
+                </span>
+
+                <div id="image-cropper" class="uploadNewImage nodisplay field">
+                    <input type="file" class="cropit-image-input" accept="image/*"/>
+                    <div class="cropit-image-preview-container">
+                        <div class="cropit-image-background-container">
+                            <img class="cropit-image-background" />
+                        </div>
+                        <div class="cropit-image-preview"></div>
+                    </div>
+
+                    <input type="range" class="cropit-image-zoom-input" />
+                    {if isset($errors["croppedimage"])}
+                    <label class="error">
+                        {echo join("<br/>", $errors["croppedimage"])}
+                    </label>
+                    {/if}
+                </div>
+            {/if}{else}
+                <div id="image-cropper" class="uploadNewImage field">
+                    <input type="file" class="cropit-image-input" accept="image/*"/>
+                    <div class="cropit-image-preview-container">
+                        <div class="cropit-image-background-container">
+                            <img class="cropit-image-background" />
+                        </div>
+                        <div class="cropit-image-preview"></div>
+                    </div>
+
+                    <input type="range" class="cropit-image-zoom-input" />
+                    {if isset($errors["croppedimage"])}
+                    <label class="error">
+                        {echo join("<br/>", $errors["croppedimage"])}
+                    </label>
+                    {/if}
+                </div>
+            {/else}
+        </div>
         <p>
             <label>Rasa*</label>
             <span class="field">
@@ -119,7 +148,7 @@
                 </select>
             </span>
         </p>
-        
+
         <br/>
         <div class="contenttitle radiusbottom0">
             <h2 class="form"><span>Další fotografie</span></h2>
@@ -149,8 +178,9 @@
             {/if}
         </p>
 
+        <br/>
         <div class="contenttitle radiusbottom0">
-            <h2 class="form"><span>Aktualni fotky</span></h2>
+            <h2 class="form"><span>Další fotky</span></h2>
         </div>
         {if !empty($photos)}
         <div style="overflow:hidden;">
@@ -175,8 +205,34 @@
         <div class="notification msginfo"><a class="close"></a><p>Žádné foto</p></div>
         {/else}
 
+        <br/>
+        <div class="contenttitle radiusbottom0">
+            <h2 class="form"><span>Zkoušky</span></h2>
+        </div>
+        <div class="par">
+            <label>Zkoušky</label>
+            <div class="field">
+                {if !empty($exams)}
+                    <ul class="category-tree">
+                        {foreach $exam in $exams}
+                        <li>
+                            {script $ch = ""}
+                            {if in_array($exam->getId(), $dogexamids)}
+                                {script $ch = "checked=\"checked\""}
+                            {/if}
+                            <input type="checkbox" name="chexam[]" value="{echo $exam->id}" {echo $ch} /><span>{echo $exam->title}</span>
+                        </li>
+                        {/foreach}
+                    </ul>
+                {/if}
+                {if isset($errors["exams"])}
+                <label class="error">{echo join("<br/>", $errors["exams"])}</label>
+                {/if}
+            </div>
+        </div>
+
         <p class="stdformbutton">
-            <input type="submit" name="submitEditDog" value="Uložit změny" />
+            <input type="submit" name="submitEditDog" value="Uložit změny" class="submit radius2" />
         </p>
     </form>
 </div>

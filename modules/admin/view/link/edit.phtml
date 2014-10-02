@@ -1,0 +1,63 @@
+<ul class="maintabmenu multipletabmenu">
+    <li><a href="/admin/link/">Odkazy</a></li>
+    <li><a href="/admin/link/add/">Přidat odkaz</a></li>
+    <li class="current"><a href="#">Upravit odkaz</a></li>
+</ul>
+
+<div class="content">
+    <div class="contenttitle">
+        <h2 class="form"><span>Odkaz</span></h2>
+    </div>
+
+    <form class="stdform stdform2" method="post" action="#">
+        <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+        <p>
+            <label>Text odkazu*</label>
+            <span class="field">
+                <input required type="text" name="title" class="longinput" 
+                       value="{echo $link->title}" />
+                {if isset($errors["title"])}
+                <label class="error">{echo join("<br/>", $errors["title"])}</label>
+                {/if}
+            </span>
+        </p>
+        <p>
+            <label>URL*</label>
+            <span class="field">
+                <input required type="text" name="url" class="longinput" 
+                       value="{echo $link->uri}" />
+                {if isset($errors["uri"])}
+                <label class="error">{echo join("<br/>", $errors["uri"])}</label>
+                {/if}
+            </span>
+        </p>
+        <p>
+            <label>Pořadí<small>Max. 99</small></label>
+            <span class="field">
+                <input type="text" name="rank" class="longinput" value="{echo $link->rank}"/>
+                {if isset($errors["rank"])}
+                <label class="error">{echo join("<br/>", $errors["rank"])}</label>
+                {/if}
+            </span>
+        </p>
+        <p>
+            <label>Aktivní</label>
+            <span class="field">
+                <select name="active" class="longinput">
+                    {if $link->active}
+                    <option value="0">Neaktivní</option>
+                    <option value="1" selected>Aktivní</option>
+                    {/if}
+                    {else}
+                    <option value="0" selected>Neaktivní</option>
+                    <option value="1">Aktivní</option>
+                    {/else}
+                </select>
+            </span>
+        </p>
+        
+        <p class="stdformbutton">
+            <input name="submitEditLink" type="submit" value="Uložit" class="submit radius2" />
+        </p>
+    </form>
+</div>

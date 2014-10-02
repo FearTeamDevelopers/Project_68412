@@ -1,0 +1,60 @@
+<ul class="maintabmenu multipletabmenu">
+    <li><a href="/admin/exam/">Zkoušky</a></li>
+    <li><a href="/admin/exam/add/">Přidat zkoušku</a></li>
+    <li class="current"><a href="#">Upravit zkoušku</a></li>
+</ul>
+
+<div class="content">
+    <div class="contenttitle">
+        <h2 class="form"><span>Zkouška</span></h2>
+    </div>
+
+    <form class="stdform stdform2" method="post" action="#">
+        <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+        <input type="hidden" name="submstoken" id="submstoken" value="{echo $submstoken}" />
+
+        <p>
+            <label>Název*</label>
+            <span class="field">
+                <input required name="title" type="text" class="longinput" 
+                       value="{echo $exam->title}" />
+                {if isset($errors["title"])}
+                <label class="error">{echo join("<br/>", $errors["title"])}</label>
+                {/if}
+            </span>
+        </p>
+        <p>
+            <label>Zkratka*</label>
+            <span class="field">
+                <input required type="text" name="url" class="longinput" 
+                       value="{echo $exam->shortcut}" />
+                {if isset($errors["shortcut"])}
+                <label class="error">{echo join("<br/>", $errors["shortcut"])}</label>
+                {/if}
+            </span>
+        </p>
+        <p>
+            <label>Popis</label>
+            <span class="field">
+                <input type="text" name="description" class="longinput" 
+                       value="{echo $exam->description}" />
+                {if isset($errors["description"])}
+                <label class="error">{echo join("<br/>", $errors["description"])}</label>
+                {/if}
+            </span>
+        </p>
+        <p>
+            <label>Pořadí<small>Max. 99</small></label>
+            <span class="field">
+                <input type="text" name="rank" class="longinput" value="{echo $exam->rank}"/>
+                {if isset($errors["rank"])}
+                <label class="error">{echo join("<br/>", $errors["rank"])}</label>
+                {/if}
+            </span>
+        </p>
+
+        <p class="stdformbutton">
+            <input name="submitEditExam" type="submit" value="Uložit" class="submit radius2" />
+        </p>
+    </form>
+</div>

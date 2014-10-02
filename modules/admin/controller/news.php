@@ -33,7 +33,7 @@ class Admin_Controller_News extends Controller
      */
     private function _getPhotos()
     {
-        $photos = App_Model_Photo::all(array('active = ?' => true));
+        $photos = App_Model_Photo::all(array('galleryId = ?' => 3, 'active = ?' => true));
 
         return $photos;
     }
@@ -65,7 +65,7 @@ class Admin_Controller_News extends Controller
             }
 
             $errors = array();
-            $urlKey = $this->_createUrlKey(RequestMethods::post('urlkey'));
+            $urlKey = $this->_createUrlKey(RequestMethods::post('title'));
 
             if (!$this->_checkUrlKey($urlKey)) {
                 $errors['title'] = array('This title is already used');
@@ -121,7 +121,7 @@ class Admin_Controller_News extends Controller
             }
 
             $errors = array();
-            $urlKey = $this->_createUrlKey(RequestMethods::post('urlkey'));
+            $urlKey = $this->_createUrlKey(RequestMethods::post('title'));
 
             if ($news->urlKey != $urlKey && !$this->_checkUrlKey($urlKey)) {
                 $errors['title'] = array('This title is already used');
@@ -170,7 +170,7 @@ class Admin_Controller_News extends Controller
             } else {
                 if ($news->delete()) {
                     Event::fire('admin.log', array('success', 'News id: ' . $id));
-                    echo 'ok';
+                    echo 'success';
                 } else {
                     Event::fire('admin.log', array('fail', 'News id: ' . $id));
                     echo self::ERROR_MESSAGE_1;

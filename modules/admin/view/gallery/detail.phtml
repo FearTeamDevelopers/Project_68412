@@ -41,8 +41,8 @@
                     <img src="{echo $photo->imgThumb}" alt="" height="120px" />
                     <span>
                         <a href="{echo $photo->imgMain}" class="view"></a>
-                        <a href="/admin/gallery/changephotostatus/{echo $photo->id}" class="activate" value="Změnit stav foto"></a>
-                        <a href="/admin/gallery/deletephoto/{echo $photo->id}" class="delete" value="Smazat foto"></a>
+                        <a href="/admin/gallery/changephotostatus/{echo $photo->id}" class="activate" value="Aktivovat/Deaktivovat"></a>
+                        <a href="/admin/gallery/deletephoto/{echo $photo->id}" class="delete" value="Smazat"></a>
                     </span>
                 </li>
                 {/foreach}

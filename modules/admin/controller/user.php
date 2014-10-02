@@ -5,7 +5,6 @@ use THCFrame\Registry\Registry;
 use THCFrame\Request\RequestMethods;
 use THCFrame\Events\Events as Event;
 use THCFrame\Filesystem\FileManager;
-use THCFrame\Core\ArrayMethods;
 
 /**
  * Description of Admin_Controller_User
@@ -137,13 +136,13 @@ class Admin_Controller_User extends Controller
 
             $fileErrors = $fileManager->uploadBase64Image(RequestMethods::post('croppedimage'), $photoName, 'members', time() . '_')->getUploadErrors();
             $files = $fileManager->getUploadedFiles();
-            
+
             if (!empty($fileErrors)) {
                 $errors['croppedimage'] = $fileErrors;
             }
 
             if (!empty($files)) {
-                    foreach ($files as $i => $file) {
+                foreach ($files as $i => $file) {
                     if ($file instanceof \THCFrame\Filesystem\Image) {
                         $user = new App_Model_User(array(
                             'firstname' => RequestMethods::post('firstname'),
@@ -157,59 +156,18 @@ class Admin_Controller_User extends Controller
                             'imgMain' => trim($file->getFilename(), '.'),
                             'imgThumb' => trim($file->getThumbname(), '.')
                         ));
-                        
+
                         break;
                     }
                 }
             }
-            
-            $photoNameRawDog = RequestMethods::post('firstname') . '-' . RequestMethods::post('lastname') . '-' . RequestMethods::post('dogname');
-            $photoNameDog = $this->_createUrlKey($photoNameRawDog);
-
-            $fileErrorsDog = $fileManager->newUpload()
-                    ->uploadBase64Image(RequestMethods::post('croppedimage2'), $photoNameDog, 'dog', time() . '_')
-                    ->getUploadErrors();
-            $filesDog = $fileManager->getUploadedFiles();
-            
-            if (!empty($fileErrorsDog)) {
-                $errors['croppedimage2'] = $fileErrorsDog;
-            }
 
             if (empty($errors) && $user->validate()) {
                 $userId = $user->save();
-            
-                if (!empty($filesDog)) {
-                    foreach ($filesDog as $i => $file) {
-                        if ($file instanceof \THCFrame\Filesystem\Image) {
-                            $dog = new App_Model_Dog(array(
-                                'userId' => $userId,
-                                'isActive' => 1,
-                                'dogName' => RequestMethods::post('dogname'),
-                                'race' => RequestMethods::post('dograce'),
-                                'dob' => RequestMethods::post('dogdob'),
-                                'information' => RequestMethods::post('doginfo'),
-                                'imgMain' => trim($file->getFilename(), '.'),
-                                'imgThumb' => trim($file->getThumbname(), '.')
-                            ));
-                            
-                            break;
-                        }
-                    }
-                }
 
-                if ($dog->validate()) {
-                    $dogId = $dog->save();
-
-                    Event::fire('admin.log', array('success', 'User id: ' . $userId . ' Dog id: ' . $dogId));
-                    $view->successMessage('Účet' . self::SUCCESS_MESSAGE_1);
-                    self::redirect('/admin/user/');
-                } else {
-                    Event::fire('admin.log', array('fail'));
-                    $view->set('errors', $errors + $user->getErrors() + $dog->getErrors())
-                            ->set('submstoken', $this->revalidateMutliSubmissionProtectionToken())
-                            ->set('dog', $dog)
-                            ->set('user', $user);
-                }
+                Event::fire('admin.log', array('success', 'User id: ' . $userId . ' Dog id: ' . $dogId));
+                $view->successMessage('Uživatel' . self::SUCCESS_MESSAGE_1);
+                self::redirect('/admin/user/');
             } else {
                 Event::fire('admin.log', array('fail'));
                 $view->set('errors', $errors + $user->getErrors())
@@ -270,7 +228,7 @@ class Admin_Controller_User extends Controller
                 $salt = $security->createSalt();
                 $hash = $security->getSaltedHash($pass, $salt);
             }
-            
+
             if ($user->imgMain == '') {
                 $fileManager = new FileManager(array(
                     'thumbWidth' => $this->loadConfigFromDb('thumb_width'),
@@ -294,7 +252,7 @@ class Admin_Controller_User extends Controller
                             break;
                         }
                     }
-                }else{
+                } else {
                     $errors['croppedimage'] = $fileErrors;
                 }
             } else {
@@ -377,7 +335,7 @@ class Admin_Controller_User extends Controller
                 $salt = $security->createSalt();
                 $hash = $security->getSaltedHash($pass, $salt);
             }
-            
+
             if ($user->imgMain == '') {
                 $fileManager = new FileManager(array(
                     'thumbWidth' => $this->loadConfigFromDb('thumb_width'),
@@ -401,7 +359,7 @@ class Admin_Controller_User extends Controller
                             break;
                         }
                     }
-                }else{
+                } else {
                     $errors['croppedimage'] = $fileErrors;
                 }
             } else {
@@ -450,7 +408,7 @@ class Admin_Controller_User extends Controller
             } else {
                 $pathMain = $user->getUnlinkPath();
                 $pathThumb = $user->getUnlinkThumbPath();
-                
+
                 if ($user->delete()) {
                     @unlink($pathMain);
                     @unlink($pathThumb);
@@ -465,7 +423,7 @@ class Admin_Controller_User extends Controller
             echo self::ERROR_MESSAGE_1;
         }
     }
-    
+
     /**
      * @before _secured, _admin
      */

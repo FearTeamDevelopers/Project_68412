@@ -26,7 +26,11 @@
 
             {if (!empty($users))}
                 {foreach $user in $users}
-                    <tr>
+                    {if ($user->active)}
+                        <tr class="rowActive">
+                    {/if}{else}
+                        <tr>
+                    {/else}
                         <td>{echo $user->getFirstname()}</td>
                         <td>{echo $user->getLastname()}</td>
                         <td>{echo $user->getEmail()}</td>
@@ -39,8 +43,8 @@
                     {/else}
 
                     <td>
-                        <a href="/admin/user/edit/{echo $user->id}" class="btn btn3 btn_pencil"></a> 
-                        {if $isSuperAdmin}<a href="/admin/user/delete/{echo $user->id}" class="btn btn3 btn_trash deleteRow"></a>{/if}
+                        <a href="/admin/user/edit/{echo $user->id}" class="btn btn3 btn_pencil" title="Upravit"></a> 
+                        {if $isSuperAdmin}<a href="/admin/user/delete/{echo $user->id}" class="btn btn3 btn_trash deleteRow" title="Smazat"></a>{/if}
                     </td>
                     </tr>
                 {/foreach}

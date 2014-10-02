@@ -14,27 +14,36 @@
             <col class="con0" /><col class="con1" />
             <col class="con0" /><col class="con1" />
             <col class="con0" /><col class="con1" />
+            <col class="con0" />
         </colgroup>
         <thead>
             <tr>
                 <th class="head0">Jméno</th><th class="head1">Foto</th>
                 <th class="head0">Rasa</th><th class="head1">Majitel</th>
-                <th class="head0">Narozen</th><th class="head1">&nbsp;</th>
+                <th class="head0">Narozen</th><th class="head1">Status</th>
+                <th class="head0">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
 
             {if (!empty($dogs))}
                 {foreach $dog in $dogs}
-                    <tr>
+                    {if ($dog->active)}
+                        <tr class="rowActive">
+                    {/if}{else}
+                        <tr>
+                    {/else}
                         <td>{echo $dog->getDogName()}</td>
                         <td><img src="{echo $dog->getImgThumb()}" alt="" height="80px" /></td>
                         <td>{echo $dog->getRace()}</td>
                         <td>{echo $dog->firstname." ".$dog->lastname}</td>
+                        <td>
+                            {if $dog->isActive == 1}<span class="labelProduct labelProductGreen">Aktivní</span>{/if}
+                        </td>
                         <td>{echo $dog->getDob()}</td>
                         <td>
-                            <a href="/admin/dog/edit/{echo $dog->id}" class="btn btn3 btn_pencil"></a> 
-                            <a href="/admin/dog/delete/{echo $dog->id}" class="btn btn3 btn_trash deleteRow"></a>
+                            <a href="/admin/dog/edit/{echo $dog->id}" class="btn btn3 btn_pencil" title="Upravit"></a> 
+                            <a href="/admin/dog/delete/{echo $dog->id}" class="btn btn3 btn_trash deleteRow" title="Smazat"></a>
                         </td>
                     </tr>
                 {/foreach}

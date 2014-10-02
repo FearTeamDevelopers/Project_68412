@@ -41,7 +41,7 @@ class Admin_Controller_Link extends Controller
                 'title' => RequestMethods::post('title'),
                 'uri' => RequestMethods::post('url'),
                 'target' => RequestMethods::post('target', '_blank'),
-                'rank' => RequestMethods::post('rank', 1),
+                'rank' => RequestMethods::post('rank', 1)
             ));
 
             if ($link->validate()) {
@@ -118,7 +118,7 @@ class Admin_Controller_Link extends Controller
             } else {
                 if ($link->delete()) {
                     Event::fire('admin.log', array('success', 'Link Id: ' . $id));
-                    echo 'ok';
+                    echo 'success';
                 } else {
                     Event::fire('admin.log', array('fail', 'Link Id: ' . $id));
                     echo self::ERROR_MESSAGE_1;

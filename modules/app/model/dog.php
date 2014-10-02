@@ -103,7 +103,7 @@ class App_Model_Dog extends Model {
      * @length 250
      * 
      * @validate path, max(250)
-     * @label photo path
+     * @label foto
      */
     protected $_imgMain;
 
@@ -114,7 +114,7 @@ class App_Model_Dog extends Model {
      * @length 250
      * 
      * @validate path, max(250)
-     * @label thumb path
+     * @label náhled
      */
     protected $_imgThumb;
 

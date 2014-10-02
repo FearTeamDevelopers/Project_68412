@@ -13,7 +13,7 @@
             <form class="stdform stdform2" method="post" action="#">
                 <input type="hidden" name="tk" id="tk" value="{echo $token}" />
                 <p>
-                    <label>Název stránky*</label>
+                    <label>Název stránky*<small>Neupravovat</small></label>
                     <span class="field">
                         <input type="text" name="page" required class="longinput" value="{echo $content->pageName}"/>
                         {if isset($errors["pageName"])}
@@ -66,7 +66,6 @@
                 </p>
                 <p class="stdformbutton">
                     <input name="submitEditContent" type="submit" value="Uložit" class="submit radius2" />
-                    <input type="reset" class="reset radius2" value="Reset" />
                 </p>
             </form>
         </div>

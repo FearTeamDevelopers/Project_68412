@@ -1,20 +1,20 @@
 <ul class="maintabmenu multipletabmenu">
-    <li><a href="/admin/news/">News List</a></li>
-    <li class="current"><a href="#">Add News</a></li>
+    <li><a href="/admin/news/">Novinky</a></li>
+    <li class="current"><a href="#">Přidat novinku</a></li>
 </ul><!--maintabmenu-->
 
 <div class="content">
     <div class="two_third">
         <div class="widgetbox">
             <div class="contenttitle radiusbottom0">
-                <h2 class="table"><span>News content</span></h2>
+                <h2 class="table"><span>Novinka</span></h2>
             </div><!--contenttitle-->
 
             <form class="stdform stdform2" method="post" action="#" >
                 <input type="hidden" name="tk" id="tk" value="{echo $token}" />
                 <input type="hidden" name="submstoken" id="submstoken" value="{echo $submstoken}" />
                 <p>
-                    <label>Title*</label>
+                    <label>Název*</label>
                     <span class="field">
                         <input type="text" name="title" value="{echo isset($news)? $news->title: ""}" />
                         {if isset($errors["title"])}
@@ -23,13 +23,13 @@
                     </span>
                 </p>
                 <p>
-                    <label>Author*</label>
+                    <label>Autor*</label>
                     <span class="field">
                         <input type="text" name="author" class="longinput" value="{echo $authUser->getWholeName()}"/>
                     </span>
                 </p>
                 <p>
-                    <label>Rank<small>Max. 99</small></label>
+                    <label>Pořadí<small>Max. 99</small></label>
                     <span class="field">
                         <input type="text" name="rank" class="longinput" value="{echo isset($news)? $news->rank: 1}"/>
                         {if isset($errors["rank"])}
@@ -38,7 +38,7 @@
                     </span>
                 </p>
                 <p>
-                    <label>Expiration Date*</label>
+                    <label>Zobrazovat do*</label>
                     <span class="field">
                         <input type="text" name="expiration" class="longinput datepicker" 
                                value="{echo isset($news)? $news->expirationDate: ""}"/>
@@ -48,32 +48,32 @@
                     </span>
                 </p>
                 <p>
-                    <label>Text*<small>Max. 20 000 characters</small></label>
+                    <label>Text*<small>Max. 30 000 znaků</small></label>
                     <span class="field">
                         <textarea rows="20" name="text" id="ckeditor">{echo isset($news)? $news->body: ""}</textarea>
                         {if isset($errors["body"])}
                             <label class="error">{echo join("<br/>", $errors["body"])}</label>
                         {/if}
                         <br/>
-                        <button id="news-text-to-teaser">Copy to Teaser</button>
-                        <button id="news-clear-text">Clear</button>
+                        <button id="news-clear-text">Smazat</button>
+                        <button id="news-text-to-teaser">Zkopírovat do Teaser</button>
                     </span>
                 </p>
                 <p>
-                    <label>Teaser*<small>Max. 5000 characters</small></label>
+                    <label>Teaser*<small>Max. 5000 znaků</small></label>
                     <span class="field">
                         <textarea rows="20" name="shorttext" id="ckeditor2">{echo isset($news)? $news->shortBody: ""}</textarea>
                         {if isset($errors["shortBody"])}
                             <label class="error">{echo join("<br/>", $errors["shortBody"])}</label>
                         {/if}
                         <br/>
-                        <button id="news-clear-teaser">Clear</button>
-                        <button id="news-readmore-link">Add Read More link</button>
-                        <button id="news-teaser-to-meta">Copy teaser to meta desc</button>
+                        <button id="news-clear-teaser">Smazat</button>
+                        <button id="news-readmore-link">Přidat odkaz na celý článek</button>
+                        <button id="news-teaser-to-meta">Zkopírovat do Meta-popis</button>
                     </span>
                 </p>
                 <p>
-                    <label>Meta Title<small>Fill if different form Title</small></label>
+                    <label>Meta-název<small>Vyplnit pokud se liší od Název</small></label>
                     <span class="field">
                         <input type="text" name="metatitle" value="{echo isset($news)? $news->metaTitle: ""}" />
                         {if isset($errors["metaTitle"])}
@@ -82,7 +82,7 @@
                     </span>
                 </p>
                 <p>
-                    <label>Meta description<small>Max. 250 characters<br/>Text only<br/>Fill if different from Teaser</small></label>
+                    <label>Meta-popis<small>Max. 250 znaků<br/>Pouze text<br/>Vyplnit pokud se liší od Teaser</small></label>
                     <span class="field">
                         <textarea rows="5" name="metadescription" class="longinput" >{echo isset($news)? $news->metaDescription: ""}</textarea>
                         {if isset($errors["metaDescription"])}
@@ -92,7 +92,7 @@
                     </span>
                 </p>
                 <p>
-                    <label>Meta Image<small>FB use this image if article is shared</small></label>
+                    <label>Meta-image<small>FB používá tento obrázek při sdílení</small></label>
                     <span class="field">
                         <input type="text" name="metaimage" value="{echo isset($news)? $news->metaImage: ""}" />
                         {if isset($errors["metaImage"])}
@@ -102,7 +102,7 @@
                 </p>
 
                 <p class="stdformbutton">
-                    <input name="submitAddNews" type="submit" value="Save" class="submit radius2" />
+                    <input name="submitAddNews" type="submit" value="Uložit" class="submit radius2" />
                     <input type="reset" class="reset radius2" value="Reset" />
                 </p>
             </form>
@@ -112,13 +112,13 @@
     <div class="one_third last">
         <div class="widgetbox">
             <div class="contenttitle radiusbottom0">
-                <h2 class="table"><span>Photos</span></h2>
+                <h2 class="table"><span>Foto</span></h2>
             </div><!--contenttitle-->
             <div class="news-photos">
                 {if ($photos && !empty($photos))}
                     {foreach $photo in $photos}
                         <span class="news-photo">
-                            <img src="{echo $photo->getThumbPath()}" alt="{echo $photo->getPhotoName()}" width="150px"/>
+                            <img src="{echo $photo->getImgThumb()}" alt="{echo $photo->getPhotoName()}" width="160px"/>
                             <button class="stdbtn img-to-text" value="{echo $photo->getId()}">Txt</button>
                             <button class="stdbtn img-to-teaser" value="{echo $photo->getId()}">Teaser</button>
                         </span>
