@@ -5,11 +5,10 @@
 
 <div class="content">
 
-    <form class="stdform stdform2 cropit-form-dual" method="post" action="#" enctype="multipart/form-data">
+    <form class="stdform stdform2 cropit-form" method="post" action="#" enctype="multipart/form-data">
         <input type="hidden" name="tk" id="tk" value="{echo $token}" />
         <input type="hidden" name="submstoken" id="submstoken" value="{echo $submstoken}" />
         <input type="hidden" name="croppedimage" class="cropit-hidden-resized-image" value="" />
-        <input type="hidden" name="croppedimage2" class="cropit-hidden-resized-image2" value="" />
 
         <div class="contenttitle radiusbottom0">
             <h2 class="form"><span>Osobní údaje</span></h2>
@@ -36,9 +35,9 @@
             </label>
             {/if}
         </p>
-        <p>
+        <div class="par">
             <label>Profilová fotka*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
-            <div id="image-cropper" >
+            <div id="image-cropper" class="field">
                 <input type="file" class="cropit-image-input" accept="image/*"/>
                 <div class="cropit-image-preview-container">
                     <div class="cropit-image-background-container">
@@ -54,7 +53,7 @@
                 </label>
                 {/if}
             </div>
-        </p>
+        </div>
         <br/>
         <div class="contenttitle radiusbottom0">
             <h2 class="form"><span>Přihlašovací údaje</span></h2>
@@ -110,76 +109,9 @@
         </p>
         {/if}
 
-        <br/>
-        <div class="contenttitle radiusbottom0">
-            <h2 class="form"><span>Pes</span></h2>
-        </div>
-        <p>
-            <label>Jméno psa*</label>
-            <span class="field">
-                <input required type="text" name="dogname" class="longinput" value="{echo isset($dog)? $dog->dogName: ""}" />
-            </span>
-            {if isset($errors["dogName"])}
-            <label class="error">
-                {echo join("<br/>", $errors["dogName"])}
-            </label>
-            {/if}
-        </p>
-        <p>
-            <label>Foto*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
-            <div id="image-cropper2" >
-                <input type="file" class="cropit-image-input" accept="image/*"/>
-                <div class="cropit-image-preview-container">
-                    <div class="cropit-image-background-container">
-                        <img class="cropit-image-background" />
-                    </div>
-                    <div class="cropit-image-preview"></div>
-                </div>
-
-                <input type="range" class="cropit-image-zoom-input"/>
-                {if isset($errors["croppedimage2"])}
-                <label class="error">
-                    {echo join("<br/>", $errors["croppedimage2"])}
-                </label>
-                {/if}
-            </div> 
-        </p>
-        <p>
-            <label>Rasa*</label>
-            <span class="field">
-                <input required type="text" name="dograce" class="longinput" value="{echo isset($dog)? $dog->race: ""}" />
-            </span>
-            {if isset($errors["race"])}
-            <label class="error">
-                {echo join("<br/>", $errors["race"])}
-            </label>
-            {/if}
-        </p>
-        <p>
-            <label>Datum narození*</label>
-            <span class="field">
-                <input required type="text" name="dogdob" class="longinput datepicker" value="{echo isset($dog)? $dog->dob: ""}" />
-            </span>
-            {if isset($errors["dob"])}
-            <label class="error">
-                {echo join("<br/>", $errors["dob"])}
-            </label>
-            {/if}
-        </p>
-        <p>
-            <label>Další informace</label>
-            <span class="field">
-                <textarea name="doginfo" class="longinput" rows="5">{echo isset($dog)? $dog->information : ""}</textarea>
-            </span>
-            {if isset($errors["information"])}
-            <label class="error">
-                {echo join("<br/>", $errors["information"])}
-            </label>
-            {/if}
-        </p>
-
         <p class="stdformbutton">
-            <input type="submit" name="submitAddUser" value="Vytvořit" />
+            <input type="submit" name="submitAddUser" value="Uložit" class="submit radius2" />
+            <input type="reset" class="reset radius2" value="Reset" />
         </p>
     </form>
 </div>

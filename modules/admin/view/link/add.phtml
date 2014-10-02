@@ -1,0 +1,50 @@
+<ul class="maintabmenu multipletabmenu">
+    <li ><a href="/admin/link/">Odkazy</a></li>
+    <li class="current"><a href="#">Přidat odkaz</a></li>
+</ul>
+
+<div class="content">
+    <div class="contenttitle">
+        <h2 class="form"><span>Odkaz</span></h2>
+    </div>
+
+    <form class="stdform stdform2" method="post" action="#">
+        <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+        <input type="hidden" name="submstoken" id="submstoken" value="{echo $submstoken}" />
+
+        <p>
+            <label>Text odkazu*</label>
+            <span class="field">
+                <input required name="title" type="text" class="longinput" 
+                       value="{echo isset($link)? $link->title: ""}" />
+                {if isset($errors["title"])}
+                <label class="error">{echo join("<br/>", $errors["title"])}</label>
+                {/if}
+            </span>
+        </p>
+        <p>
+            <label>URL*</label>
+            <span class="field">
+                <input required type="text" name="url" class="longinput" 
+                       value="{echo isset($link)? $link->uri: ""}" />
+                {if isset($errors["uri"])}
+                <label class="error">{echo join("<br/>", $errors["uri"])}</label>
+                {/if}
+            </span>
+        </p>
+        <p>
+            <label>Pořadí<small>Max. 99</small></label>
+            <span class="field">
+                <input type="text" name="rank" class="longinput" value="{echo isset($link)? $link->rank: 1}"/>
+                {if isset($errors["rank"])}
+                <label class="error">{echo join("<br/>", $errors["rank"])}</label>
+                {/if}
+            </span>
+        </p>
+
+        <p class="stdformbutton">
+            <input name="submitAddLink" type="submit" value="Uložit" class="submit radius2" />
+            <input type="reset" class="reset radius2" value="Reset" />
+        </p>
+    </form>
+</div>

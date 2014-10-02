@@ -431,7 +431,7 @@ button,input,select,textarea { font-size: 13px; font-family: Arial, Helvetica, s
 .stdform2 div.terms { border: 0; background: none; }
 .stdform2 p:first-child, .stdform2 div.par:first-child { border-top: 1px solid #ddd; }
 .stdform div.par { overflow: hidden; }
-.stdform2 p > label, .stdform2 div.par > label { display: inline-block; padding: 13px 20px; vertical-align: top; text-align: left; font-weight: bold; }
+.stdform2 p > label, .stdform2 div.par > label { display: inline-block; width: 200px; padding: 13px 10px; vertical-align: top; text-align: left; font-weight: bold; }
 .stdform2 p span > label.error, .stdform2 div.par div.field > label.error { margin-left: 0; padding: 8px 0 0 0; }
 .stdform2 p > label small, .stdform2 div.par > label small { font-size: 11px; color: #999; display: block; font-weight: normal; line-height: 16px; }
 .stdform2 span.field, .stdform2 div.field { margin-left: 220px; display: block; background: #fff; padding: 20px; border-left: 1px solid #ddd; }

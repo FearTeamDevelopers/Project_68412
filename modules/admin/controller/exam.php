@@ -40,7 +40,8 @@ class Admin_Controller_Exam extends Controller
             $exam = new App_Model_Exam(array(
                 'title' => RequestMethods::post('title'),
                 'description' => RequestMethods::post('description'),
-                'shortcut' => RequestMethods::post('shortcut')
+                'shortcut' => RequestMethods::post('shortcut'),
+                'rank' => RequestMethods::post('rank', 1)
             ));
 
             if ($exam->validate()) {
@@ -80,8 +81,10 @@ class Admin_Controller_Exam extends Controller
             }
 
             $exam->title = RequestMethods::post('title');
+            $exam->active = RequestMethods::post('active');
             $exam->description = RequestMethods::post('description');
             $exam->shortcut = RequestMethods::post('shortcut');
+            $exam->rank = RequestMethods::post('rank', 1);
 
             if ($exam->validate()) {
                 $exam->save();

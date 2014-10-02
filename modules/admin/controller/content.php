@@ -32,7 +32,7 @@ class Admin_Controller_Content extends Controller
      */
     private function _getPhotos()
     {
-        $photos = App_Model_Photo::all(array('active = ?' => true));
+        $photos = App_Model_Photo::all(array('galleryId = ?' => 3, 'active = ?' => true));
 
         return $photos;
     }

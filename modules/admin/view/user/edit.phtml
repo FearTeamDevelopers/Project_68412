@@ -34,7 +34,7 @@
             </label>
             {/if}
         </p>
-        <p class="uploadImageWrapper">
+        <div class="par">
             <label>Profilová fotka*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
             {if $user->imgMain != ""}
                 <span class="field" id="currentLogo">
@@ -42,7 +42,7 @@
                     <a href="/admin/user/deleteusermainphoto/{echo $user->id}" class="btn btn3 btn_trash deleteImg" title="Smazat"></a>
                 </span>
 
-                <div id="image-cropper" class="uploadNewImage nodisplay">
+                <div id="image-cropper" class="uploadNewImage nodisplay field">
                     <input type="file" class="cropit-image-input" accept="image/*"/>
                     <div class="cropit-image-preview-container">
                         <div class="cropit-image-background-container">
@@ -59,7 +59,7 @@
                     {/if}
                 </div>
             {/if}{else}
-                <div id="image-cropper" class="uploadNewImage">
+                <div id="image-cropper" class="uploadNewImage field">
                     <input type="file" class="cropit-image-input" accept="image/*"/>
                     <div class="cropit-image-preview-container">
                         <div class="cropit-image-background-container">
@@ -76,7 +76,7 @@
                     {/if}
                 </div>
             {/else}
-        </p>
+        </div>
 
         <br/>
         <div class="contenttitle radiusbottom0">
@@ -175,23 +175,23 @@
                 <tr>
                     <th class="head0">Jméno</th><th class="head1">Foto</th>
                     <th class="head0">Rasa</th><th class="head1">Narozen</th>
-                    <th class="head0">Aktivní</th><th class="head1">&nbsp;</th>
+                    <th class="head0">Status</th><th class="head1">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
 
                 {if (!empty($dogs))}
                     {foreach $dog in $dogs}
-                        <tr>
+                        {if ($dog->active)}
+                            <tr class="rowActive">
+                        {/if}{else}
+                            <tr>
+                        {/else}
                             <td>{echo $dog->getDogName()}</td>
                             <td><img src="{echo $dog->getImgThumb()}" alt="" /></td>
                             <td>{echo $dog->getRace()}</td>
                             <td>{echo $dog->getDob()}</td>
-                            {if $dog->active}
-                                <td>Active</td>
-                            {/if}{else}
-                                <td>Inactive</td>
-                            {/else}
+                            <td>{if $dog->isActive == 1}<span class="labelProduct labelProductGreen">Aktivní</span>{/if}</td>
 
                             <td>
                                 <a href="/admin/dog/edit/{echo $dog->id}" class="btn btn3 btn_pencil"></a> 
@@ -204,7 +204,7 @@
         </table>
 
         <p class="stdformbutton">
-            <input type="submit" name="submitEditUser" value="Uložit změny" />
+            <input type="submit" name="submitEditUser" value="Uložit" class="submit radius2"/>
         </p>
     </form>
 </div>

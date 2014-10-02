@@ -31,6 +31,13 @@ class Admin_Etc_Module extends Module
             'module' => 'admin',
             'controller' => 'user',
             'action' => 'logout',
+        ),
+        array(
+            'pattern' => '/admin/dog/deleteexam/:dogid/:examid',
+            'module' => 'admin',
+            'controller' => 'dog',
+            'action' => 'deleteexam',
+            'args' => array(':dogid', ':examid')
         )
     );
 

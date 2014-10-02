@@ -4,7 +4,6 @@ use Admin\Etc\Controller;
 use THCFrame\Request\RequestMethods;
 use THCFrame\Events\Events as Event;
 use THCFrame\Filesystem\FileManager;
-use THCFrame\Core\ArrayMethods;
 
 /**
  * Description of Admin_Controller_Dog
@@ -30,13 +29,15 @@ class Admin_Controller_Dog extends Controller
     public function add()
     {
         $view = $this->getActionView();
-        
+
         $users = App_Model_User::all(
-                array('role = ?' => 'role_member'), 
-                array('id', 'firstname', 'lastname')
+                        array('role = ?' => 'role_member'), array('id', 'firstname', 'lastname')
         );
-        
+
+        $exams = App_Model_Exam::all(array('active = ?' => true));
+
         $view->set('submstoken', $this->mutliSubmissionProtectionToken())
+                ->set('exams', $exams)
                 ->set('users', $users);
 
         if (RequestMethods::post('submitAddDog')) {
@@ -55,65 +56,101 @@ class Admin_Controller_Dog extends Controller
                 'maxImageHeight' => $this->loadConfigFromDb('photo_maxheight')
             ));
 
-            try {
-                $data = $fileManager->upload('dogphoto', 'dog', time() . '_');
-                foreach ($data['files'] as $file) {
-                    $mainPhoto = ArrayMethods::toObject($file);
-                    break;
+            $photoNameRaw = RequestMethods::post('user') . '-' . RequestMethods::post('dogname');
+            $photoName = $this->_createUrlKey($photoNameRaw);
+
+            $fileErrors = $fileManager->uploadBase64Image(RequestMethods::post('croppedimage'), $photoName, 'dog', time() . '_')->getUploadErrors();
+            $files = $fileManager->getUploadedFiles();
+
+            if (!empty($fileErrors)) {
+                $errors['croppedimage'] = $fileErrors;
+            }
+
+            if ((int) RequestMethods::post('isactive') == 1) {
+                App_Model_Dog::updateAll(array('isActive = ?' => true, 'userId = ?' => (int) RequestMethods::post('user')), array('isActive' => 0));
+            }
+
+            if (!empty($files)) {
+                foreach ($files as $i => $file) {
+                    if ($file instanceof \THCFrame\Filesystem\Image) {
+                        $imgMain = trim($file->getFilename(), '.');
+                        $imgThumb = trim($file->getThumbname(), '.');
+
+                        break;
+                    }
                 }
-            } catch (Exception $ex) {
-                $errors['dogphoto'] = array($ex->getMessage());
+            }else{
+                $imgMain = '';
+                $imgThumb = '';
             }
 
             $dog = new App_Model_Dog(array(
                 'userId' => RequestMethods::post('user'),
-                'isActive' => RequestMethods::post('isact', 1),
+                'isActive' => RequestMethods::post('isactive', 0),
                 'dogName' => RequestMethods::post('dogname'),
                 'race' => RequestMethods::post('dograce'),
                 'dob' => RequestMethods::post('dogdob'),
                 'information' => RequestMethods::post('doginfo'),
-                'imgMain' => trim($mainPhoto->file->path, '.'),
-                'imgThumb' => trim($mainPhoto->thumb->path, '.')
+                'imgMain' => $imgMain,
+                'imgThumb' => $imgThumb
             ));
 
             if (empty($errors) && $dog->validate()) {
                 $dogId = $dog->save();
 
-                if (RequestMethods::post('uploadmorephotos') == '1') {
-                    try {
-                        $additionalPhotos = $fileManager->upload('secondfile', 'dog', time() . '_');
-                    } catch (Exception $ex) {
-                        $errors['secondfile'] = array($ex->getMessage());
+                $examsArr = (array) RequestMethods::post('chexam');
+
+                if (!empty($examsArr)) {
+                    foreach ($examsArr as $exam) {
+                        $de = new App_Model_DogExam(array(
+                            'dogId' => (int) $dogId,
+                            'examId' => (int) $exam
+                        ));
+
+                        $de->save();
+                        Event::fire('admin.log', array('success', 'Dog id: ' . $dogId . ' has exam ' . $exam));
                     }
+                }
 
-                    if (empty($additionalPhotos['errors']) && empty($errors['secondfile'])) {
-                        foreach ($additionalPhotos['files'] as $i => $value) {
-                            $uploadedFile = ArrayMethods::toObject($value);
+                if (RequestMethods::post('uploadmorephotos') == '1') {
+                    $fileErrors = $fileManager->newUpload()->upload('secondfile', 'dog', time() . '_')->getUploadErrors();
+                    $files = $fileManager->getUploadedFiles();
 
-                            $photo = new App_Model_Photo(array(
-                                'galleryId' => 2,
-                                'imgMain' => trim($uploadedFile->file->path, '.'),
-                                'imgThumb' => trim($uploadedFile->thumb->path, '.'),
-                                'description' => RequestMethods::post('description'),
-                                'photoName' => $uploadedFile->file->filename,
-                                'mime' => $uploadedFile->file->ext,
-                                'sizeMain' => $uploadedFile->file->size,
-                                'sizeThumb' => $uploadedFile->thumb->size
-                            ));
+                    if (!empty($fileErrors)) {
+                        $errors['secondfile'] = $fileErrors;
+                    }
+                    if (!empty($files)) {
+                        foreach ($files as $i => $file) {
+                            if ($file instanceof \THCFrame\Filesystem\Image) {
+                                $info = $file->getOriginalInfo();
 
-                            if ($photo->validate()) {
-                                $photoId = $photo->save();
-
-                                $dp = new App_Model_DogPhoto(array(
-                                    'dogId' => $dogId,
-                                    'photoId' => $photoId
+                                $photo = new App_Model_Photo(array(
+                                    'galleryId' => 2,
+                                    'imgMain' => trim($file->getFilename(), '.'),
+                                    'imgThumb' => trim($file->getThumbname(), '.'),
+                                    'description' => RequestMethods::post('description'),
+                                    'photoName' => pathinfo($file->getFilename(), PATHINFO_FILENAME),
+                                    'mime' => $info['mime'],
+                                    'format' => $info['format'],
+                                    'width' => $file->getWidth(),
+                                    'height' => $file->getHeight(),
+                                    'size' => $file->getSize()
                                 ));
-                                $dp->save();
 
-                                Event::fire('admin.log', array('success', 'Photo id: ' . $photoId));
-                            } else {
-                                Event::fire('admin.log', array('fail'));
-                                $errors['secondfile'][] = $photo->getErrors();
+                                if ($photo->validate()) {
+                                    $photoId = $photo->save();
+
+                                    $dp = new App_Model_DogPhoto(array(
+                                        'dogId' => $dogId,
+                                        'photoId' => $photoId
+                                    ));
+                                    $dp->save();
+
+                                    Event::fire('admin.log', array('success', 'Photo id: ' . $photoId));
+                                } else {
+                                    Event::fire('admin.log', array('fail'));
+                                    $errors['secondfile'][] = $photo->getErrors();
+                                }
                             }
                         }
                     }
@@ -149,57 +186,75 @@ class Admin_Controller_Dog extends Controller
     {
         $view = $this->getActionView();
 
-        $dog = App_Model_Dog::first(array('id = ?' => (int) $id));
+        $dog = App_Model_Dog::fetchDogById((int) $id);
 
         if ($dog === null) {
             $view->warningMessage(self::ERROR_MESSAGE_2);
             self::redirect('/admin/dog/');
         }
         
-        $photos = App_Model_Photo::fetchPhotosByDogId($dog->getId());
+        if (!empty($dog->exams)) {
+            $dogExamIds = array();
+            foreach ($dog->exams as $dogExam) {
+                $dogExamIds[] = $dogExam->examId;
+            }
+        }
+
+        $exams = App_Model_Exam::all(array('active = ?' => true));
         $users = App_Model_User::all(
-                array('role = ?' => 'role_member'), 
-                array('id', 'firstname', 'lastname')
+                        array('role = ?' => 'role_member'), array('id', 'firstname', 'lastname')
         );
 
         $view->set('dog', $dog)
-                ->set('users', $users)
-                ->set('photos', $photos);
+                ->set('exams', $exams)
+                ->set('dogexamids', $dogExamIds)
+                ->set('users', $users);
 
         if (RequestMethods::post('submitEditDog')) {
             if ($this->checkToken() !== true) {
                 self::redirect('/admin/dog/');
             }
+
             $errors = array();
+            $fileManager = new FileManager(array(
+                'thumbWidth' => $this->loadConfigFromDb('thumb_width'),
+                'thumbHeight' => $this->loadConfigFromDb('thumb_height'),
+                'thumbResizeBy' => $this->loadConfigFromDb('thumb_resizeby'),
+                'maxImageWidth' => $this->loadConfigFromDb('photo_maxwidth'),
+                'maxImageHeight' => $this->loadConfigFromDb('photo_maxheight')
+            ));
 
             if ($dog->imgMain == '') {
-                try {
-                    $fileManager = new FileManager(array(
-                        'thumbWidth' => $this->loadConfigFromDb('thumb_width'),
-                        'thumbHeight' => $this->loadConfigFromDb('thumb_height'),
-                        'thumbResizeBy' => $this->loadConfigFromDb('thumb_resizeby'),
-                        'maxImageWidth' => $this->loadConfigFromDb('photo_maxwidth'),
-                        'maxImageHeight' => $this->loadConfigFromDb('photo_maxheight')
-                    ));
+                $photoNameRaw = RequestMethods::post('user') . '-' . RequestMethods::post('dogname');
+                $photoName = $this->_createUrlKey($photoNameRaw);
 
-                    try {
-                        $data = $fileManager->upload('mainfile', 'dog', time() . '_');
-                        $uploadedFile = ArrayMethods::toObject($data);
-                        $imgMain = trim($uploadedFile->file->path, '.');
-                        $imgThumb = trim($uploadedFile->thumb->path, '.');
-                    } catch (Exception $ex) {
-                        $errors['mainfile'] = array($ex->getMessage());
+                $fileErrors = $fileManager->uploadBase64Image(RequestMethods::post('croppedimage'), $photoName, 'dog', time() . '_')->getUploadErrors();
+                $files = $fileManager->getUploadedFiles();
+
+                if (!empty($fileErrors)) {
+                    $errors['mainfile'] = $fileErrors;
+                }
+
+                if (!empty($files)) {
+                    foreach ($files as $i => $file) {
+                        if ($file instanceof \THCFrame\Filesystem\Image) {
+                            $imgMain = trim($file->getFilename(), '.');
+                            $imgThumb = trim($file->getThumbname(), '.');
+                            break;
+                        }
                     }
-                } catch (Exception $ex) {
-                    $errors['mainfile'] = $ex->getMessage();
                 }
             } else {
                 $imgMain = $dog->imgMain;
                 $imgThumb = $dog->imgThumb;
             }
 
+            if ((int) RequestMethods::post('isactive') == 1) {
+                App_Model_Dog::updateAll(array('isActive = ?' => true, 'userId = ?' => (int) RequestMethods::post('user')), array('isActive' => 0));
+            }
+
             $dog->userId = RequestMethods::post('user');
-            $dog->isActive = RequestMethods::post('isActive', 1);
+            $dog->isActive = RequestMethods::post('isactive', 0);
             $dog->dogName = RequestMethods::post('dogname');
             $dog->race = RequestMethods::post('dograce');
             $dog->dob = RequestMethods::post('dogdob');
@@ -211,41 +266,64 @@ class Admin_Controller_Dog extends Controller
             if (empty($errors) && $dog->validate()) {
                 $dog->save();
                 
-                if (RequestMethods::post('uploadmorephotos') == '1') {
-                    try {
-                        $additionalPhotos = $fileManager->upload('secondfile', 'dog', time() . '_');
-                    } catch (Exception $ex) {
-                        $errors['secondfile'] = array($ex->getMessage());
-                    }
+                $examsArr = (array) RequestMethods::post('chexam');
 
-                    if (empty($additionalPhotos['errors']) && empty($errors['secondfile'])) {
-                        foreach ($additionalPhotos['files'] as $i => $value) {
-                            $uploadedFile = ArrayMethods::toObject($value);
-
-                            $photo = new App_Model_Photo(array(
-                                'galleryId' => 2,
-                                'imgMain' => trim($uploadedFile->file->path, '.'),
-                                'imgThumb' => trim($uploadedFile->thumb->path, '.'),
-                                'description' => RequestMethods::post('description'),
-                                'photoName' => $uploadedFile->file->filename,
-                                'mime' => $uploadedFile->file->ext,
-                                'sizeMain' => $uploadedFile->file->size,
-                                'sizeThumb' => $uploadedFile->thumb->size
+                if (!empty($examsArr)) {
+                    $deleteStatus = App_Model_DogExam::deleteAll(array('dogId = ?' => (int) $dog->getId()));
+                    if ($deleteStatus != -1) {
+                        foreach ($examsArr as $exam) {
+                            $de = new App_Model_DogExam(array(
+                                'dogId' => (int) $dog->getId(),
+                                'examId' => (int) $exam
                             ));
 
-                            if ($photo->validate()) {
-                                $photoId = $photo->save();
+                            $de->save();
+                            Event::fire('admin.log', array('success', 'Dog id: ' . $dog->getId() . ' has exam ' . $exam));
+                        }
+                    } else {
+                        $errors['exams'] = array('Nastala chyba při ukládání zkoušek');
+                    }
+                }
 
-                                $dp = new App_Model_DogPhoto(array(
-                                    'dogId' => $dog->getId(),
-                                    'photoId' => $photoId
+                if (RequestMethods::post('uploadmorephotos') == '1') {
+                    $fileErrors = $fileManager->newUpload()->upload('secondfile', 'dog', time() . '_')->getUploadErrors();
+                    $files = $fileManager->getUploadedFiles();
+
+                    if (!empty($fileErrors)) {
+                        $errors['secondfile'] = $fileErrors;
+                    }
+                    if (!empty($files)) {
+                        foreach ($files as $i => $file) {
+                            if ($file instanceof \THCFrame\Filesystem\Image) {
+                                $info = $file->getOriginalInfo();
+
+                                $photo = new App_Model_Photo(array(
+                                    'galleryId' => 2,
+                                    'imgMain' => trim($file->getFilename(), '.'),
+                                    'imgThumb' => trim($file->getThumbname(), '.'),
+                                    'description' => RequestMethods::post('description'),
+                                    'photoName' => pathinfo($file->getFilename(), PATHINFO_FILENAME),
+                                    'mime' => $info['mime'],
+                                    'format' => $info['format'],
+                                    'width' => $file->getWidth(),
+                                    'height' => $file->getHeight(),
+                                    'size' => $file->getSize()
                                 ));
-                                $dp->save();
 
-                                Event::fire('admin.log', array('success', 'Photo id: ' . $photoId));
-                            } else {
-                                Event::fire('admin.log', array('fail'));
-                                $errors['secondfile'][] = $photo->getErrors();
+                                if ($photo->validate()) {
+                                    $photoId = $photo->save();
+
+                                    $dp = new App_Model_DogPhoto(array(
+                                        'dogId' => $dog->getId(),
+                                        'photoId' => $photoId
+                                    ));
+                                    $dp->save();
+
+                                    Event::fire('admin.log', array('success', 'Photo id: ' . $photoId));
+                                } else {
+                                    Event::fire('admin.log', array('fail'));
+                                    $errors['secondfile'][] = $photo->getErrors();
+                                }
                             }
                         }
                     }
@@ -318,9 +396,12 @@ class Admin_Controller_Dog extends Controller
             if (NULL === $dog) {
                 echo self::ERROR_MESSAGE_2;
             } else {
-                if (unlink($dog->getUnlinkPath()) && unlink($dog->getUnlinkThumbPath())) {
-                    $dog->imgMain = '';
-                    $dog->imgThumb = '';
+                @unlink($dog->getUnlinkPath());
+                @unlink($dog->getUnlinkThumbPath());
+                $dog->imgMain = '';
+                $dog->imgThumb = '';
+
+                if ($dog->validate()) {
                     $dog->save();
 
                     Event::fire('admin.log', array('success', 'Dog Id: ' . $id));
