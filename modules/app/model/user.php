@@ -175,6 +175,11 @@ class App_Model_User extends Model implements UserInterface
      * @type datetime
      */
     protected $_modified;
+    
+    /**
+     * @readwrite
+     */
+    protected $_activeDog;
 
     /**
      * 
@@ -270,5 +275,6 @@ class App_Model_User extends Model implements UserInterface
         $str = "Id: {$this->_id} <br/>Email: {$this->_email} <br/> Name: {$this->_firstname} {$this->_lastname}";
         return $str;
     }
-
+    
+    
 }

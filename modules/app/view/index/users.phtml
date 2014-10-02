@@ -1,0 +1,20 @@
+{if !empty($users)}
+    {foreach $user in $users}
+    {script $dog = $user->getActiveDog()}
+    <div class="dogUser">
+        <div class="dogImg"><img src="{echo $user->getImgThumb()}"/></div>
+        <div class="dogInfo">
+            <span>Jméno:{echo $user->firstname.' '.$user->lastname}</span><br/>
+            <span>Pes: {echo $dog->getDogName()}</span><br/>
+            <span>Rasa: {echo $dog->getRace()}</span><br/>
+            <span>Zkoušky:</span>
+        </div>
+        <div class="dogLogo"><img src="../../../../public/images/user_logo.jpg"/></div>
+    </div>
+    {/foreach}
+{/if}
+{else}
+<div class="errorDiv">
+    <span>Prazdny</span>
+</div>
+{/else}

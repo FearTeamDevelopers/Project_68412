@@ -21,10 +21,25 @@ class App_Etc_Module extends Module
     protected $_observerClass = '';
     protected $_routes = array(
         array(
-            'pattern' => '/news',
+            'pattern' => '/clenove',
             'module' => 'app',
-            'controller' => 'news',
-            'action' => 'index',
+            'controller' => 'index',
+            'action' => 'users',
+        ),array(
+            'pattern' => '/galerie',
+            'module' => 'app',
+            'controller' => 'index',
+            'action' => 'galery',
+        ),array(
+            'pattern' => '/aktuality',
+            'module' => 'app',
+            'controller' => 'index',
+            'action' => 'news',
+        ),array(
+            'pattern' => '/historie',
+            'module' => 'app',
+            'controller' => 'index',
+            'action' => 'history',
         ),
         array(
             'pattern' => '/news/:page',

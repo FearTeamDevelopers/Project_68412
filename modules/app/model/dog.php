@@ -7,8 +7,7 @@ use THCFrame\Model\Model;
  *
  * @author Tomy
  */
-class App_Model_Dog extends Model
-{
+class App_Model_Dog extends Model {
 
     /**
      * @readwrite
@@ -134,10 +133,19 @@ class App_Model_Dog extends Model
     protected $_modified;
 
     /**
+     * @readwrite
+     */
+    protected $_exams;
+
+    /**
+     * @readwrite
+     */
+    protected $_adPhoto;
+
+    /**
      * 
      */
-    public function preSave()
-    {
+    public function preSave() {
         $primary = $this->getPrimaryColumn();
         $raw = $primary['raw'];
 
@@ -152,8 +160,7 @@ class App_Model_Dog extends Model
      * 
      * @return type
      */
-    public function getUnlinkPath($type = true)
-    {
+    public function getUnlinkPath($type = true) {
         if ($type) {
             if (file_exists(APP_PATH . $this->_imgMain)) {
                 return APP_PATH . $this->_imgMain;
@@ -171,8 +178,7 @@ class App_Model_Dog extends Model
      * 
      * @return type
      */
-    public function getUnlinkThumbPath($type = true)
-    {
+    public function getUnlinkThumbPath($type = true) {
         if ($type) {
             if (file_exists(APP_PATH . $this->_imgThumb)) {
                 return APP_PATH . $this->_imgThumb;
@@ -190,10 +196,9 @@ class App_Model_Dog extends Model
      * 
      * @return array
      */
-    public static function fetchAll()
-    {
+    public static function fetchAll() {
         $query = App_Model_Dog::getQuery(array('do.*'))
-                ->leftjoin('tb_user', 'do.userId = us.id', 'us', 
+                ->leftjoin('tb_user', 'do.userId = us.id', 'us',
                         array('us.firstname', 'us.lastname'));
 
         $dogs = App_Model_Dog::initialize($query);
@@ -205,10 +210,9 @@ class App_Model_Dog extends Model
      * @param type $id
      * @return type
      */
-    public static function fetchDogsByUserId($id)
-    {
+    public static function fetchDogsByUserId($id) {
         $query = App_Model_Dog::getQuery(array('do.*'))
-                ->join('tb_user', 'do.userId = us.id', 'us', 
+                ->join('tb_user', 'do.userId = us.id', 'us',
                         array('us.firstname', 'us.lastname'))
                 ->where('us.id = ?', (int) $id);
 
@@ -216,4 +220,36 @@ class App_Model_Dog extends Model
         return $dogs;
     }
 
+    /**
+     * 
+     * @param type $id
+     * @return type
+     */
+    public static function fetchActiveDogsByUserId($id) {
+        $dog = self::first(array('userId = ?' => (int) $id, 'isActive = ?' => true));
+        return $dog->getDogById();
+    }
+
+    /**
+     * 
+     * @return \App_Model_Dog
+     */
+    public function getDogById() {
+        $query = App_Model_Exam::getQuery(array('ex.*'))
+                ->join('tb_dogexam', 'ex.id = de.examId', 'de',
+                        array('de.dogId', 'de.examId'))
+                ->where('de.dogId = ?', (int) $this->getId());
+
+        $this->_exams = App_Model_Exam::initialize($query);
+
+        $query2 = App_Model_Photo::getQuery(array('ph.*'))
+                ->join('tb_dogphoto', 'ph.id = dp.photoId', 'dp', 
+                        array('dp.dogId', 'dp.photoId'))
+                ->where('dp.dogId = ?', (int) $this->getId());
+
+        $this->_adPhoto = App_Model_Photo::initialize($query2);
+
+        return $this;
+    }
 }
+    
