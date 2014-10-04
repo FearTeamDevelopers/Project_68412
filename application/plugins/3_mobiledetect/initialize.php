@@ -1,6 +1,6 @@
 <?php
 
-if (!$_SESSION['app_devicetype']) {
+if (!isset($_SESSION['app_devicetype'])) {
     require_once 'MobileDetect.php';
 
     $detect = new MobileDetect();

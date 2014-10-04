@@ -28,19 +28,16 @@
 
             {if (!empty($dogs))}
                 {foreach $dog in $dogs}
-                    {if ($dog->active)}
-                        <tr class="rowActive">
-                    {/if}{else}
-                        <tr>
-                    {/else}
+                    <tr>
                         <td>{echo $dog->getDogName()}</td>
-                        <td><img src="{echo $dog->getImgThumb()}" alt="" height="80px" /></td>
+                        <td><img src="{echo $dog->getImgThumb()}" alt="" height="150px" /></td>
                         <td>{echo $dog->getRace()}</td>
                         <td>{echo $dog->firstname." ".$dog->lastname}</td>
-                        <td>
-                            {if $dog->isActive == 1}<span class="labelProduct labelProductGreen">Aktivní</span>{/if}
-                        </td>
                         <td>{echo $dog->getDob()}</td>
+                        <td>
+                            {if $dog->active}<span class="labelProduct labelProductGreen">Aktivní</span>{/if}
+                            {if $dog->isActive == 1}<span class="labelProduct labelProductBlue">Primární</span>{/if}
+                        </td>
                         <td>
                             <a href="/admin/dog/edit/{echo $dog->id}" class="btn btn3 btn_pencil" title="Upravit"></a> 
                             <a href="/admin/dog/delete/{echo $dog->id}" class="btn btn3 btn_trash deleteRow" title="Smazat"></a>

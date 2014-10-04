@@ -19,33 +19,27 @@
             <tr>
                 <th class="head0">Jméno</th><th class="head1">Příjmení</th>
                 <th class="head0">Email</th><th class="head1">Vytvořeno</th>
-                <th class="head0">Aktivní</th><th class="head1">&nbsp;</th>
+                <th class="head0">Status</th><th class="head1">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
 
             {if (!empty($users))}
                 {foreach $user in $users}
-                    {if ($user->active)}
-                        <tr class="rowActive">
-                    {/if}{else}
-                        <tr>
-                    {/else}
+                    <tr>
                         <td>{echo $user->getFirstname()}</td>
                         <td>{echo $user->getLastname()}</td>
                         <td>{echo $user->getEmail()}</td>
                         <td>{echo $user->getCreated()}</td>
-                    {if $user->active}
-                        <td>Active</td>
-                    {/if}
-                    {else}
-                        <td>Inactive</td>
-                    {/else}
+                        <td>
+                            {if ($user->active)}<span class="labelProduct labelProductGreen">Aktivní</span>{/if}
+                            {if $user->getRole() == "role_member"}<span class="labelProduct labelProductBlue">Člen</span>{/if}
+                        </td>
 
-                    <td>
-                        <a href="/admin/user/edit/{echo $user->id}" class="btn btn3 btn_pencil" title="Upravit"></a> 
-                        {if $isSuperAdmin}<a href="/admin/user/delete/{echo $user->id}" class="btn btn3 btn_trash deleteRow" title="Smazat"></a>{/if}
-                    </td>
+                        <td>
+                            <a href="/admin/user/edit/{echo $user->id}" class="btn btn3 btn_pencil" title="Upravit"></a> 
+                            {if $isSuperAdmin}<a href="/admin/user/delete/{echo $user->id}" class="btn btn3 btn_trash deleteRow" title="Smazat"></a>{/if}
+                        </td>
                     </tr>
                 {/foreach}
             {/if}

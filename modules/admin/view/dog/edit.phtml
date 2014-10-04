@@ -5,7 +5,7 @@
 </ul>
 
 <div class="content">
-    <form class="stdform stdform2 uploadCollectionPhotoForm" method="post" action="#" enctype="multipart/form-data">
+    <form class="stdform stdform2 uploadCollectionPhotoForm cropit-form" method="post" action="#" enctype="multipart/form-data">
         <input type="hidden" name="tk" id="tk" value="{echo $token}" />
         <input type="hidden" name="croppedimage" class="cropit-hidden-resized-image" value="" />
 
@@ -60,10 +60,10 @@
         </p>
         <div class="par">
             <label>Hlavní fotka*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
-            {if $user->imgMain != ""}
+            {if $dog->imgMain != ""}
                 <span class="field" id="currentLogo">
-                    <img src="{echo $user->imgThumb}" alt="" height="100" />
-                    <a href="/admin/user/deleteusermainphoto/{echo $user->id}" class="btn btn3 btn_trash deleteImg" title="Smazat"></a>
+                    <img src="{echo $dog->imgThumb}" alt="" height="100" />
+                    <a href="/admin/dog/deleteusermainphoto/{echo $dog->id}" class="btn btn3 btn_trash deleteImg" title="Smazat"></a>
                 </span>
 
                 <div id="image-cropper" class="uploadNewImage nodisplay field">
@@ -182,27 +182,28 @@
         <div class="contenttitle radiusbottom0">
             <h2 class="form"><span>Další fotky</span></h2>
         </div>
+        {script $photos = $dog->adPhoto}
         {if !empty($photos)}
-        <div style="overflow:hidden;">
-            <ul class="imagelist">
-                {foreach $photo in $photos}
-                {if $photo->active}
-                <li class="photoactive">
-                    {/if}{else}
-                <li class="photoinactive">
-                    {/else}
-                    <img src="{echo $photo->imgThumb}" alt="" height="120px" />
-                    <span>
-                        <a href="{echo $photo->imgMain}" class="view"></a>
-                        <a href="/admin/gallery/changephotostatus/{echo $photo->id}" class="activate" value="Změnit stav foto"></a>
-                        <a href="/admin/gallery/deletephoto/{echo $photo->id}" class="delete" value="Smazat foto"></a>
-                    </span>
-                </li>
-                {/foreach}
-            </ul>
-        </div>
+            <div style="overflow:hidden;">
+                <ul class="imagelist">
+                    {foreach $photo in $photos}
+                        {if $photo->active}
+                        <li class="photoactive">
+                            {/if}{else}
+                        <li class="photoinactive">
+                            {/else}
+                            <img src="{echo $photo->imgThumb}" alt="" height="120px" />
+                            <span>
+                                <a href="{echo $photo->imgMain}" class="view"></a>
+                                <a href="/admin/gallery/changephotostatus/{echo $photo->id}" class="activate" value="Změnit stav foto"></a>
+                                <a href="/admin/gallery/deletephoto/{echo $photo->id}" class="delete" value="Smazat foto"></a>
+                            </span>
+                        </li>
+                    {/foreach}
+                </ul>
+            </div>
         {/if}{else}
-        <div class="notification msginfo"><a class="close"></a><p>Žádné foto</p></div>
+            <div class="notification msginfo"><a class="close"></a><p>Žádné foto</p></div>
         {/else}
 
         <br/>

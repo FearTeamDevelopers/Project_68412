@@ -15,6 +15,7 @@
                 <col class="con0" /> <col class="con1" />
                 <col class="con0" /> <col class="con1" />
                 <col class="con0" /> <col class="con1" />
+                <col class="con0" />
             </colgroup>
             <thead>
                 <tr>
@@ -23,18 +24,14 @@
                     <td class="head0">Autor</td>
                     <td class="head1">Zobrazovat do</td>
                     <td class="head0">Vytvořeno</td>
-                    <td class="head1">&nbsp;</td>
+                    <th class="head1">Status</th>
+                <th class="head0">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
                 {if !empty($news)}
                     {foreach $_news in $news}
-                        {if ($_news->active)}
-                            <tr class="rowActive">
-                        {/if} 
-                        {else}
-                            <tr>
-                        {/else}
+                        <tr>
                             <td class="center">
                                 <input type="checkbox" name="newsids[]" value="{echo $_news->getId()}" />
                             </td>
@@ -42,6 +39,9 @@
                             <td>{echo $_news->getAuthor()}</td>
                             <td>{echo $_news->getExpirationDate()}</td>
                             <td>{echo $_news->getCreated()}</td>
+                            <td>
+                                {if ($_news->active)}<span class="labelProduct labelProductGreen">Aktivní</span>{/if}
+                            </td>
                             <td>
                                 <a href="/admin/news/edit/{echo $_news->id}" class="btn btn3 btn_pencil" title="Upravit"></a>
                                 {if $isAdmin}<a href="/admin/news/delete/{echo $_news->id}" class="btn btn3 btn_trash deleteRow" title="Smazat"></a>{/if}

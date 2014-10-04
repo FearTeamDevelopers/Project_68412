@@ -3,12 +3,32 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta http-equiv="Content-Language" content="cs" />
-        <meta http-equiv="CACHE-CONTROL" content="public">
+        {if $env == "live"}<meta http-equiv="CACHE-CONTROL" content="public, max-age=10800">{/if}
+        {else}<meta http-equiv="CACHE-CONTROL" content="no-store">{/else}
+
         <meta name="viewport" content="width=device-width, maximum-scale=2.0, minimum-scale=1.0, initial-scale=1.0" />
-        <meta name="keywords" content="" />
-        <meta name="description" content="" />
-        <meta name="author" content="Tomas Hodan" />
-        <meta name="robots" content="INDEX,NOFOLLOW" />
+        <meta name="language" content="czech" />
+        <meta name="description" content="{echo $metadescription}" />
+        <meta name="revisit-after" content="2 Days" />
+        <meta name="distribution" content="global"/>
+        <meta name="robots" content="{echo $metarobots}">
+        
+        {if isset($article)}
+        <meta property="og:title" content="{echo $metatitle}" />
+        <meta property="og:type" content="{echo $metaogtype}" />
+        <meta property="og:url" content="{echo $metaogurl}" />
+        <meta property="og:image" content="{echo $metaogimage}" />
+        <meta property="og:description" content="{echo $metadescription}" />
+        <meta property="og:site_name" content="{echo $metaogsitename}" />
+        <meta property="article:published_time" content="{echo $artcreated}" />
+        <meta property="article:modified_time" content="{echo $artmodified}" />
+        {/if}{else}
+        <meta property="og:url" content="{echo $metaogurl}" />
+        <meta property="og:title" content="{echo $metatitle}" />
+        <meta property="og:description" content="{echo $metadescription}" />
+        <meta property="og:type" content="{echo $metaogtype}" />
+        <meta property="og:site_name" content="{echo $metaogsitename}" />
+        {/else}
 
         <link href="/public/css/custom/reset.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="/public/css/plugins/smoothness/jquery-ui-1.10.4.custom.min.css" media="screen" rel="stylesheet" type="text/css" />
@@ -16,15 +36,18 @@
         <!--[if IE]> <link href="/public/css/styles.css" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
 
         <!--[if lt IE 9]><script type="text/javascript" src="/public/js/plugins/html5.js"></script><![endif]-->
+        <link href="/public/css/plugins/lightbox2.css" rel="stylesheet"  type="text/css" />
         <script type="text/javascript" src="/public/js/plugins/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="/public/js/plugins/jquery-ui-1.10.4.custom.min.js"></script>
 
-        <title></title>
+        <link rel="canonical" href="{echo $canonical}" />
+        
+        <title>{echo $metatitle}</title>
     </head>
     <body lang="cs">
         <header>
             <div class="logo">
-                <img src="../../../../public/images/logo.jpg"/>
+                <img src="/public/images/logo.jpg"/>
             </div>
             <div class="nazev">
                 <h1>ZKO Kostelec nad Labem č.796</h1>
@@ -49,9 +72,11 @@
         <footer>
             <section class="odkazy">
                 <h1 class="footerH">Odkazy</h1>
-                <a href="#">Chovná stanice ELZET</a><br/>
-                <a href="#">Český kynologický svaz</a><br/>
-                <a href="#">Zkušební řády</a>
+                {if !empty($links)}
+                    {foreach $link in $links}
+                        <a href="{echo $link->getUri()}" target="{echo $link->getTarget()}">{echo $link->getTitle()}</a><br/>
+                    {/foreach}
+                {/if}
             </section>
             <section class="kontakt">
                 <h1 class="footerH">Kontakt</h1>

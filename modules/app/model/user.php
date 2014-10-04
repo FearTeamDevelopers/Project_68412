@@ -180,6 +180,11 @@ class App_Model_User extends Model implements UserInterface
      * @readwrite
      */
     protected $_activeDog;
+    
+    /**
+     * @readwrite
+     */
+    protected $_allDogs;
 
     /**
      * 
@@ -276,5 +281,43 @@ class App_Model_User extends Model implements UserInterface
         return $str;
     }
     
+    /**
+     * 
+     * @return type
+     */
+    public static function fetchMembersWithDogs()
+    {
+        $users = self::all(array('role = ?' => 'role_member', 'active = ?' => true));
+        
+        if (!empty($users)) {
+            foreach ($users as $i => $user) {
+                $users[$i] = $user->getUserById();
+            }
+        }
+        
+        return $users;
+    }
     
+    /**
+     * 
+     * @param type $id
+     * @return type
+     */
+    public static function fetchUserById($id)
+    {
+        $user = self::first(array('id = ?' => (int)$id));
+        return $user->getUserById();
+    }
+    
+    /**
+     * 
+     * @return \App_Model_User
+     */
+    public function getUserById()
+    {
+        $this->_activeDog = App_Model_Dog::fetchActiveDogByUserId($this->getId());
+        $this->_allDogs = App_Model_Dog::fetchOtherDogsByUserId($this->getId());
+        
+        return $this;
+    }
 }

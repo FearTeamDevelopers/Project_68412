@@ -193,13 +193,14 @@ class Admin_Controller_Dog extends Controller
             self::redirect('/admin/dog/');
         }
         
-        if (!empty($dog->exams)) {
-            $dogExamIds = array();
-            foreach ($dog->exams as $dogExam) {
+        $dogExams = $dog->exams;
+        $dogExamIds = array();
+        if (!empty($dogExams)) {
+            foreach ($dogExams as $dogExam) {
                 $dogExamIds[] = $dogExam->examId;
             }
         }
-
+        
         $exams = App_Model_Exam::all(array('active = ?' => true));
         $users = App_Model_User::all(
                         array('role = ?' => 'role_member'), array('id', 'firstname', 'lastname')
@@ -232,7 +233,7 @@ class Admin_Controller_Dog extends Controller
                 $files = $fileManager->getUploadedFiles();
 
                 if (!empty($fileErrors)) {
-                    $errors['mainfile'] = $fileErrors;
+                    $errors['croppedimage'] = $fileErrors;
                 }
 
                 if (!empty($files)) {

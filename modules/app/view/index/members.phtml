@@ -1,5 +1,5 @@
-{if !empty($users)}
-    {foreach $user in $users}
+{if !empty($members)}
+    {foreach $user in $members}
     {script $dog = $user->getActiveDog()}
     <div class="dogUser">
         <div class="dogImg"><img src="{echo $user->getImgThumb()}"/></div>
@@ -9,7 +9,7 @@
             <span>Rasa: {echo $dog->getRace()}</span><br/>
             <span>Zkoušky:</span>
         </div>
-        <div class="dogLogo"><img src="../../../../public/images/user_logo.jpg"/></div>
+        <div class="dogLogo"><img src="/public/images/user_logo.jpg"/></div>
     </div>
     {/foreach}
 {/if}

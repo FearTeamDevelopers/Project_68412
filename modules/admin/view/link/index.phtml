@@ -13,25 +13,27 @@
         <colgroup>
             <col class="con0" /><col class="con1" />
             <col class="con0" /><col class="con1" />
+            <col class="con0" />
         </colgroup>
         <thead>
             <tr>
-                <th class="head0">Text</th><th class="head1">Adresa</th>
-                <th class="head0">Pořadí</th><th class="head1">&nbsp;</th>
+                <th class="head0">Text</th>
+                <th class="head1">Adresa</th>
+                <th class="head0">Pořadí</th>
+                <th class="head1">Status</th>
+                <th class="head0">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
-
             {if (!empty($links))}
                 {foreach $link in $links}
-                    {if ($link->active)}
-                        <tr class="rowActive">
-                    {/if}{else}
-                        <tr>
-                    {/else}
+                    <tr>
                         <td>{echo $link->getTitle()}</td>    
                         <td>{echo $link->getUri()}</td>
                         <td>{echo $link->getRank()}</td>
+                        <td>
+                            {if ($link->active)}<span class="labelProduct labelProductGreen">Aktivní</span>{/if}
+                        </td>
                         <td>
                             <a href="/admin/link/edit/{echo $link->getId()}" class="btn btn3 btn_pencil" title="Upravit"></a> 
                             {if $isAdmin}<a href="/admin/link/delete/{echo $link->getId()}" class="btn btn3 btn_trash deleteRow" title="Smazat"></a>{/if}

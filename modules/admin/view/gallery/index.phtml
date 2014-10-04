@@ -12,33 +12,34 @@
         <colgroup>
             <col class="con0" /> <col class="con1" />
             <col class="con0" /> <col class="con1" />
+            <col class="con0" />
         </colgroup>
         <thead>
             <tr>
                 <th class="head0">Název</th>
                 <th class="head1">Typ</th>
                 <th class="head0">Vytvořeno</th>
-                <th class="head1">&nbsp;</th>
+                <th class="head1">Status</th>
+                <th class="head0">&nbsp;</th>
             </tr> 
         </thead>
 
         <tbody>
             {if !empty($galleries)}
                 {foreach $gallery in $galleries}
-                    {if ($gallery->active)}
-                        <tr class="rowActive">
-                    {/if}{else}
-                        <tr>
-                    {/else}
+                    <tr>
                         <td>{echo $gallery->getTitle()}</td>
                         <td>
                             {if $gallery->isPublic == 0}
-                            Soukromá
+                                Soukromá
                             {/if}{else}
-                            Veřejná
+                                Veřejná
                             {/else}
                         </td>
                         <td>{echo $gallery->getCreated()}</td>
+                        <td>
+                            {if ($gallery->active)}<span class="labelProduct labelProductGreen">Aktivní</span>{/if}
+                        </td>
                         <td>
                             <a href="/admin/gallery/detail/{echo $gallery->id}" class="btn btn_image2">
                                 <span>Vstoupit do galerie</span>

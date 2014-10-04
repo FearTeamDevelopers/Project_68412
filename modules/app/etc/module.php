@@ -24,17 +24,17 @@ class App_Etc_Module extends Module
             'pattern' => '/clenove',
             'module' => 'app',
             'controller' => 'index',
-            'action' => 'users',
+            'action' => 'members',
         ),array(
             'pattern' => '/galerie',
             'module' => 'app',
             'controller' => 'index',
-            'action' => 'galery',
+            'action' => 'gallery',
         ),array(
             'pattern' => '/aktuality',
             'module' => 'app',
-            'controller' => 'index',
-            'action' => 'news',
+            'controller' => 'news',
+            'action' => 'index',
         ),array(
             'pattern' => '/historie',
             'module' => 'app',
@@ -42,11 +42,18 @@ class App_Etc_Module extends Module
             'action' => 'history',
         ),
         array(
-            'pattern' => '/news/:page',
+            'pattern' => '/aktuality/p/:page',
             'module' => 'app',
             'controller' => 'news',
             'action' => 'index',
             'args' => ':page'
+        ),
+        array(
+            'pattern' => '/aktuality/r/:urlkey',
+            'module' => 'app',
+            'controller' => 'news',
+            'action' => 'detail',
+            'args' => ':urlkey'
         ),
         array(
             'pattern' => '/admin',

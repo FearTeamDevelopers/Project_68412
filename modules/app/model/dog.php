@@ -210,13 +210,50 @@ class App_Model_Dog extends Model {
      * @param type $id
      * @return type
      */
-    public static function fetchDogsByUserId($id) {
-        $query = App_Model_Dog::getQuery(array('do.*'))
-                ->join('tb_user', 'do.userId = us.id', 'us',
-                        array('us.firstname', 'us.lastname'))
-                ->where('us.id = ?', (int) $id);
+    public static function fetchDogById($id)
+    {
+        $dog = self::first(array('id = ?' => (int)$id));
+        return $dog->getDogById();
+    }
+    
+    /**
+     * 
+     * @param type $id
+     * @return type
+     */
+    public static function fetchOtherDogsByUserId($id) 
+    {
+        $dogs = self::all(array(
+            'userId = ?' => (int) $id, 
+            'isActive = ?' => false)
+        );
+        
+        if (!empty($dogs)) {
+            foreach ($dogs as $i => $dog) {
+                $dogs[$i] = $dog->getDogById();
+            }
+        }
 
-        $dogs = App_Model_Dog::initialize($query);
+        return $dogs;
+    }
+    
+    /**
+     * 
+     * @param type $id
+     * @return type
+     */
+    public static function fetchAllDogsByUserId($id)
+    {
+        $dogs = self::all(array(
+            'userId = ?' => (int) $id)
+        );
+        
+        if (!empty($dogs)) {
+            foreach ($dogs as $i => $dog) {
+                $dogs[$i] = $dog->getDogById();
+            }
+        }
+
         return $dogs;
     }
 
@@ -225,8 +262,13 @@ class App_Model_Dog extends Model {
      * @param type $id
      * @return type
      */
-    public static function fetchActiveDogsByUserId($id) {
-        $dog = self::first(array('userId = ?' => (int) $id, 'isActive = ?' => true));
+    public static function fetchActiveDogByUserId($id) 
+    {
+        $dog = self::first(array(
+            'userId = ?' => (int) $id, 
+            'isActive = ?' => true)
+        );
+        
         return $dog->getDogById();
     }
 

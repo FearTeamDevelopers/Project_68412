@@ -193,7 +193,7 @@ class Admin_Controller_User extends Controller
             self::redirect('/admin/user/');
         }
 
-        $dogs = App_Model_Dog::fetchDogsByUserId($id);
+        $dogs = App_Model_Dog::fetchAllDogsByUserId($user->getId());
 
         $view->set('user', $user)
                 ->set('dogs', $dogs);
@@ -300,7 +300,7 @@ class Admin_Controller_User extends Controller
             self::redirect('/admin/user/');
         }
 
-        $dogs = App_Model_Dog::fetchDogsByUserId($id);
+        $dogs = App_Model_Dog::fetchAllDogsByUserId($user->getId());
 
         $view->set('user', $user)
                 ->set('dogs', $dogs);

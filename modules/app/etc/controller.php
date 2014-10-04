@@ -27,6 +27,45 @@ class Controller extends BaseController
             $database = Registry::get('database');
             $database->disconnect();
         });
+        
+        $cache = Registry::get('cache');
+        
+        $links = $cache->get('links');
+
+        if (NULL !== $links) {
+            $links = $links;
+        } else {
+            $links = \App_Model_Link::all(array('active = ?' => true));
+            $cache->set('links', $links);
+        }
+
+        $metaData = $cache->get('global_meta_data');
+
+        if (NULL !== $metaData) {
+            $metaData = $metaData;
+        } else {
+            $metaData = array(
+                'metadescription' => $this->loadConfigFromDb('meta_description'),
+                'metarobots' => $this->loadConfigFromDb('meta_robots'),
+                'metatitle' => $this->loadConfigFromDb('meta_title'),
+                'metaogurl' => $this->loadConfigFromDb('meta_og_url'),
+                'metaogtype' => $this->loadConfigFromDb('meta_og_type'),
+                'metaogimage' => $this->loadConfigFromDb('meta_og_image'),
+                'metaogsitename' => $this->loadConfigFromDb('meta_og_site_name')
+            );
+
+            $cache->set('global_meta_data', $metaData);
+        }
+
+        $this->getLayoutView()
+                ->set('links', $links)
+                ->set('metatitle', $metaData['metatitle'])
+                ->set('metarobots', $metaData['metarobots'])
+                ->set('metadescription', $metaData['metadescription'])
+                ->set('metaogurl', $metaData['metaogurl'])
+                ->set('metaogtype', $metaData['metaogtype'])
+                ->set('metaogimage', $metaData['metaogimage'])
+                ->set('metaogsitename', $metaData['metaogsitename']);
     }
 
     /**

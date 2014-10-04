@@ -13,25 +13,28 @@
         <colgroup>
             <col class="con0" /><col class="con1" />
             <col class="con0" /><col class="con1" />
+            <col class="con0" />
         </colgroup>
         <thead>
             <tr>
-                <th class="head0">Text</th><th class="head1">Adresa</th>
-                <th class="head0">Pořadí</th><th class="head1">&nbsp;</th>
+                <th class="head0">Text</th>
+                <th class="head1">Adresa</th>
+                <th class="head0">Pořadí</th>
+                <th class="head1">Status</th>
+                <th class="head0">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
 
             {if (!empty($exams))}
                 {foreach $exam in $exams}
-                    {if ($exam->active)}
-                        <tr class="rowActive">
-                    {/if}{else}
-                        <tr>
-                    {/else}
+                    <tr>
                         <td>{echo $exam->getTitle()}</td>    
                         <td>{echo $exam->getShortcut()}</td>
                         <td>{echo $exam->getRank()}</td>
+                        <td>
+                            {if ($exam->active)}<span class="labelProduct labelProductGreen">Aktivní</span>{/if}
+                        </td>
                         <td>
                             <a href="/admin/exam/edit/{echo $exam->getId()}" class="btn btn3 btn_pencil" title="Upravit"></a> 
                             {if $isAdmin}<a href="/admin/exam/delete/{echo $exam->getId()}" class="btn btn3 btn_trash deleteRow" title="Smazat"></a>{/if}
