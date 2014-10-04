@@ -107,12 +107,22 @@ class App_Controller_Index extends Controller
     {
         
     }
+     public function akce()
+    {
+        
+    }
     
     /**
      * 
      */
     public function gallery()
-    {
+         {
+        $view = $this->getActionView();
         
+        $gallery = App_Model_Gallery::all();
+        
+        
+        $view->set('gallery', $gallery);
     }
+    
 }

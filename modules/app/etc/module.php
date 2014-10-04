@@ -40,6 +40,11 @@ class App_Etc_Module extends Module
             'module' => 'app',
             'controller' => 'index',
             'action' => 'history',
+        ),array(
+            'pattern' => '/akce',
+            'module' => 'app',
+            'controller' => 'index',
+            'action' => 'akce',
         ),
         array(
             'pattern' => '/aktuality/p/:page',

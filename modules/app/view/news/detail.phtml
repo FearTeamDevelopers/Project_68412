@@ -1,8 +1,12 @@
-<?php
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+{if !empty($news)}
+<div class="whiteBg">
+    <div class="detailHeader">
+        <span class="detailTitle">{echo $news->title}</span> <br/>
+        <span class="detailCreated">{echo $news->created." ".$news->author}</span>
+    </div>
+    <p class="detailBody">{echo $news->body}</p>
+</div>
+{/if}
+{else}
+Nebyla vybrána žádná aktualita
+{/else}

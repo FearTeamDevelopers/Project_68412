@@ -1,0 +1,11 @@
+{if !empty($history)}
+<div class="whiteBg">
+    <div class="historyHeader">
+        <span class="historyTitle">{echo $akce->title}</span>
+    </div>
+    <p class="historyBody">{echo $akce->body}</p>
+</div>
+{/if}
+{else}<div class="whiteBg">zadne akce</div>{/else}
+
+

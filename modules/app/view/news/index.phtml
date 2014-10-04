@@ -1,8 +1,16 @@
-<?php
+{if !empty($newsbatch)}
+    {foreach $new in $newsbatch}
+    <a href="/aktuality/r/{echo $new->urlKey}"><div class="news">
+        <span class="newsTitle">{echo $new->title}</span><br/>
+        <span class="newsCreated">{echo $new->created}</span><br/>
+        <p class="newsBody">{echo $new->shortBody}</p>
+    </div></a>
+    {/foreach}
+{/if}
+{else}
+<div>
+    Nejsou žádné aktuality
+</div>
+{/else}
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 

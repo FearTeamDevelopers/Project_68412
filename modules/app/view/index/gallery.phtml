@@ -1,0 +1,43 @@
+
+{if !empty($gallery)}
+    {script $i=1}
+    {foreach $bla in $gallery}
+        {if $i%2!=0}
+                <div class="galerie Leva">
+                  <a href="#">
+                    <div class="galHeader">
+                    <span class="galTitle">{echo $bla->title}</span>
+                    <img src=""/>
+                </div>
+            
+            </a>
+            <div class="galImg">
+                <img src="/public/images/Cvicak_web_galerie.jpg"/>
+                <span class="galCreated">{echo $bla->created}</span>
+            </div>
+</div>
+            
+            {/if}
+            
+            {else}
+                <div class="galerie Prava">
+                   <div class="galImg">
+                        <img src="/public/images/Cvicak_web_galerie.jpg"/>
+                        <span class="galCreated">{echo $bla->created}</span>
+                    </div>
+                    
+                    <a href="#">
+                        <div class="galHeader">
+                            <span class="galTitle">{echo $bla->title}</span>
+                            <img src=""/>
+                        </div>
+                    </a>
+                    
+                </div>
+            {/else}
+        {script $i++}
+    {/foreach}
+{/if}
+{else}
+    zadne galerie
+{/else}

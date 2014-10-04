@@ -1,0 +1,11 @@
+{if !empty($history)}
+<div class="whiteBg">
+    <div class="historyHeader">
+        <span class="historyTitle">{echo $history->title}</span>
+    </div>
+    <p class="historyBody">{echo $history->body}</p>
+</div>
+{/if}
+{else}<div class="whiteBg">zadna historie</div>{/else}
+
+
