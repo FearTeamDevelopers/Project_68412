@@ -228,7 +228,6 @@ class App_Controller_Index extends Controller
             $galleries = App_Model_Gallery::fetchGalleriesByYear($year);
             $cache->set('galerie', $galleries);
         }
-        
 
         $view->set('galleries', $galleries);
 
