@@ -107,7 +107,7 @@ class App_Controller_Index extends Controller
 
             if ($news !== null) {
                 foreach ($news as $_news) {
-                    $this->_parseNewsBody($_news, 'shortBody');
+                    $this->_parseContentBody($_news, 'shortBody');
                 }
                 
                 $cache->set('aktuality-all', $news);

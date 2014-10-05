@@ -55,7 +55,7 @@ class App_Controller_Gallery extends Controller
         $gallery = App_Model_Gallery::fetchActivePublicGalleryById((int)$id);
         $view->set('gallery', $gallery);
 
-        $canonical = 'http://' . $host . '/gallerie/r/'.$id;
+        $canonical = 'http://' . $host . '/galerie/r/'.$id;
         $layoutView->set('canonical', $canonical);
     }
 }

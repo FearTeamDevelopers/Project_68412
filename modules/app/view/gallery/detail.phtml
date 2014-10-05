@@ -1,0 +1,16 @@
+<div class="whiteBg">
+    <div class="center">
+    <span class="galDetailTitle">{$gallery->title}</span>
+    </div>
+    <p class="galDetailBody">{$gallery->description}</p>
+    {foreach $bla in $photos}
+    <div class="galDetailImgs">
+        <a data-lightbox="imageGr" data-title="echo {$bla->getTitle()}" href="{$bla->getImgMain()}" alt="{echo $bla->getTitle()}"> <img src="{echo $bla->getImgThumb()}"/></a>
+    </div>
+    {/foreach}
+    
+    <div class="galDetailImgs">
+        <a data-lightbox="imageGr" data-title="echo $bla->title" href="/public/images/user_logo.jpg" alt="echo $bla->title"> <img src="/public/images/user_logo.jpg"/></a>
+    </div>
+    
+</div>

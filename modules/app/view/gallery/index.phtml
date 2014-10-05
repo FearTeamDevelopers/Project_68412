@@ -1,13 +1,13 @@
 <div class="galleryConteiner">
-{if !empty($gallery)}
+{if !empty($galleries)}
 {script $i=1}
-{foreach $bla in $gallery}
+{foreach $bla in $galleries}
 
 {if $i%2!=0}
 <div class="galerie Leva">
-    <a href="#">
+    <a href="/galerie/r/{echo $bla->urlKey}">
         <div class="galHeader">
-            <span class="galTitle">{echo $bla->title}</span>
+            <span class="galTitle">{echo $bla->title}</span><br/>
             <img src="{echo $bla->getImgThumb()}"/>
         </div>
 
@@ -25,10 +25,10 @@
 <div class="galerie {if $i==2}Prava2{/if}{else}Prava{/else}">
 
 
-    <a href="#">
+    <a href="/galerie/r/{echo $bla->urlKey}">
         <div class="galHeader">
             <span class="galTitle">{echo $bla->title}</span>
-            <img src=""/>
+            <img src="{echo $bla->getImgThumb()}"/>
         </div>
     </a>
 
