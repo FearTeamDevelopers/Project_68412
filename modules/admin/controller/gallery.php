@@ -19,7 +19,7 @@ class Admin_Controller_Gallery extends Controller
      */
     private function _checkUrlKey($key)
     {
-        $status = App_Model_Category::first(array('urlKey = ?' => $key));
+        $status = App_Model_Gallery::first(array('urlKey = ?' => $key));
 
         if ($status === null) {
             return true;
@@ -66,7 +66,9 @@ class Admin_Controller_Gallery extends Controller
 
             $gallery = new App_Model_Gallery(array(
                 'title' => RequestMethods::post('title'),
+                'avatarPhotoId' => 0,
                 'isPublic' => RequestMethods::post('public', 1),
+                'showDate' => RequestMethods::post('showdate', date('Y-m-d')),
                 'urlKey' => $urlKey,
                 'description' => RequestMethods::post('description', '')
             ));
@@ -142,6 +144,7 @@ class Admin_Controller_Gallery extends Controller
             $gallery->title = RequestMethods::post('title');
             $gallery->avatarPhotoId = RequestMethods::post('avatar');
             $gallery->isPublic = RequestMethods::post('public');
+            $gallery->showDate = RequestMethods::post('showdate');
             $gallery->active = RequestMethods::post('active');
             $gallery->urlKey = $urlKey;
             $gallery->description = RequestMethods::post('description', '');

@@ -139,7 +139,7 @@ class App_Model_Gallery extends Model
     public static function fetchGalleryById($id)
     {
         $galleryQuery = self::getQuery(array('gl.*'))
-                ->join('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
+                ->leftjoin('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
                         array('ph.imgMain', 'ph.imgThumb'))
                 ->where('gl.id = ?', (int) $id);
         $galleryArr = self::initialize($galleryQuery);
@@ -160,7 +160,7 @@ class App_Model_Gallery extends Model
     public static function fetchActivePublicGalleryById($id)
     {
         $galleryQuery = self::getQuery(array('gl.*'))
-                ->join('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
+                ->leftjoin('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
                         array('ph.imgMain', 'ph.imgThumb'))
                 ->where('gl.id = ?', (int) $id)
                 ->where('gl.active = ?', true)
@@ -184,7 +184,7 @@ class App_Model_Gallery extends Model
         $startDate = date('Y-m-d', mktime(0, 0, 0, 1, 1, $year));
         $endDate = date('Y-m-d', mktime(0, 0, 0, 1, 1, $year + 1));
         $galleryQuery = self::getQuery(array('gl.*'))
-                ->join('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
+                ->leftjoin('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
                         array('ph.imgMain', 'ph.imgThumb'))
                 ->where('gl.active = ?', true)
                 ->where('gl.isPublic = ?', true)

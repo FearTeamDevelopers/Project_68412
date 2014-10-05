@@ -55,6 +55,15 @@
             </span>
         </p>
         <p>
+            <label>Ke dni*</label>
+            <span class="field">
+                <input type="text" name="showdate" class="longinput datepicker" value="{echo $gallery->showDate}"/>
+                {if isset($errors["showDate"])}
+                    <label class="error">{echo join("<br/>", $errors["showDate"])}</label>
+                {/if}
+            </span>
+        </p>
+        <p>
             <label>Popis*<small>Max. 30 000 znaků</small></label>
             <span class="field">
                 <textarea class="longinput" name="description" id="ckeditor">{echo $gallery->description}</textarea>
