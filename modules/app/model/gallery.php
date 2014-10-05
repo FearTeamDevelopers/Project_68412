@@ -183,13 +183,12 @@ class App_Model_Gallery extends Model
     {
         $startDate = date('Y-m-d', mktime(0, 0, 0, 1, 1, $year));
         $endDate = date('Y-m-d', mktime(0, 0, 0, 1, 1, $year + 1));
+        
         $galleryQuery = self::getQuery(array('gl.*'))
-                ->join('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
+                ->leftjoin('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
                         array('ph.imgMain', 'ph.imgThumb'))
-                ->where('gl.active = ?', true)
-                ->where('gl.isPublic = ?', true)
-                ->where('gl.showDate BETWEEN ?', $startDate . ' AND ' . $endDate)
-                ->order('showDate', 'DESC');
+                ->wheresql('gl.active=1 AND gl.isPublic=1 AND gl.showDate BETWEEN \''.$startDate.'\' AND \''.$endDate.'\'')
+                ->order('gl.showDate', 'DESC');
 
         $galleries = self::initialize($galleryQuery);
 
