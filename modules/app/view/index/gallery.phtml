@@ -1,43 +1,48 @@
-
+<div class="galleryConteiner">
 {if !empty($gallery)}
-    {script $i=1}
-    {foreach $bla in $gallery}
-        {if $i%2!=0}
-                <div class="galerie Leva">
-                  <a href="#">
-                    <div class="galHeader">
-                    <span class="galTitle">{echo $bla->title}</span>
-                    <img src=""/>
-                </div>
-            
-            </a>
-            <div class="galImg">
-                <img src="/public/images/Cvicak_web_galerie.jpg"/>
-                <span class="galCreated">{echo $bla->created}</span>
-            </div>
+{script $i=1}
+{foreach $bla in $gallery}
+
+{if $i%2!=0}
+<div class="galerie Leva">
+    <a href="#">
+        <div class="galHeader">
+            <span class="galTitle">{echo $bla->title}</span>
+            <img src="{echo $bla->getImgThumb()}"/>
+        </div>
+
+    </a>
 </div>
-            
-            {/if}
-            
-            {else}
-                <div class="galerie Prava">
-                   <div class="galImg">
-                        <img src="/public/images/Cvicak_web_galerie.jpg"/>
-                        <span class="galCreated">{echo $bla->created}</span>
-                    </div>
-                    
-                    <a href="#">
-                        <div class="galHeader">
-                            <span class="galTitle">{echo $bla->title}</span>
-                            <img src=""/>
-                        </div>
-                    </a>
-                    
-                </div>
-            {/else}
-        {script $i++}
-    {/foreach}
+<div class="galImgLeva">
+    <img src="/public/images/Cvicak_web_galerie.jpg"/>
+    <br/>
+    <span class="galCreated">{echo date("d.m. Y", strtotime($bla->showDate))}</span>
+</div>  
+{/if}
+
+{else}
+
+<div class="galerie {if $i==2}Prava2{/if}{else}Prava{/else}">
+
+
+    <a href="#">
+        <div class="galHeader">
+            <span class="galTitle">{echo $bla->title}</span>
+            <img src=""/>
+        </div>
+    </a>
+
+</div>
+<div class="galImg">
+    <img src="/public/images/Cvicak_web_galerie.jpg"/><br/>
+    <span class="galCreated">{echo date("d.m. Y", strtotime($bla->showDate))}</span>
+</div>  
+{/else}
+
+
+{script $i++}
+{/foreach}
 {/if}
 {else}
-    zadne galerie
-{/else}
+zadne galerie
+{/else}</div>

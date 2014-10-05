@@ -10,18 +10,17 @@ html{
     background-repeat: no-repeat ,repeat-x;
     background-position-x: center;
     background-attachment:fixed;
+    height:100%;
 }
 body{
     font: 18px 'Calibri', sans-serif;
     width:1000px;
-    height:1000px;
+    min-height:100%;
     background-color:rgb(235,235,235);
     background-attachment: fixed;
-    margin:0 auto;
-    -webkit-box-shadow: -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow:    -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
-    box-shadow:         -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
+   
     position:relative;
+    margin:0 auto;
 
 }
 .whiteBg{
@@ -45,6 +44,9 @@ header{
     position:absolute;
     top:0%;
     border-bottom:2px solid gray;
+     -webkit-box-shadow: 0px -10px 20px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow:     0px -10px 20px 0px rgba(0, 0, 0, 0.75);
+    box-shadow:          0px -10px 20px 0px rgba(0, 0, 0, 0.75);
 }
 .logo{
     margin-left:50px;
@@ -61,25 +63,33 @@ header{
 .conteiner{
     float:left;
     width:100%;
-    height:59%;
+    min-height:610px;
     border-top:2px solid white;
     border-bottom:2px solid rgb(125, 125, 125);
     margin-top:172px;
-    margin-bottom:230px;
+    margin-bottom:1px;
     padding-bottom:3px;
+    
+ -webkit-box-shadow:    0px 10px 20px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow:    0px 10px 20px 0px rgba(0, 0, 0, 0.75);
+    box-shadow:         0px 10px 20px 0px rgba(0, 0, 0, 0.75);
+background-color:rgb(235,235,235);
+}
 
+.conteiner:after{
+    clear: both;
 }
 /********************** MENU ***************************/
 .navigation{
     float:left;
-    width:20%;
+    width:200px;
     height:100%;
     margin-top:35px;
 }
 nav{
     width:80%;
     margin:0 auto;
-    text-aling:center;
+    text-align:center;
 }
 nav a{
     text-decoration: none;
@@ -114,9 +124,13 @@ footer{
     padding-bottom:5px;
     height:220px;
     background-color:RGB(40,123,165);
-    position:absolute;
+    position:relative;
+    float:left;
     bottom:0;
-}
+     -webkit-box-shadow: -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow:    -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
+    box-shadow:         -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
+   }
 .odkazy,.kontakt,.vytvoril{
     float:left;
     width:33%;
@@ -227,26 +241,46 @@ footer a:hover{
 }
 
 /*********Galerie***********/
-.Leva{float:left;}
-.Prava{float:right;}
+.galleryConteiner{
+    margin-right:15px;
+    margin-top:40px;
+}
+.Leva{float:left; margin-bottom:75px;}
+.Prava{float:right; margin-top:75px;margin-right:14px;}
+.Prava2{
+    margin-right:14px;
+    margin-top:145px;
+    float:right;
+}
 
 .galerie{
- width:440px;
- height:150px;
+ width:335px;
+ height:220px;
  background-color:white;
- margin-top:40px;
  position:relative;
 }
 .galImg{
-    width:30%;
-    height:150px;
-    float:left;
-    margin-top:40px;
+    width:101px;
+    height:140px;
     text-align:center;
-    border:10px solid green;
+    position:relative;
+    float:right;
+    margin-top:5px;
+}
+.galImgLeva{
+    width:101px;
+    height:140px;
+    text-align:center;
+    position:relative;
+    float:left;
+    margin-top:5px;
+}
+.galImgLeva img, .galImg img{
+    margin:0 auto;
+    height:80%;
 }
 .galHeader{
-    width:70%;
+    width:85%;
     height:150px;
-    background-color:black;
+    margin:0 auto;
 }
