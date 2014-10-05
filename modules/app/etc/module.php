@@ -29,21 +29,22 @@ class App_Etc_Module extends Module
         array(
             'pattern' => '/galerie',
             'module' => 'app',
-            'controller' => 'index',
-            'action' => 'gallery'
+            'controller' => 'gallery',
+            'action' => 'index'
         ),
         array(
             'pattern' => '/galerie/:year',
             'module' => 'app',
-            'controller' => 'index',
-            'action' => 'gallery',
+            'controller' => 'gallery',
+            'action' => 'index',
             'args' => ':year'
         ),
         array(
-            'pattern' => '/aktuality',
+            'pattern' => '/galerie/r/:id',
             'module' => 'app',
-            'controller' => 'news',
-            'action' => 'index'
+            'controller' => 'gallery',
+            'action' => 'detail',
+            'args' => ':id'
         ),
         array(
             'pattern' => '/historie',
@@ -56,6 +57,12 @@ class App_Etc_Module extends Module
             'module' => 'app',
             'controller' => 'index',
             'action' => 'actions'
+        ),
+        array(
+            'pattern' => '/aktuality',
+            'module' => 'app',
+            'controller' => 'news',
+            'action' => 'index'
         ),
         array(
             'pattern' => '/aktuality/p/:page',

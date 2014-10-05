@@ -154,6 +154,29 @@ class App_Model_Gallery extends Model
 
     /**
      * 
+     * @param type $id
+     * @return type
+     */
+    public static function fetchActivePublicGalleryById($id)
+    {
+        $galleryQuery = self::getQuery(array('gl.*'))
+                ->join('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
+                        array('ph.imgMain', 'ph.imgThumb'))
+                ->where('gl.id = ?', (int) $id)
+                ->where('gl.active = ?', true)
+                ->where('gl.isPublic = ?', true);
+        $galleryArr = self::initialize($galleryQuery);
+
+        if (!empty($galleryArr)) {
+            $gallery = array_shift($galleryArr);
+            return $gallery->getGalleryById();
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * 
      * @param type $year
      */
     public static function fetchGalleriesByYear($year)
@@ -163,7 +186,9 @@ class App_Model_Gallery extends Model
         $galleryQuery = self::getQuery(array('gl.*'))
                 ->join('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
                         array('ph.imgMain', 'ph.imgThumb'))
-                ->where('showDate BETWEEN ?', $startDate . ' AND ' . $endDate)
+                ->where('gl.active = ?', true)
+                ->where('gl.isPublic = ?', true)
+                ->where('gl.showDate BETWEEN ?', $startDate . ' AND ' . $endDate)
                 ->order('showDate', 'DESC');
 
         $galleries = self::initialize($galleryQuery);

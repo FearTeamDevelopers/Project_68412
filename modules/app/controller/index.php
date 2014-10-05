@@ -40,7 +40,6 @@ class App_Controller_Index extends Controller
             $layoutView->set('metaogtype', 'website');
         }
 
-
         return;
     }
 
@@ -199,38 +198,6 @@ class App_Controller_Index extends Controller
         $view->set('content', $parsed);
 
         $this->_checkMetaData($layoutView, $content);
-        $layoutView->set('canonical', $canonical);
-    }
-
-    /**
-     * 
-     */
-    public function gallery($year = null)
-    {
-        $view = $this->getActionView();
-        $layoutView = $this->getLayoutView();
-        $host = RequestMethods::server('HTTP_HOST');
-        $cache = Registry::get('cache');
-        
-        if($year == null){
-            $year = date('Y');
-            $canonical = 'http://' . $host . '/gallerie';
-        }else{
-            $canonical = 'http://' . $host . '/gallerie/'.$year;
-            
-        }
-
-        $content = $cache->get('galerie');
-
-        if (NULL !== $content) {
-            $galleries = $content;
-        } else {
-            $galleries = App_Model_Gallery::fetchGalleriesByYear($year);
-            $cache->set('galerie', $galleries);
-        }
-
-        $view->set('galleries', $galleries);
-
         $layoutView->set('canonical', $canonical);
     }
 
