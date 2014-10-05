@@ -24,6 +24,23 @@
             </span>
         </p>
         <p>
+            <label>Avatar</label>
+            <span class="field">
+                <select class="longinput" name="avatar">
+                    {script $photos = $gallery->getPhotos()}
+                    {if !empty($photos)}
+                        {foreach $photo in $photos}
+                            {if $photo->getId() == $gallery->getAvatarPhotoId()}
+                                <option value="{echo $photo->getId()}" selected>{echo $photo->getPhotoName()}</option>
+                            {/if}{else}
+                                <option value="{echo $photo->getId()}">{echo $photo->getPhotoName()}</option>
+                            {/else}
+                        {/foreach}
+                    {/if}
+                </select>
+            </span>
+        </p>
+        <p>
             <label>Veřejná</label>
             <span class="field">
                 <select class="longinput" name="active">
