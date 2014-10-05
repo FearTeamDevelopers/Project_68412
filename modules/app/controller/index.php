@@ -3,17 +3,18 @@
 use App\Etc\Controller;
 use THCFrame\Request\RequestMethods;
 use THCFrame\Registry\Registry;
+use THCFrame\Model\Model;
 
 /**
  * 
  */
 class App_Controller_Index extends Controller
 {
-    
+
     /**
      * Check if are sets category specific metadata or leave their default values
      */
-    private function _checkMetaData($layoutView, \App_Model_PageContent $object)
+    private function _checkMetaData($layoutView, Model $object)
     {
         $host = RequestMethods::server('HTTP_HOST');
 
@@ -25,10 +26,20 @@ class App_Controller_Index extends Controller
             $layoutView->set('metadescription', $object->getMetaDescription());
         }
 
-        $layoutView->set('metaogimage', "http://{$host}/public/images/meta_image.jpg");
-        $layoutView->set('metaogurl', "http://{$host}/" . $object->getUrlKey() . '/');
+        if ($object instanceof \App_Model_News) {
+            if ($object->getMetaImage() != '') {
+                $layoutView->set('metaogimage', "http://{$host}/public/images/meta_image.jpg");
+            }
 
-        $layoutView->set('metaogtype', 'website');
+            $layoutView->set('metaogurl', "http://{$host}/aktuality/r/" . $object->getUrlKey() . '/');
+            $layoutView->set('metaogtype', 'article');
+        } else {
+            $layoutView->set('metaogimage', "http://{$host}/public/images/meta_image.jpg");
+            $layoutView->set('metaogurl', "http://{$host}/" . $object->getUrlKey() . '/');
+
+            $layoutView->set('metaogtype', 'website');
+        }
+
 
         return;
     }
@@ -37,7 +48,7 @@ class App_Controller_Index extends Controller
      * Method replace specific strings whit their equivalent images
      * @param \App_Model_PageContent $news
      */
-    private function _parseContentBody(\App_Model_PageContent $content, $parsedField = 'body')
+    private function _parseContentBody(Model $content, $parsedField = 'body')
     {
         preg_match_all('/\(\!(photo|read)_[0-9a-z]+\!\)/', $content->$parsedField, $matches);
         $m = array_shift($matches);
@@ -74,15 +85,41 @@ class App_Controller_Index extends Controller
 
         return $content;
     }
-    
+
     /**
      * 
      */
-    public function index()
+    public function index($page = 1)
     {
+        $view = $this->getActionView();
+        $cache = Registry::get('cache');
 
+        $content = $cache->get('aktuality-all');
+
+        if (NULL !== $content) {
+            $news = $content;
+        } else {
+            $npp = (int) $this->loadConfigFromDb('news_per_page');
+
+            $news = App_Model_News::all(
+                            array('active = ?' => true, 'expirationDate >= ?' => date('Y-m-d H:i:s')),
+                        array('id', 'urlKey', 'author', 'title', 'shortBody', 'created', 'rank'),
+                        array('rank' => 'asc', 'created' => 'DESC'), $npp, (int) $page);
+
+            if ($news !== null) {
+                foreach ($news as $_news) {
+                    $this->_parseNewsBody($_news, 'shortBody');
+                }
+                
+                $cache->set('aktuality-all', $news);
+            } else {
+                $news = array();
+            }
+        }
+
+        $view->set('newsbatch', $news);
     }
-    
+
     /**
      * 
      */
@@ -90,39 +127,112 @@ class App_Controller_Index extends Controller
     {
         $view = $this->getActionView();
         $layoutView = $this->getLayoutView();
-        
-        $members = App_Model_User::fetchMembersWithDogs();
-        
+        $cache = Registry::get('cache');
+
+        $content = $cache->get('clenove');
+
+        if (NULL !== $content) {
+            $members = $content;
+        } else {
+            $members = App_Model_User::fetchMembersWithDogs();
+            $cache->set('clenove', $members);
+        }
+
+
         $host = RequestMethods::server('HTTP_HOST');
         $canonical = 'http://' . $host . '/clenove';
-        
+
         $layoutView->set('canonical', $canonical);
         $view->set('members', $members);
     }
-    
+
     /**
      * 
      */
     public function history()
     {
-        
+        $view = $this->getActionView();
+        $layoutView = $this->getLayoutView();
+        $cache = Registry::get('cache');
+
+        $content = $cache->get('historie');
+
+        if (NULL !== $content) {
+            $content = $content;
+        } else {
+            $content = App_Model_PageContent::first(array('active = ?' => true, 'urlKey = ?' => 'historie'));
+            $cache->set('historie', $content);
+        }
+
+        $parsed = $this->_parseContentBody($content);
+        $host = RequestMethods::server('HTTP_HOST');
+        $canonical = 'http://' . $host . '/historie';
+
+        $view->set('content', $parsed);
+
+        $this->_checkMetaData($layoutView, $content);
+        $layoutView->set('canonical', $canonical);
     }
-     public function akce()
-    {
-        
-    }
-    
+
     /**
      * 
      */
-    public function gallery()
-         {
+    public function actions()
+    {
         $view = $this->getActionView();
-        
-        $gallery = App_Model_Gallery::all();
-        
-        
-        $view->set('gallery', $gallery);
+        $layoutView = $this->getLayoutView();
+        $cache = Registry::get('cache');
+
+        $content = $cache->get('akce');
+
+        if (NULL !== $content) {
+            $content = $content;
+        } else {
+            $content = App_Model_PageContent::first(array('active = ?' => true, 'urlKey = ?' => 'akce'));
+            $cache->set('akce', $content);
+        }
+
+        $parsed = $this->_parseContentBody($content);
+        $host = RequestMethods::server('HTTP_HOST');
+        $canonical = 'http://' . $host . '/akce';
+
+        $view->set('content', $parsed);
+
+        $this->_checkMetaData($layoutView, $content);
+        $layoutView->set('canonical', $canonical);
     }
-    
+
+    /**
+     * 
+     */
+    public function gallery($year = null)
+    {
+        $view = $this->getActionView();
+        $layoutView = $this->getLayoutView();
+        $host = RequestMethods::server('HTTP_HOST');
+        $cache = Registry::get('cache');
+        
+        if($year == null){
+            $year = date('Y');
+            $canonical = 'http://' . $host . '/gallerie';
+        }else{
+            $canonical = 'http://' . $host . '/gallerie/'.$year;
+            
+        }
+
+        $content = $cache->get('galerie');
+
+        if (NULL !== $content) {
+            $galleries = $content;
+        } else {
+            $galleries = App_Model_Gallery::fetchGalleriesByYear($year);
+            $cache->set('galerie', $galleries);
+        }
+        
+
+        $view->set('galleries', $galleries);
+
+        $layoutView->set('canonical', $canonical);
+    }
+
 }

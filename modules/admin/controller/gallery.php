@@ -118,7 +118,7 @@ class Admin_Controller_Gallery extends Controller
     {
         $view = $this->getActionView();
 
-        $gallery = App_Model_Gallery::first(array('id = ?' => (int) $id));
+        $gallery = App_Model_Gallery::fetchGalleryById((int) $id);
 
         if (NULL === $gallery) {
             $view->warningMessage(self::ERROR_MESSAGE_2);
@@ -140,6 +140,7 @@ class Admin_Controller_Gallery extends Controller
             }
 
             $gallery->title = RequestMethods::post('title');
+            $gallery->avatarPhotoId = RequestMethods::post('avatar');
             $gallery->isPublic = RequestMethods::post('public');
             $gallery->active = RequestMethods::post('active');
             $gallery->urlKey = $urlKey;

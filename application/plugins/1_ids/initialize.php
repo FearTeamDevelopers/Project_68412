@@ -24,10 +24,9 @@ use IDS\Monitor;
 try {
 
     $request = array(
-        //'REQUEST' => $_REQUEST,
+        'REQUEST' => $_REQUEST,
         'GET' => $_GET,
-        'POST' => $_POST,
-        'COOKIE' => $_COOKIE
+        'POST' => $_POST
     );
 
     $init = Init::init(APP_PATH . '/vendors/ids/config/config.ini');
@@ -50,7 +49,7 @@ try {
         */
         $compositeLog->execute($result);
         
-        echo 'Data which you have sent contains dangerous chars';
+        echo 'Data which you have sent contains dangerous chars. Please delete all cookies and try it again';
         die();
     }
 } catch (\Exception $e) {

@@ -26,6 +26,15 @@ class App_Model_Gallery extends Model
     /**
      * @column
      * @readwrite
+     * @type integer
+     * 
+     * @validate numeric, max(8)
+     */
+    protected $_avatarPhotoId;
+
+    /**
+     * @column
+     * @readwrite
      * @type boolean
      * @index
      * 
@@ -129,8 +138,45 @@ class App_Model_Gallery extends Model
      */
     public static function fetchGalleryById($id)
     {
-        $gallery = self::first(array('id = ?' => (int) $id));
-        return $gallery->getGalleryById();
+        $galleryQuery = self::getQuery(array('gl.*'))
+                ->join('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
+                        array('ph.imgMain', 'ph.imgThumb'))
+                ->where('gl.id = ?', (int) $id);
+        $galleryArr = self::initialize($galleryQuery);
+
+        if (!empty($galleryArr)) {
+            $gallery = array_shift($galleryArr);
+            return $gallery->getGalleryById();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 
+     * @param type $year
+     */
+    public static function fetchGalleriesByYear($year)
+    {
+        $startDate = date('Y-m-d', mktime(0, 0, 0, 1, 1, $year));
+        $endDate = date('Y-m-d', mktime(0, 0, 0, 1, 1, $year + 1));
+        $galleryQuery = self::getQuery(array('gl.*'))
+                ->join('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
+                        array('ph.imgMain', 'ph.imgThumb'))
+                ->where('showDate BETWEEN ?', $startDate . ' AND ' . $endDate)
+                ->order('showDate', 'DESC');
+
+        $galleries = self::initialize($galleryQuery);
+
+        if (!empty($galleries)) {
+            foreach ($galleries as $i => $gallery) {
+                $galleries[$i] = $gallery->getGalleryById();
+            }
+
+            return $galleries;
+        } else {
+            return null;
+        }
     }
 
     /**
