@@ -6,8 +6,17 @@
             <p class="newsBody">{echo $new->shortBody}</p>
         </div>
     {/foreach}
+    {if $newspagecount > 1}
+    <div class="pageCounter">
+        <ul>
+        {for $i=1 $i<=$newspagecount $i++}
+           <a title="{echo $i}"  href="/aktuality/p/{echo $i}"> <li>$i</li></a>
+        {/for}
+        </ul>
+    </div>
+    {/if}
 {/if}{else}
-    <div>
+    <div class='whiteBg'>
         Nejsou žádné aktuality
     </div>
 {/else}

@@ -115,8 +115,14 @@ class App_Controller_Index extends Controller
                 $news = array();
             }
         }
+         $newsCount = \App_Model_News::count(
+                        array('active = ?' => true,
+                            'expirationDate >= ?' => date('Y-m-d H:i:s'))
+        );
+        $newsPageCount = ceil($newsCount / $npp);
 
-        $view->set('newsbatch', $news);
+        $view->set('newsbatch', $news)
+            ->set('newspagecount', $newsPageCount);
     }
 
     /**

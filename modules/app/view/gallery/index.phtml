@@ -1,5 +1,17 @@
 <div class="galleryConteiner">
     {if !empty($galleries)}
+        <!-- YEAR COUNTER -->
+        {if !empty($years)}
+            <div class="yearCounter">
+                <ul>
+                {foreach $year in $years}
+                   <a title="{echo $year}"  href="/galerie/{echo $year}"> <li>$year</li></a>
+                {/foreach}
+                </ul>
+            </div>
+        {/if}
+        <!--YC END -->
+    
         {foreach $bla in $galleries}
             {if $bla_i%2==0}
                 <div class="galerie Leva">
@@ -20,7 +32,7 @@
                 <div class="galerie {if $bla_i==1}Prava2{/if}{else}Prava{/else}">
                     <a href="/galerie/r/{echo $bla->urlKey}">
                         <div class="galHeader">
-                            <span class="galTitle">{echo $bla->title}</span>
+                            <span class="galTitle">{echo $bla->title}</span><br/>
                             <img src="{echo $bla->imgThumb}"/>
                         </div>
                     </a>
