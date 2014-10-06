@@ -118,7 +118,7 @@ class Admin_Controller_Exam extends Controller
             } else {
                 if ($exam->delete()) {
                     Event::fire('admin.log', array('success', 'Exam Id: ' . $id));
-                    echo 'ok';
+                    echo 'success';
                 } else {
                     Event::fire('admin.log', array('fail', 'Exam Id: ' . $id));
                     echo self::ERROR_MESSAGE_1;

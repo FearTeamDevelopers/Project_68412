@@ -1,14 +1,13 @@
 {if !empty($newsbatch)}
     {foreach $new in $newsbatch}
-    <a href="/aktuality/r/{echo $new->urlKey}"><div class="news">
-        <span class="newsTitle">{echo $new->title}</span><br/>
-        <span class="newsCreated">{echo $new->created}</span><br/>
-        <p class="newsBody">{echo $new->shortBody}</p>
-    </div></a>
+        <div class="news">
+            <a href="/aktuality/r/{echo $new->urlKey}"><span class="newsTitle">{echo $new->title}</span></a><br/>
+            <span class="newsCreated">{echo $new->created}</span><br/>
+            <p class="newsBody">{echo $new->shortBody}</p>
+        </div>
     {/foreach}
-{/if}
-{else}
-<div>
-    Nejsou žádné aktuality
-</div>
+{/if}{else}
+    <div>
+        Nejsou žádné aktuality
+    </div>
 {/else}

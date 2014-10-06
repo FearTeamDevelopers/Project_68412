@@ -25,7 +25,7 @@
         <p>
             <label>Zkratka*</label>
             <span class="field">
-                <input required type="text" name="url" class="longinput" 
+                <input required type="text" name="shortcut" class="longinput" 
                        value="{echo isset($exam)? $exam->shortcut: ""}" />
                 {if isset($errors["shortcut"])}
                 <label class="error">{echo join("<br/>", $errors["shortcut"])}</label>
@@ -33,10 +33,9 @@
             </span>
         </p>
         <p>
-            <label>Popis</label>
+            <label>Popis<small>Max. 5000 znaků</small></label>
             <span class="field">
-                <input type="text" name="description" class="longinput" 
-                       value="{echo isset($exam)? $exam->description: ""}" />
+                <textarea id="ckeditor" name="description" class="longinput">{echo isset($exam)? $exam->description: ""}</textarea>
                 {if isset($errors["description"])}
                 <label class="error">{echo join("<br/>", $errors["description"])}</label>
                 {/if}

@@ -157,12 +157,12 @@ class App_Model_Gallery extends Model
      * @param type $id
      * @return type
      */
-    public static function fetchActivePublicGalleryById($id)
+    public static function fetchActivePublicGalleryByUrlkey($urlkey)
     {
         $galleryQuery = self::getQuery(array('gl.*'))
                 ->leftjoin('tb_photo', 'ph.id = gl.avatarPhotoId', 'ph', 
                         array('ph.imgMain', 'ph.imgThumb'))
-                ->where('gl.id = ?', (int) $id)
+                ->where('gl.urlKey = ?', $urlkey)
                 ->where('gl.active = ?', true)
                 ->where('gl.isPublic = ?', true);
         $galleryArr = self::initialize($galleryQuery);
@@ -196,7 +196,7 @@ class App_Model_Gallery extends Model
             foreach ($galleries as $i => $gallery) {
                 $galleries[$i] = $gallery->getGalleryById();
             }
-
+            
             return $galleries;
         } else {
             return null;

@@ -1,20 +1,27 @@
 {if !empty($members)}
     {foreach $user in $members}
-    {script $dog = $user->getActiveDog()}
-    <div class="dogUser">
-        <div class="dogImg"><img src="{echo $user->getImgThumb()}"/></div>
-        <div class="dogInfo">
-            <span>Jméno:{echo $user->firstname.' '.$user->lastname}</span><br/>
-            <span>Pes: {echo $dog->getDogName()}</span><br/>
-            <span>Rasa: {echo $dog->getRace()}</span><br/>
-            <span>Zkoušky:</span>
+        {script $dog = $user->getActiveDog()}
+        <div class="dogUser">
+            <div class="dogImg"><img src="{echo $user->getImgThumb()}"/></div>
+            <div class="dogInfo">
+                <span>Jméno:{echo $user->firstname.' '.$user->lastname}</span><br/>
+                <span>Pes: {echo $dog->getDogName()}</span><br/>
+                <span>Rasa: {echo $dog->getRace()}</span><br/>
+                {script $exams = $dog->getExams()}
+                <span>Zkoušky:
+                    {if !empty($exams)}
+                        {foreach $exam in $exams}
+                            {echo $exam->getShortcut()}
+                        {/foreach}
+                    {/if}{else}
+                        Bez zkousek
+                    {/else}
+                </span>
+            </div>
         </div>
-        <div class="dogLogo"><img src="/public/images/user_logo.jpg"/></div>
-    </div>
     {/foreach}
-{/if}
-{else}
-<div class="errorDiv">
-    <span>Prazdny</span>
-</div>
+{/if}{else}
+    <div class="errorDiv">
+        <span>Prazdny</span>
+    </div>
 {/else}

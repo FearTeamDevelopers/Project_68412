@@ -225,6 +225,7 @@ class Admin_Controller_Dog extends Controller
                 'maxImageHeight' => $this->loadConfigFromDb('photo_maxheight')
             ));
 
+            $imgMain = $imgThumb = '';
             if ($dog->imgMain == '') {
                 $photoNameRaw = RequestMethods::post('user') . '-' . RequestMethods::post('dogname');
                 $photoName = $this->_createUrlKey($photoNameRaw);

@@ -51,7 +51,12 @@ class Image extends Base
      * @readwrite
      */
     protected $_size;
-
+    
+    /**
+     * @readwrite
+     */
+    protected $_format;
+    
     /**
      * @readwrite
      */
@@ -1014,6 +1019,7 @@ class Image extends Base
 
         $this->width = $info[0];
         $this->height = $info[1];
+        $this->format = $this->_originalInfo['format'];
 
         imagesavealpha($this->image, true);
         imagealphablending($this->image, true);

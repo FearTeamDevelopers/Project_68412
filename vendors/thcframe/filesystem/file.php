@@ -13,11 +13,6 @@ class File extends Base
     /**
      * @readwrite
      */
-    protected $_path;
-
-    /**
-     * @readwrite
-     */
     protected $_filename;
 
     /**
@@ -28,7 +23,7 @@ class File extends Base
     /**
      * @readwrite
      */
-    protected $_ext;
+    protected $_format;
 
     /**
      * @readwrite
@@ -63,7 +58,7 @@ class File extends Base
     {
         parent::__construct();
 
-        $this->_path = $file;
+        $this->_filename = $file;
         $this->_loadMetaData();
     }
 
@@ -74,14 +69,13 @@ class File extends Base
     {
         clearstatcache();
 
-        $this->_pathname = pathinfo($this->_path, PATHINFO_FILENAME);
-        $this->_ext = strtolower(pathinfo($this->_path, PATHINFO_EXTENSION));
-        $this->_size = filesize($this->_path);
-        $this->_modificationTime = filemtime($this->_path);
-        $this->_accessTime = fileatime($this->_path);
-        $this->_isExecutable = is_executable($this->_path);
-        $this->_isReadable = is_readable($this->_path);
-        $this->_isWritable = is_writable($this->_path);
+        $this->_format = strtolower(pathinfo($this->_filename, PATHINFO_EXTENSION));
+        $this->_size = filesize($this->_filename);
+        $this->_modificationTime = filemtime($this->_filename);
+        $this->_accessTime = fileatime($this->_filename);
+        $this->_isExecutable = is_executable($this->_filename);
+        $this->_isReadable = is_readable($this->_filename);
+        $this->_isWritable = is_writable($this->_filename);
     }
 
 }

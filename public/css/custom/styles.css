@@ -197,7 +197,6 @@ footer a:hover{
 .news{
     background-color:white;
     width:90%;
-    height:140px;
     float:left;
     margin-top:35px;
     margin-left:15px;
@@ -208,6 +207,7 @@ footer a:hover{
     box-shadow: 0px 0px 10px 2px rgba(66,65,66,0.75);
 
 }
+
 .newsTitle{
     font-weight:bold;
     font-size:20px;

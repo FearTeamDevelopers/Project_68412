@@ -165,7 +165,7 @@ class Admin_Controller_User extends Controller
             if (empty($errors) && $user->validate()) {
                 $userId = $user->save();
 
-                Event::fire('admin.log', array('success', 'User id: ' . $userId . ' Dog id: ' . $dogId));
+                Event::fire('admin.log', array('success', 'User id: ' . $userId));
                 $view->successMessage('Uživatel' . self::SUCCESS_MESSAGE_1);
                 self::redirect('/admin/user/');
             } else {
@@ -271,11 +271,11 @@ class Admin_Controller_User extends Controller
             if (empty($errors) && $user->validate()) {
                 $user->save();
 
-                Event::fire('admin.log', array('success', 'ID: ' . $user->getId()));
+                Event::fire('admin.log', array('success', 'User id: ' . $user->getId()));
                 $view->successMessage(self::SUCCESS_MESSAGE_2);
                 self::redirect('/admin/');
             } else {
-                Event::fire('admin.log', array('fail', 'ID: ' . $user->getId()));
+                Event::fire('admin.log', array('fail', 'User id: ' . $user->getId()));
                 $view->set('errors', $errors + $user->getErrors());
             }
         }
@@ -380,11 +380,11 @@ class Admin_Controller_User extends Controller
             if (empty($errors) && $user->validate()) {
                 $user->save();
 
-                Event::fire('admin.log', array('success', 'ID: ' . $id));
+                Event::fire('admin.log', array('success', 'User id: ' . $id));
                 $view->successMessage(self::SUCCESS_MESSAGE_2);
                 self::redirect('/admin/user/');
             } else {
-                Event::fire('admin.log', array('fail', 'ID: ' . $id));
+                Event::fire('admin.log', array('fail', 'User id: ' . $id));
                 $view->set('errors', $errors + $user->getErrors());
             }
         }
@@ -412,10 +412,10 @@ class Admin_Controller_User extends Controller
                 if ($user->delete()) {
                     @unlink($pathMain);
                     @unlink($pathThumb);
-                    Event::fire('admin.log', array('success', 'ID: ' . $id));
+                    Event::fire('admin.log', array('success', 'User id: ' . $id));
                     echo 'success';
                 } else {
-                    Event::fire('admin.log', array('fail', 'ID: ' . $id));
+                    Event::fire('admin.log', array('fail', 'User id: ' . $id));
                     echo self::ERROR_MESSAGE_1;
                 }
             }

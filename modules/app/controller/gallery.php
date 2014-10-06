@@ -44,18 +44,18 @@ class App_Controller_Gallery extends Controller
     
     /**
      * 
-     * @param type $id
+     * @param type $urlkey
      */
-    public function detail($id)
+    public function detail($urlkey)
     {
         $view = $this->getActionView();
         $layoutView = $this->getLayoutView();
         $host = RequestMethods::server('HTTP_HOST');
         
-        $gallery = App_Model_Gallery::fetchActivePublicGalleryById((int)$id);
+        $gallery = App_Model_Gallery::fetchActivePublicGalleryByUrlkey($urlkey);
         $view->set('gallery', $gallery);
 
-        $canonical = 'http://' . $host . '/galerie/r/'.$id;
+        $canonical = 'http://' . $host . '/galerie/r/'.$urlkey;
         $layoutView->set('canonical', $canonical);
     }
 }
