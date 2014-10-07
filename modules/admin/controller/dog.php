@@ -368,6 +368,9 @@ class Admin_Controller_Dog extends Controller
             if (NULL === $dog) {
                 echo self::ERROR_MESSAGE_2;
             } else {
+                @unlink($dog->getUnlinkPath());
+                @unlink($dog->getUnlinkThumbPath());
+                
                 if ($dog->delete()) {
                     Event::fire('admin.log', array('success', 'Dog Id: ' . $id));
                     echo 'success';
