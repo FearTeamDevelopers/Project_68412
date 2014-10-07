@@ -48,15 +48,21 @@ header{
     box-shadow:          0px -10px 20px 0px rgba(0, 0, 0, 0.75);
 }
 .logo{
+    margin-top:15px;
     margin-left:50px;
     float:left;
+}
+.logo img{
+    width:160px;
 }
 .nazev{
     float:left;
     color:RGB(40,123,165);
     font-size:45px;
     margin-top:50px;
-    margin-left:50px;
+    margin-left:15px;
+}
+.nazev img{
 }
 /***********************Conteiner*************************/
 .conteiner{
@@ -66,7 +72,6 @@ header{
     border-top:2px solid white;
     border-bottom:2px solid rgb(125, 125, 125);
     margin-top:172px;
-    margin-bottom:1px;
     padding-bottom:30px;
 
     -webkit-box-shadow:    0px 10px 20px 0px rgba(0, 0, 0, 0.75);
@@ -115,6 +120,7 @@ nav ul li:hover{
 
 /**********************FOOTER*/
 footer{
+    border-top:1px solid rgb(235,235,235);
     width:100%;
     padding-top:5px;
     padding-bottom:5px;
@@ -123,9 +129,9 @@ footer{
     position:relative;
     float:left;
     bottom:0;
-    -webkit-box-shadow: -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow:    -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
-    box-shadow:         -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow:    0px 8px 20px 0px rgba(0, 0, 0, 0.75);
+    box-shadow:         0px 8px 20px 0px rgba(0, 0, 0, 0.75);
 }
 .odkazy,.kontakt,.vytvoril{
     float:left;
@@ -177,6 +183,9 @@ footer a:hover{
     right:5%;
     bottom:3%;
     z-index:1;
+}
+.dogLogo img{
+    width:100px;
 }
 .dogImg{
     width:30%;
@@ -305,7 +314,8 @@ footer a:hover{
 }
 .galImgLeva img, .galImg img{
     margin:0 auto;
-    height:112px;
+    width:100px;
+    height:120px;
 }
 
 .galHeader{
