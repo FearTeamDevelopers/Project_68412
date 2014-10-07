@@ -5,18 +5,17 @@
 
 <div class="content">
     <ul class="widgetlist">
-        <li><a href="/admin/news/add/" class="message">Nová novinky</a></li>
+        <li><a href="/admin/news/add/" class="events">Nová novinky</a></li>
         <li><a href="/admin/dog/add/" class="message">Nový pes</a></li>
         <li><a href="/admin/user/add/" class="message">Nový člen</a></li>
         <li><a href="/admin/gallery/add/" class="upload">Nová galerie</a></li>
-        <li><a href="/admin/analytics/" class="events">Analytics</a></li>
     </ul>
 
     <br clear="all" /><br />
 
     <div class="one_half">
         <div class="widgetbox">
-            <div class="title"><h2 class="tabbed"><span>Poslední novinky</span></h2></div>
+            <div class="title"><h2 class="calendar"><span>Poslední novinky</span></h2></div>
             <div class="widgetcontent announcement">
                 {if !empty($latestnews)}
                     {foreach $news in $latestnews}
@@ -50,6 +49,7 @@
                         <tr>
                             <th class="head0">Název</th>
                             <th class="head1">Vytvořeno</th>
+                            <th class="head0">Veřejná/Soukromá</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,6 +58,13 @@
                                 <tr>
                                     <td>{echo $gallery->getTitle()}</td>
                                     <td>{echo $gallery->getCreated()}</td>
+                                    <td>
+                                        {if $gallery->isPublic}
+                                            Veřejná
+                                        {/if}{else}
+                                            Soukromá
+                                        {/else}
+                                    </td>
                                 </tr>
                             {/foreach}
                         {/if} 
@@ -75,24 +82,25 @@
             <div class="widgetcontent padding0 statement">
                 <table cellpadding="0" cellspacing="0" border="0" class="stdtable">
                     <colgroup>
-                        <col class="con0" />
-                        <col class="con1" />
-                        <col class="con0" />
+                        <col class="con0" /><col class="con1" />
+                        <col class="con0" /><col class="con1" />
                     </colgroup>
                     <thead>
                         <tr>
-                            <th class="head0">Název</th>
-                            <th class="head1">Autor</th>
-                            <th class="head0">Vytvořeno</th>
+                            <th class="head0">Foto</th>
+                            <th class="head1">Jméno</th>
+                            <th class="head0">Příjmení</th>
+                            <th class="head1">Přidán</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {if !empty($latestnews)}
-                            {foreach $news in $latestnews}
+                        {if !empty($latestmembers)}
+                            {foreach $member in $latestmembers}
                                 <tr>
-                                    <td>{echo $news->getTitle()}</td>
-                                    <td>{echo $news->getAuthor()}</td>
-                                    <td>{echo $news->getCreated()}</td>
+                                    <td><img src="{echo $member->getImgThumb()}" alt="" height="80px"/></td>
+                                    <td>{echo $member->getFirstname()}</td>
+                                    <td>{echo $member->getLastname()}</td>
+                                    <td>{echo $member->getCreated()}</td>
                                 </tr>
                             {/foreach}
                         {/if} 
@@ -104,28 +112,32 @@
     
     <div class="one_half last">
         <div class="widgetbox">
-            <div class="title"><h2 class="tabbed"><span>Nejnovější soutěže</span></h2></div>
+            <div class="title"><h2 class="general"><span>Nejnovější psi</span></h2></div>
             <div class="widgetcontent padding0 statement">
                 <table cellpadding="0" cellspacing="0" border="0" class="stdtable">
                     <colgroup>
-                        <col class="con0" />
-                        <col class="con1" />
+                        <col class="con0" /><col class="con1" />
+                        <col class="con0" /><col class="con1" />
                         <col class="con0" />
                     </colgroup>
                     <thead>
                         <tr>
-                            <th class="head0">Název</th>
-                            <th class="head1">Autor</th>
-                            <th class="head0">Vytvořeno</th>
+                            <th class="head0">Foto</th>
+                            <th class="head1">Jméno</th>
+                            <th class="head0">Rasa</th>
+                            <th class="head1">Majitel</th>
+                            <th class="head0">Přidáno</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {if !empty($latestnews)}
-                            {foreach $news in $latestnews}
+                        {if !empty($latestdogs)}
+                            {foreach $dog in $latestdogs}
                                 <tr>
-                                    <td>{echo $news->getTitle()}</td>
-                                    <td>{echo $news->getAuthor()}</td>
-                                    <td>{echo $news->getCreated()}</td>
+                                    <td><img src="{echo $dog->getImgThumb()}" alt="" height="80px"/></td>
+                                    <td>{echo $dog->getDogName()}</td>
+                                    <td>{echo $dog->getRace()}</td>
+                                    <td>{echo $dog->firstname." ".$dog->lastname}</td>
+                                    <td>{echo $dog->getCreated()}</td>
                                 </tr>
                             {/foreach}
                         {/if} 

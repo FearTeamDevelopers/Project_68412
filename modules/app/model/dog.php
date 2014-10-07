@@ -204,6 +204,22 @@ class App_Model_Dog extends Model {
         $dogs = App_Model_Dog::initialize($query);
         return $dogs;
     }
+    
+    /**
+     * 
+     * @return array
+     */
+    public static function fetchAllLimit() {
+        $query = App_Model_Dog::getQuery(array('do.*'))
+                ->leftjoin('tb_user', 'do.userId = us.id', 'us',
+                        array('us.firstname', 'us.lastname'))
+                ->where('do.active = ?', true)
+                ->order('do.created', 'DESC')
+                ->limit(10);
+
+        $dogs = App_Model_Dog::initialize($query);
+        return $dogs;
+    }
 
     /**
      * 

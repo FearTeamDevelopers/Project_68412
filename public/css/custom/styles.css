@@ -113,9 +113,6 @@ nav ul li:hover{
     height:100%;
 }
 
-
-
-
 /**********************FOOTER*/
 footer{
     width:100%;
@@ -235,13 +232,13 @@ footer a:hover{
     margin-bottom:25px;
 }
 .yearCounter ul, .pageCounter ul{
-    margin-right:14px;
+    margin-right:20px;
 }
 .pageCounter ul li, .yearCounter ul li{
     display:inline;
     margin:1px;
     border:1px solid black;
-    padding:5px 8px;
+    padding:5px 15px;
     background-color:RGB(40,123,165);
     border-radius:3px;
 }

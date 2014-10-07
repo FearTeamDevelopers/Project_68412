@@ -34,6 +34,7 @@
                         <td>
                             {if ($user->active)}<span class="labelProduct labelProductGreen">Aktivní</span>{/if}
                             {if $user->getRole() == "role_member"}<span class="labelProduct labelProductBlue">Člen</span>{/if}
+                            {if $user->getRole() == "role_admin"}<span class="labelProduct labelProductBlue">Admin</span>{/if}
                         </td>
 
                         <td>
