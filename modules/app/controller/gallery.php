@@ -7,12 +7,14 @@ use THCFrame\Registry\Registry;
 /**
  * 
  */
-class App_Controller_Gallery extends Controller {
+class App_Controller_Gallery extends Controller
+{
 
     /**
      * 
      */
-    public function index($year = null) {
+    public function index($year = null)
+    {
         $view = $this->getActionView();
         $layoutView = $this->getLayoutView();
         $host = RequestMethods::server('HTTP_HOST');
@@ -34,7 +36,11 @@ class App_Controller_Gallery extends Controller {
             $cache->set('galerie', $galleries);
         }
 
-        $galleryYears = App_Model_Gallery::all(array('showDate <> ?' => ''), array('DISTINCT(EXTRACT(YEAR FROM showDate))' => 'year'), array('year' => 'ASC'));
+        $galleryYears = App_Model_Gallery::all(
+                    array('showDate <> ?' => ''), 
+                    array('DISTINCT(EXTRACT(YEAR FROM showDate))' => 'year'), 
+                    array('year' => 'ASC')
+        );
 
         $returnYears = array();
 
@@ -51,7 +57,8 @@ class App_Controller_Gallery extends Controller {
      * 
      * @param type $urlkey
      */
-    public function detail($urlkey) {
+    public function detail($urlkey)
+    {
         $view = $this->getActionView();
         $layoutView = $this->getLayoutView();
         $host = RequestMethods::server('HTTP_HOST');

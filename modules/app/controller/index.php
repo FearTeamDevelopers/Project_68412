@@ -75,8 +75,7 @@ class App_Controller_Index extends Controller
             }
 
             if ($type == 'read') {
-                $tag = "<a href=\"#\" class=\"ajaxLink news-read-more\" "
-                        . "id=\"show_news-detail_{$content->getUrlKey()}\">[Celý článek]</a>";
+                $tag = "<a href=\"/aktuality/r/{$content->getUrlKey()}\" class=\"news-read-more\">[Celý článek]</a>";
                 $body = str_replace("(!read_more!)", $tag, $body);
                 $content->$parsedField = $body;
             }
@@ -87,6 +86,7 @@ class App_Controller_Index extends Controller
 
     /**
      * 
+     * @param type $page
      */
     public function index($page = 1)
     {
@@ -115,7 +115,8 @@ class App_Controller_Index extends Controller
                 $news = array();
             }
         }
-         $newsCount = \App_Model_News::count(
+        
+        $newsCount = App_Model_News::count(
                         array('active = ?' => true,
                             'expirationDate >= ?' => date('Y-m-d H:i:s'))
         );

@@ -8,12 +8,14 @@ use THCFrame\Request\RequestMethods;
  *
  * @author Tomy
  */
-class App_Controller_News extends Controller {
+class App_Controller_News extends Controller
+{
 
     /**
      * Check if are sets category specific metadata or leave their default values
      */
-    private function _checkMetaData($layoutView, \App_Model_News $object) {
+    private function _checkMetaData($layoutView, \App_Model_News $object)
+    {
         $host = RequestMethods::server('HTTP_HOST');
 
         if ($object->getMetaTitle() != '') {
@@ -38,7 +40,8 @@ class App_Controller_News extends Controller {
      * Method replace specific strings whit their equivalent images
      * @param \App_Model_PageContent $news
      */
-    private function _parseNewsBody(\App_Model_News $content, $parsedField = 'body') {
+    private function _parseNewsBody(\App_Model_News $content, $parsedField = 'body')
+    {
         preg_match_all('/\(\!(photo|read)_[0-9a-z]+\!\)/', $content->$parsedField, $matches);
         $m = array_shift($matches);
 
@@ -65,8 +68,7 @@ class App_Controller_News extends Controller {
             }
 
             if ($type == 'read') {
-                $tag = "<a href=\"#\" class=\"ajaxLink news-read-more\" "
-                        . "id=\"show_news-detail_{$content->getUrlKey()}\">[Celý článek]</a>";
+                $tag = "<a href=\"/aktuality/r/{$content->getUrlKey()}\" class=\"news-read-more\">[Celý článek]</a>";
                 $body = str_replace("(!read_more!)", $tag, $body);
                 $content->$parsedField = $body;
             }
@@ -79,13 +81,16 @@ class App_Controller_News extends Controller {
      *
      * @param type $page
      */
-    public function index($page = 1) {
+    public function index($page = 1)
+    {
         $view = $this->getActionView();
 
         $npp = (int) $this->loadConfigFromDb('news_per_page');
 
         $news = App_Model_News::all(
-                        array('active = ?' => true, 'expirationDate >= ?' => date('Y-m-d H:i:s')), array('id', 'urlKey', 'author', 'title', 'shortBody', 'created', 'rank'), array('rank' => 'asc', 'created' => 'DESC'), $npp, (int) $page);
+                        array('active = ?' => true, 'expirationDate >= ?' => date('Y-m-d H:i:s')), 
+                    array('id', 'urlKey', 'author', 'title', 'shortBody', 'created', 'rank'), 
+                    array('rank' => 'asc', 'created' => 'DESC'), $npp, (int) $page);
 
         if ($news !== null) {
             foreach ($news as $_news) {
@@ -94,7 +99,8 @@ class App_Controller_News extends Controller {
         } else {
             $news = array();
         }
-        $newsCount = \App_Model_News::count(
+
+        $newsCount = App_Model_News::count(
                         array('active = ?' => true,
                             'expirationDate >= ?' => date('Y-m-d H:i:s'))
         );
@@ -105,9 +111,10 @@ class App_Controller_News extends Controller {
 
     /**
      *
-     * @param type $title
+     * @param type $urlkey
      */
-    public function detail($urlkey) {
+    public function detail($urlkey)
+    {
         $view = $this->getActionView();
 
         $news = App_Model_News::first(
