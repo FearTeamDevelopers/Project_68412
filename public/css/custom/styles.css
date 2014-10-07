@@ -16,7 +16,7 @@ body{
     width:1000px;
     background-color:rgb(235,235,235);
     background-attachment: fixed;
-   
+
     position:relative;
     margin:0 auto;
 
@@ -43,7 +43,7 @@ header{
     position:absolute;
     top:0%;
     border-bottom:2px solid gray;
-     -webkit-box-shadow: 0px -10px 20px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px -10px 20px 0px rgba(0, 0, 0, 0.75);
     -moz-box-shadow:     0px -10px 20px 0px rgba(0, 0, 0, 0.75);
     box-shadow:          0px -10px 20px 0px rgba(0, 0, 0, 0.75);
 }
@@ -68,11 +68,11 @@ header{
     margin-top:172px;
     margin-bottom:1px;
     padding-bottom:30px;
-    
- -webkit-box-shadow:    0px 10px 20px 0px rgba(0, 0, 0, 0.75);
+
+    -webkit-box-shadow:    0px 10px 20px 0px rgba(0, 0, 0, 0.75);
     -moz-box-shadow:    0px 10px 20px 0px rgba(0, 0, 0, 0.75);
     box-shadow:         0px 10px 20px 0px rgba(0, 0, 0, 0.75);
-background-color:rgb(235,235,235);
+    background-color:rgb(235,235,235);
 }
 
 .conteiner:after{
@@ -126,10 +126,10 @@ footer{
     position:relative;
     float:left;
     bottom:0;
-     -webkit-box-shadow: -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
     -moz-box-shadow:    -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
     box-shadow:         -2px 4px 35px 0px rgba(0, 0, 0, 0.75);
-   }
+}
 .odkazy,.kontakt,.vytvoril{
     float:left;
     width:33%;
@@ -171,11 +171,15 @@ footer a:hover{
     float:left;
     position:relative;
 }
+.dogUser a{
+    width:100%;
+    height:100%;
+}
 .dogLogo{
     position:absolute;
     right:5%;
     bottom:3%;
-    z-index:100;
+    z-index:1;
 }
 .dogImg{
     width:30%;
@@ -191,6 +195,8 @@ footer a:hover{
 }
 .dogInfo{
     margin-top:15px;
+    z-index:9999;
+    position:relative;
 }
 
 /************ AKTUALITY ***************/
@@ -228,6 +234,9 @@ footer a:hover{
     text-align:center;
     margin-bottom:25px;
 }
+.yearCounter ul, .pageCounter ul{
+    margin-right:14px;
+}
 .pageCounter ul li, .yearCounter ul li{
     display:inline;
     margin:1px;
@@ -245,7 +254,7 @@ footer a:hover{
 
 .detailHeader, .historyHeader{
     text-align:center;
-        margin-top:10px;
+    margin-top:10px;
 
 }
 .detailTitle, .historyTitle{
@@ -267,7 +276,7 @@ footer a:hover{
     margin-right:15px;
     margin-top:40px;
 }
-.Leva{float:left; margin-bottom:75px;}
+.Leva{float:left; margin-bottom:75px;margin-left:1px;}
 .Prava{float:right; margin-top:75px;margin-right:14px;}
 .Prava2{
     margin-right:14px;
@@ -276,13 +285,13 @@ footer a:hover{
 }
 
 .galerie{
- width:335px;
- height:220px;
- background-color:white;
- position:relative;
+    width:335px;
+    height:220px;
+    background-color:white;
+    position:relative;
 }
 .galImg{
-    width:101px;
+    width:100px;
     height:140px;
     text-align:center;
     position:relative;
@@ -290,7 +299,7 @@ footer a:hover{
     margin-top:5px;
 }
 .galImgLeva{
-    width:101px;
+    width:100px;
     height:140px;
     text-align:center;
     position:relative;
@@ -299,15 +308,16 @@ footer a:hover{
 }
 .galImgLeva img, .galImg img{
     margin:0 auto;
-    height:80%;
+    height:112px;
 }
+
 .galHeader{
     width:100%;
     height:100%;
     margin:0 auto;
     text-align:center;
-    
-    
+
+
 }
 .galerie a{text-decoration:none;}  
 
@@ -333,7 +343,7 @@ footer a:hover{
     margin:30px;
     float:left;
     width:100%;
-    
+
 }
 .galDetailImgs{
     float:left;
@@ -342,7 +352,7 @@ footer a:hover{
     height:200px;
     border:1px solid black;
     text-align:center;
-    
+
     -webkit-box-shadow: 0px 0px 5px 2px rgba(43,156,214,0.75);
     -moz-box-shadow: 0px 0px 5px 2px rgba(43,156,214,0.75);
     box-shadow: 0px 0px 5px 2px rgba(43,156,214,0.75);
