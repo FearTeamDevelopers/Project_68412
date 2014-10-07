@@ -100,7 +100,7 @@ class Admin_Controller_Dog extends Controller
 
                 $examsArr = (array) RequestMethods::post('chexam');
 
-                if (!empty($examsArr)) {
+                if ($examsArr[0] != '') {
                     foreach ($examsArr as $exam) {
                         $de = new App_Model_DogExam(array(
                             'dogId' => (int) $dogId,
@@ -270,7 +270,7 @@ class Admin_Controller_Dog extends Controller
                 
                 $examsArr = (array) RequestMethods::post('chexam');
 
-                if (!empty($examsArr)) {
+                if ($examsArr[0] != '') {
                     $deleteStatus = App_Model_DogExam::deleteAll(array('dogId = ?' => (int) $dog->getId()));
                     if ($deleteStatus != -1) {
                         foreach ($examsArr as $exam) {

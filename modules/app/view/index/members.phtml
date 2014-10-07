@@ -13,6 +13,7 @@
             </div>
             <div class="dogInfo">
                 <span>Jméno:{echo $user->firstname.' '.$user->lastname}</span><br/>
+                {if $dog !== null}
                 <span>Pes: {echo $dog->getDogName()}</span><br/>
                 <span>Rasa: {echo $dog->getRace()}</span><br/>
                 {script $exams = $dog->getExams()}
@@ -22,9 +23,10 @@
                             {echo $exam->getShortcut()}
                         {/foreach}
                     {/if}{else}
-                        Bez zkousek
+                        Bez zkoušek
                     {/else}
                 </span>
+                {/if}
             </div>
             <div class="dogLogo">
                 <img src="/public/images/user_logo.jpg"/>
@@ -33,6 +35,6 @@
     {/foreach}
 {/if}{else}
     <div class="errorDiv">
-        <span>Prazdny</span>
+        <span>Žádní členové</span>
     </div>
 {/else}

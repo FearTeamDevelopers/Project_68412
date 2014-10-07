@@ -285,7 +285,11 @@ class App_Model_Dog extends Model {
             'isActive = ?' => true)
         );
         
-        return $dog->getDogById();
+        if($dog !== null){
+            return $dog->getDogById();
+        }else{
+            return null;
+        }
     }
 
     /**

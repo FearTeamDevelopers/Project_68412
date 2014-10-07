@@ -137,17 +137,16 @@
             <span class="field">
                 <select name="role" class="longinput">
                     {if $user->role == "role_superadmin"}
-                    <option value="role_member">Member</option>
+                    <option value="role_member">Člen</option>
                     <option value="role_admin">Admin</option>
                     <option value="role_superadmin" selected>Super Admin</option>
                     {/if}
                     {elseif $user->role == "role_admin"}
-                    <option value="role_member">Member</option>
+                    <option value="role_member">Člen</option>
                     <option value="role_admin" selected>Admin</option>
                     <option value="role_superadmin">Super Admin</option>
-                    {/elseif}
-                    {else}
-                    <option value="role_member" selected>Member</option>
+                    {/elseif}{else}
+                    <option value="role_member" selected>Člen</option>
                     <option value="role_admin">Admin</option>
                     <option value="role_superadmin">Super Admin</option>
                     {/else}

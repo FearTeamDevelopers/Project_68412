@@ -93,13 +93,11 @@ class App_Controller_Index extends Controller
         $view = $this->getActionView();
         $cache = Registry::get('cache');
 
-        $content = $cache->get('aktuality-all');
+        $content = $cache->get('aktuality');
 
         if (NULL !== $content) {
             $news = $content;
         } else {
-            $npp = (int) $this->loadConfigFromDb('news_per_page');
-
             $news = App_Model_News::all(
                             array('active = ?' => true, 'expirationDate >= ?' => date('Y-m-d H:i:s')),
                         array('id', 'urlKey', 'author', 'title', 'shortBody', 'created', 'rank'),
@@ -110,11 +108,13 @@ class App_Controller_Index extends Controller
                     $this->_parseContentBody($_news, 'shortBody');
                 }
                 
-                $cache->set('aktuality-all', $news);
+                $cache->set('aktuality', $news);
             } else {
                 $news = array();
             }
         }
+        
+        $npp = (int) $this->loadConfigFromDb('news_per_page');
         
         $newsCount = App_Model_News::count(
                         array('active = ?' => true,
