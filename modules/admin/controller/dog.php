@@ -394,9 +394,7 @@ class Admin_Controller_Dog extends Controller
         $this->willRenderLayoutView = false;
 
         if ($this->checkToken()) {
-            $dog = App_Model_Dog::first(
-                            array('id = ?' => (int) $id), array('id', 'imgMain', 'imgThumb')
-            );
+            $dog = App_Model_Dog::first(array('id = ?' => (int) $id));
 
             if (NULL === $dog) {
                 echo self::ERROR_MESSAGE_2;

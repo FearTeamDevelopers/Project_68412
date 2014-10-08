@@ -44,11 +44,6 @@ class Admin_Controller_User extends Controller
                     $status = $security->authenticate($email, $password);
 
                     if ($status === true) {
-                        $user = App_Model_User::first(array('id = ?' => $this->getUser()->getId()));
-                        $user->lastLogin = date('Y-m-d H:i:s', time());
-                        $user->save();
-                        unset($user);
-
                         self::redirect('/admin/');
                     } else {
                         $view->set('account_error', 'Email a/nebo heslo není správně');
@@ -374,7 +369,7 @@ class Admin_Controller_User extends Controller
             $user->salt = $salt;
             $user->imgMain = $imgMain;
             $user->imgThumb = $imgThumb;
-            $user->role = RequestMethods::post('role', 'role_member');
+            $user->role = RequestMethods::post('role', $user->getRole());
             $user->active = RequestMethods::post('active');
 
             if (empty($errors) && $user->validate()) {

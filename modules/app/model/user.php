@@ -203,6 +203,15 @@ class App_Model_User extends Model implements UserInterface
 
     /**
      * 
+     * @param type $datetime
+     */
+    public function setLastLogin($datetime)
+    {
+        $this->_lastLogin = $datetime;
+    }
+    
+    /**
+     * 
      * @return type
      */
     public function getUnlinkPath($type = true)

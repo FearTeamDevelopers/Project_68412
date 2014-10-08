@@ -16,33 +16,33 @@
             <label>Jméno psa*</label>
             <span class="field">
                 <input required type="text" name="dogname" class="longinput" value="{echo $dog->dogName}" />
+                {if isset($errors["dogName"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["dogName"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["dogName"])}
-            <label class="error">
-                {echo join("<br/>", $errors["dogName"])}
-            </label>
-            {/if}
         </p>
         <p>
             <label>Majitel*</label>
             <span class="field">
                 <select name="user" class="longinput">
                     {if !empty($users)}
-                        {foreach $user in $users}
-                            {script $sel=""}
-                            {if $dog->userId == $user->id}
-                                {script $sel="selected"}
-                            {/if}
-                            <option value="{echo $user->id}" {echo $sel}>{echo $user->firstname." ".$user->lastname}</option>
-                        {/foreach}
+                    {foreach $user in $users}
+                    {script $sel=""}
+                    {if $dog->userId == $user->id}
+                    {script $sel="selected"}
+                    {/if}
+                    <option value="{echo $user->id}" {echo $sel}>{echo $user->firstname." ".$user->lastname}</option>
+                    {/foreach}
                     {/if}
                 </select>
+                {if isset($errors["user"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["user"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["user"])}
-            <label class="error">
-                {echo join("<br/>", $errors["user"])}
-            </label>
-            {/if}
         </p>
         <p>
             <label>Aktuální pes</label>
@@ -61,78 +61,78 @@
         <div class="par">
             <label>Hlavní fotka*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
             {if $dog->imgMain != ""}
-                <span class="field" id="currentLogo">
-                    <img src="{echo $dog->imgThumb}" alt="" height="100" />
-                    <a href="/admin/dog/deleteusermainphoto/{echo $dog->id}" class="btn btn3 btn_trash deleteImg" title="Smazat"></a>
-                </span>
+            <span class="field" id="currentLogo">
+                <img src="{echo $dog->imgThumb}" alt="" height="100" />
+                <a href="/admin/dog/deletemainphoto/{echo $dog->id}" class="btn btn3 btn_trash deleteImg" title="Smazat"></a>
+            </span>
 
-                <div id="image-cropper" class="uploadNewImage nodisplay field">
-                    <input type="file" class="cropit-image-input" accept="image/*"/>
-                    <div class="cropit-image-preview-container">
-                        <div class="cropit-image-background-container">
-                            <img class="cropit-image-background" />
-                        </div>
-                        <div class="cropit-image-preview"></div>
+            <div id="image-cropper" class="uploadNewImage nodisplay field">
+                <input type="file" class="cropit-image-input" accept="image/*"/>
+                <div class="cropit-image-preview-container">
+                    <div class="cropit-image-background-container">
+                        <img class="cropit-image-background" />
                     </div>
-
-                    <input type="range" class="cropit-image-zoom-input" />
-                    {if isset($errors["croppedimage"])}
-                    <label class="error">
-                        {echo join("<br/>", $errors["croppedimage"])}
-                    </label>
-                    {/if}
+                    <div class="cropit-image-preview"></div>
                 </div>
+
+                <input type="range" class="cropit-image-zoom-input" />
+                {if isset($errors["croppedimage"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["croppedimage"])}
+                </label>
+                {/if}
+            </div>
             {/if}{else}
-                <div id="image-cropper" class="uploadNewImage field">
-                    <input type="file" class="cropit-image-input" accept="image/*"/>
-                    <div class="cropit-image-preview-container">
-                        <div class="cropit-image-background-container">
-                            <img class="cropit-image-background" />
-                        </div>
-                        <div class="cropit-image-preview"></div>
+            <div id="image-cropper" class="uploadNewImage field">
+                <input type="file" class="cropit-image-input" accept="image/*"/>
+                <div class="cropit-image-preview-container">
+                    <div class="cropit-image-background-container">
+                        <img class="cropit-image-background" />
                     </div>
-
-                    <input type="range" class="cropit-image-zoom-input" />
-                    {if isset($errors["croppedimage"])}
-                    <label class="error">
-                        {echo join("<br/>", $errors["croppedimage"])}
-                    </label>
-                    {/if}
+                    <div class="cropit-image-preview"></div>
                 </div>
+
+                <input type="range" class="cropit-image-zoom-input" />
+                {if isset($errors["croppedimage"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["croppedimage"])}
+                </label>
+                {/if}
+            </div>
             {/else}
         </div>
         <p>
             <label>Rasa*</label>
             <span class="field">
                 <input required type="text" name="dograce" class="longinput" value="{echo $dog->race}" />
+                {if isset($errors["race"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["race"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["race"])}
-            <label class="error">
-                {echo join("<br/>", $errors["race"])}
-            </label>
-            {/if}
         </p>
         <p>
             <label>Datum narození*</label>
             <span class="field">
                 <input required type="text" name="dogdob" class="longinput datepicker" value="{echo $dog->dob}" />
+                {if isset($errors["dob"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["dob"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["dob"])}
-            <label class="error">
-                {echo join("<br/>", $errors["dob"])}
-            </label>
-            {/if}
         </p>
         <p>
             <label>Další informace</label>
             <span class="field">
                 <textarea name="doginfo" class="longinput" rows="5">{echo $dog->information}</textarea>
+                {if isset($errors["information"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["information"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["information"])}
-            <label class="error">
-                {echo join("<br/>", $errors["information"])}
-            </label>
-            {/if}
         </p>
         <p>
             <label>Aktivní</label>
@@ -170,12 +170,12 @@
             </span>
             <span class="field file_inputs">
                 <input type="file" name="secondfile[]"/>
+                {if isset($errors["secondfile"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["secondfile"])}
+                </label>
+                {/if}
             </span> 
-            {if isset($errors["secondfile"])}
-            <label class="error">
-                {echo join("<br/>", $errors["secondfile"])}
-            </label>
-            {/if}
         </p>
 
         <br/>
@@ -203,7 +203,7 @@
                 </ul>
             </div>
         {/if}{else}
-            <div class="notification msginfo"><a class="close"></a><p>Žádné foto</p></div>
+        <div class="notification msginfo"><a class="close"></a><p>Žádné foto</p></div>
         {/else}
 
         <br/>
@@ -219,7 +219,7 @@
                         <li>
                             {script $ch = ""}
                             {if in_array($exam->getId(), $dogexamids)}
-                                {script $ch = "checked=\"checked\""}
+                            {script $ch = "checked=\"checked\""}
                             {/if}
                             <input type="checkbox" name="chexam[]" value="{echo $exam->id}" {echo $ch} /><span>{echo $exam->title}</span>
                         </li>

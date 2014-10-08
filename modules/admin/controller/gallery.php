@@ -273,7 +273,9 @@ class Admin_Controller_Gallery extends Controller
                     $this->checkMutliSubmissionProtectionToken(RequestMethods::post('submstoken')) !== true) {
                 self::redirect('/admin/gallery/');
             }
-
+            
+            $errors = array();
+            
             $fileManager = new FileManager(array(
                 'thumbWidth' => $this->loadConfigFromDb('thumb_width'),
                 'thumbHeight' => $this->loadConfigFromDb('thumb_height'),
@@ -350,10 +352,10 @@ class Admin_Controller_Gallery extends Controller
                 
                 if ($photo->delete()) {
 
-                    Event::fire('admin.log', array('success', 'ID: ' . $id));
+                    Event::fire('admin.log', array('success', 'Photo id: ' . $id));
                     echo 'success';
                 } else {
-                    Event::fire('admin.log', array('fail', 'ID: ' . $id));
+                    Event::fire('admin.log', array('fail', 'Photo id: ' . $id));
                     echo self::ERROR_MESSAGE_1;
                 }
             }
@@ -385,7 +387,7 @@ class Admin_Controller_Gallery extends Controller
 
                     if ($photo->validate()) {
                         $photo->save();
-                        Event::fire('admin.log', array('success', 'ID: ' . $id));
+                        Event::fire('admin.log', array('success', 'Photo id: ' . $id));
                         echo 'active';
                     } else {
                         echo join('<br/>', $photo->getErrors());
@@ -394,7 +396,7 @@ class Admin_Controller_Gallery extends Controller
                     $photo->active = false;
                     if ($photo->validate()) {
                         $photo->save();
-                        Event::fire('admin.log', array('success', 'ID: ' . $id));
+                        Event::fire('admin.log', array('success', 'Photo id: ' . $id));
                         echo 'inactive';
                     } else {
                         echo join('<br/>', $photo->getErrors());

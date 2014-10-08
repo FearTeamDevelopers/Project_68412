@@ -14,68 +14,68 @@
             <label>Jméno*</label>
             <span class="field">
                 <input required type="text" name="firstname" class="longinput" value="{echo $user->firstname}" />
+                {if isset($errors["firstname"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["firstname"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["firstname"])}
-            <label class="error">
-                {echo join("<br/>", $errors["firstname"])}
-            </label>
-            {/if}
         </p>
         <p>
             <label>Příjmení*</label>
             <span class="field">
                 <input required type="text" name="lastname" class="longinput" value="{echo $user->lastname}" />
+                {if isset($errors["lastname"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["lastname"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["lastname"])}
-            <label class="error">
-                {echo join("<br/>", $errors["lastname"])}
-            </label>
-            {/if}
         </p>
         <div class="par">
             <label>Profilová fotka*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
             {if $user->imgMain != ""}
-                <span class="field" id="currentImage">
-                    <img src="{echo $user->imgThumb}" alt="" height="100" />
-                    <a href="/admin/user/deleteusermainphoto/{echo $user->id}" class="btn btn3 btn_trash deleteImg" title="Smazat"></a>
-                </span>
+            <span class="field" id="currentImage">
+                <img src="{echo $user->imgThumb}" alt="" height="100" />
+                <a href="/admin/user/deleteusermainphoto/{echo $user->id}" class="btn btn3 btn_trash deleteImg" title="Smazat"></a>
+            </span>
 
-                <div id="image-cropper" class="uploadNewImage nodisplay field">
-                    <input type="file" class="cropit-image-input" accept="image/*"/>
-                    <div class="cropit-image-preview-container">
-                        <div class="cropit-image-background-container">
-                            <img class="cropit-image-background" />
-                        </div>
-                        <div class="cropit-image-preview"></div>
+            <div id="image-cropper" class="uploadNewImage nodisplay field">
+                <input type="file" class="cropit-image-input" accept="image/*"/>
+                <div class="cropit-image-preview-container">
+                    <div class="cropit-image-background-container">
+                        <img class="cropit-image-background" />
                     </div>
-
-                    <input type="range" class="cropit-image-zoom-input" />
-                    {if isset($errors["croppedimage"])}
-                    <label class="error">
-                        {echo join("<br/>", $errors["croppedimage"])}
-                    </label>
-                    {/if}
+                    <div class="cropit-image-preview"></div>
                 </div>
+
+                <input type="range" class="cropit-image-zoom-input" />
+                {if isset($errors["croppedimage"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["croppedimage"])}
+                </label>
+                {/if}
+            </div>
             {/if}{else}
-                <div id="image-cropper" class="uploadNewImage field">
-                    <input type="file" class="cropit-image-input" accept="image/*"/>
-                    <div class="cropit-image-preview-container">
-                        <div class="cropit-image-background-container">
-                            <img class="cropit-image-background" />
-                        </div>
-                        <div class="cropit-image-preview"></div>
+            <div id="image-cropper" class="uploadNewImage field">
+                <input type="file" class="cropit-image-input" accept="image/*"/>
+                <div class="cropit-image-preview-container">
+                    <div class="cropit-image-background-container">
+                        <img class="cropit-image-background" />
                     </div>
-
-                    <input type="range" class="cropit-image-zoom-input" />
-                    {if isset($errors["croppedimage"])}
-                    <label class="error">
-                        {echo join("<br/>", $errors["croppedimage"])}
-                    </label>
-                    {/if}
+                    <div class="cropit-image-preview"></div>
                 </div>
+
+                <input type="range" class="cropit-image-zoom-input" />
+                {if isset($errors["croppedimage"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["croppedimage"])}
+                </label>
+                {/if}
+            </div>
             {/else}
         </div>
-        
+
         <br/>
         <div class="contenttitle radiusbottom0">
             <h2 class="form"><span>Přihlašovací údaje</span></h2>
@@ -84,34 +84,34 @@
             <label>Email*</label>
             <span class="field">
                 <input required type="email" name="email" class="longinput" value="{echo $user->email}" />
+                {if isset($errors["email"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["email"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["email"])}
-            <label class="error">
-                {echo join("<br/>", $errors["email"])}
-            </label>
-            {/if}
         </p>
         <p>
             <label>Heslo*</label>
             <span class="field">
                 <input type="password" name="password" class="longinput" value=""/>
+                {if isset($errors["password"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["password"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["password"])}
-            <label class="error">
-                {echo join("<br/>", $errors["password"])}
-            </label>
-            {/if}
         </p>
         <p>
             <label>Potvrdit heslo*</label>
             <span class="field">
                 <input type="password" name="password2" class="longinput" value=""/>
+                {if isset($errors["password2"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["password2"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["password2"])}
-            <label class="error">
-                {echo join("<br/>", $errors["password2"])}
-            </label>
-            {/if}
         </p>
 
         <br/>

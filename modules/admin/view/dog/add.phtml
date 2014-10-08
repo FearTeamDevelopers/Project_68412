@@ -17,29 +17,29 @@
             <label>Jméno psa*</label>
             <span class="field">
                 <input required type="text" name="dogname" class="longinput" value="{echo isset($dog)? $dog->dogName: ""}" />
+                {if isset($errors["dogName"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["dogName"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["dogName"])}
-            <label class="error">
-                {echo join("<br/>", $errors["dogName"])}
-            </label>
-            {/if}
         </p>
         <p>
             <label>Majitel*</label>
             <span class="field">
                 <select name="user" class="longinput">
                     {if !empty($users)}
-                        {foreach $user in $users}
-                            <option value="{echo $user->id}">{echo $user->firstname." ".$user->lastname}</option>
-                        {/foreach}
+                    {foreach $user in $users}
+                    <option value="{echo $user->id}">{echo $user->firstname." ".$user->lastname}</option>
+                    {/foreach}
                     {/if}
                 </select>
+                {if isset($errors["user"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["user"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["user"])}
-            <label class="error">
-                {echo join("<br/>", $errors["user"])}
-            </label>
-            {/if}
         </p>
         <p>
             <label>Aktuální pes</label>
@@ -73,34 +73,34 @@
             <label>Rasa*</label>
             <span class="field">
                 <input required type="text" name="dograce" class="longinput" value="{echo isset($dog)? $dog->race: ""}" />
+                {if isset($errors["race"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["race"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["race"])}
-            <label class="error">
-                {echo join("<br/>", $errors["race"])}
-            </label>
-            {/if}
         </p>
         <p>
-            <label>Datum narození*</label>
+            <label>Datum narození</label>
             <span class="field">
-                <input required type="text" name="dogdob" class="longinput datepicker" value="{echo isset($dog)? $dog->dob: ""}" />
+                <input type="text" name="dogdob" class="longinput datepicker" value="{echo isset($dog)? $dog->dob: ""}" />
+                {if isset($errors["dob"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["dob"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["dob"])}
-            <label class="error">
-                {echo join("<br/>", $errors["dob"])}
-            </label>
-            {/if}
         </p>
         <p>
             <label>Další informace</label>
             <span class="field">
                 <textarea name="doginfo" class="longinput" rows="5">{echo isset($dog)? $dog->information : ""}</textarea>
+                {if isset($errors["information"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["information"])}
+                </label>
+                {/if}
             </span>
-            {if isset($errors["information"])}
-            <label class="error">
-                {echo join("<br/>", $errors["information"])}
-            </label>
-            {/if}
         </p>
 
         <br/>
@@ -124,12 +124,12 @@
             </span>
             <span class="field file_inputs">
                 <input type="file" name="secondfile[]"/>
-            </span> 
-            {if isset($errors["secondfile"])}
-            <label class="error">
-                {echo join("<br/>", $errors["secondfile"])}
-            </label>
-            {/if}
+                {if isset($errors["secondfile"])}
+                <label class="error">
+                    {echo join("<br/>", $errors["secondfile"])}
+                </label>
+                {/if}
+            </span>
         </p>
 
         <br/>
@@ -142,9 +142,9 @@
                 {if !empty($exams)}
                     <ul class="category-tree">
                         {foreach $exam in $exams}
-                            <li>
-                                <input type="checkbox" name="chexam[]" value="{echo $exam->id}" /><span>{echo $exam->title}</span>
-                            </li>
+                        <li>
+                            <input type="checkbox" name="chexam[]" value="{echo $exam->id}" /><span>{echo $exam->title}</span>
+                        </li>
                         {/foreach}
                     </ul>
                 {/if}
