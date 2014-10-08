@@ -68,7 +68,7 @@ header{
 .conteiner{
     float:left;
     width:100%;
-    min-height:577px;
+    min-height:597px;
     border-top:2px solid white;
     border-bottom:2px solid rgb(125, 125, 125);
     margin-top:172px;
@@ -124,7 +124,7 @@ footer{
     width:100%;
     padding-top:5px;
     padding-bottom:5px;
-    height:220px;
+    height:200px;
     background-color:RGB(40,123,165);
     position:relative;
     float:left;
