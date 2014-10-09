@@ -12,6 +12,7 @@ class App_Controller_Gallery extends Controller
 
     /**
      * 
+     * @param type $year
      */
     public function index($year = null)
     {
@@ -50,7 +51,8 @@ class App_Controller_Gallery extends Controller
         $view->set('galleries', $galleries)
                 ->set('years', $returnYears);
 
-        $layoutView->set('canonical', $canonical);
+        $layoutView->set('canonical', $canonical)
+            ->set('metatitle', 'ZKO - Galerie '.$year);
     }
 
     /**
@@ -64,10 +66,14 @@ class App_Controller_Gallery extends Controller
         $host = RequestMethods::server('HTTP_HOST');
 
         $gallery = App_Model_Gallery::fetchActivePublicGalleryByUrlkey($urlkey);
+        
+        if($gallery !== null){
+            $canonical = 'http://' . $host . '/galerie/r/' . $urlkey;
+            $layoutView->set('canonical', $canonical)
+                    ->set('metatitle', $gallery->getTitle());
+        }
+        
         $view->set('gallery', $gallery);
-
-        $canonical = 'http://' . $host . '/galerie/r/' . $urlkey;
-        $layoutView->set('canonical', $canonical);
     }
 
 }

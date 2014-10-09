@@ -148,7 +148,8 @@ class App_Controller_Index extends Controller
         $host = RequestMethods::server('HTTP_HOST');
         $canonical = 'http://' . $host . '/clenove';
 
-        $layoutView->set('canonical', $canonical);
+        $layoutView->set('canonical', $canonical)
+                ->set('metatitle', 'ZKO - Členové');
         $view->set('members', $members);
     }
 

@@ -84,6 +84,7 @@ class App_Controller_News extends Controller
     public function index($page = 1)
     {
         $view = $this->getActionView();
+        $layoutView = $this->getLayoutView();
 
         $npp = (int) $this->loadConfigFromDb('news_per_page');
 
@@ -107,6 +108,8 @@ class App_Controller_News extends Controller
         $newsPageCount = ceil($newsCount / $npp);
         $view->set('newsbatch', $news)
                 ->set('newspagecount', $newsPageCount);
+        
+        $layoutView->set('metatitle', 'ZKO - Aktuality');
     }
 
     /**
@@ -116,6 +119,7 @@ class App_Controller_News extends Controller
     public function detail($urlkey)
     {
         $view = $this->getActionView();
+        $layoutView = $this->getLayoutView();
 
         $news = App_Model_News::first(
                         array(
@@ -124,8 +128,7 @@ class App_Controller_News extends Controller
         ));
 
         $newsParsed = $this->_parseNewsBody($news, 'body');
-
-        $layoutView = $this->getLayoutView();
+        
         $this->_checkMetaData($layoutView, $news);
         $layoutView
                 ->set('article', 1)

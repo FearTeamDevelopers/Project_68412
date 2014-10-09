@@ -40,11 +40,11 @@ class App_Etc_Module extends Module
             'args' => ':year'
         ),
         array(
-            'pattern' => '/galerie/r/:id',
+            'pattern' => '/galerie/r/:urlkey',
             'module' => 'app',
             'controller' => 'gallery',
             'action' => 'detail',
-            'args' => ':id'
+            'args' => ':urlkey'
         ),
         array(
             'pattern' => '/historie',
