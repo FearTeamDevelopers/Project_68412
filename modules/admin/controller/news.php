@@ -59,7 +59,7 @@ class Admin_Controller_News extends Controller
                 ->set('submstoken', $this->mutliSubmissionProtectionToken());
 
         if (RequestMethods::post('submitAddNews')) {
-            if ($this->checkToken() !== true &&
+            if ($this->checkCSRFToken() !== true &&
                     $this->checkMutliSubmissionProtectionToken(RequestMethods::post('submstoken')) !== true) {
                 self::redirect('/admin/news/');
             }
@@ -116,7 +116,7 @@ class Admin_Controller_News extends Controller
                 ->set('photos', $this->_getPhotos());
 
         if (RequestMethods::post('submitEditNews')) {
-            if ($this->checkToken() !== true) {
+            if ($this->checkCSRFToken() !== true) {
                 self::redirect('/admin/news/');
             }
 
@@ -160,7 +160,7 @@ class Admin_Controller_News extends Controller
         $this->willRenderActionView = false;
         $this->willRenderLayoutView = false;
 
-        if ($this->checkToken()) {
+        if ($this->checkCSRFToken()) {
             $news = App_Model_News::first(
                             array('id = ?' => (int) $id), array('id')
             );
@@ -180,6 +180,14 @@ class Admin_Controller_News extends Controller
             echo self::ERROR_MESSAGE_1;
         }
     }
+    
+    /**
+     * @before _secured, _admin
+     */
+    public function insertPhotoDialog()
+    {
+        $this->willRenderLayoutView = false;
+    }
 
     /**
      * @before _secured, _admin
@@ -190,7 +198,7 @@ class Admin_Controller_News extends Controller
         $errors = array();
 
         if (RequestMethods::post('performNewsAction')) {
-            if ($this->checkToken() !== true) {
+            if ($this->checkCSRFToken() !== true) {
                 self::redirect('/admin/news/');
             }
 

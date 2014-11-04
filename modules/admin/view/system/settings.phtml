@@ -10,7 +10,7 @@
     </div><!--contenttitle-->
 
     <form class="stdform stdform2" method="post" action="#" >
-        <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+        <input type="hidden" name="csrf" id="csrf" value="{echo $token}" />
         {if !empty($config)}
             {foreach $conf in $config}
             <p>

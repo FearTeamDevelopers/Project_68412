@@ -12,7 +12,7 @@
     </div><!--contenttitle-->
     
     <form class="stdform stdform2" method="post" action="#">
-        <input type="hidden" name="tk" value="{echo $token}" />
+        <input type="hidden" name="csrf" value="{echo $token}" />
         <p>
             <label>Název</label>
             <span class="field">{echo $gallery->title}</span>

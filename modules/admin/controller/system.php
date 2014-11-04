@@ -82,7 +82,7 @@ class Admin_Controller_System extends Controller
         $view->set('config', $config);
 
         if (RequestMethods::post('submitEditSet')) {
-            $this->checkToken();
+            $this->checkCSRFToken();
             $errors = array();
 
             foreach ($config as $conf) {

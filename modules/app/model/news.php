@@ -73,7 +73,7 @@ class App_Model_News extends Model
      * @length 256
      * 
      * @validate required, html, max(5000)
-     * @label krátký text
+     * @label teaser
      */
     protected $_shortBody;
 

@@ -3,8 +3,9 @@
 namespace App\Etc;
 
 use THCFrame\Events\Events as Events;
-use THCFrame\Registry\Registry as Registry;
+use THCFrame\Registry\Registry;
 use THCFrame\Controller\Controller as BaseController;
+use THCFrame\Core\StringMethods;
 
 /**
  * Module specific controller class extending framework controller class
@@ -14,6 +15,8 @@ use THCFrame\Controller\Controller as BaseController;
 class Controller extends BaseController
 {
 
+    private $_security;
+    
     /**
      * 
      * @param type $options
@@ -28,6 +31,7 @@ class Controller extends BaseController
             $database->disconnect();
         });
         
+        $this->_security = Registry::get('security');
         $cache = Registry::get('cache');
         
         $links = $cache->get('links');
@@ -69,14 +73,26 @@ class Controller extends BaseController
     }
 
     /**
+     * 
+     * @param type $string
+     * @return type
+     */
+    protected function _createUrlKey($string)
+    {
+        $string = StringMethods::removeDiacriticalMarks($string);
+        $string = str_replace(array('.', ',', '_', '(', ')', '[', ']', '|', ' '), '-', $string);
+        $string = str_replace(array('?', '!', '@', '&', '*', ':', '+', '=', '~', '°', '´', '`', '%', "'", '"'), '', $string);
+        $string = trim($string);
+        $string = trim($string, '-');
+        return strtolower($string);
+    }
+    
+    /**
      * load user from security context
      */
     public function getUser()
     {
-        $security = Registry::get('security');
-        $user = $security->getUser();
-
-        return $user;
+        return $this->_security->getUser();
     }
 
     /**
@@ -84,16 +100,17 @@ class Controller extends BaseController
      */
     public function render()
     {
-        if ($this->getUser()) {
-            if ($this->getActionView()) {
-                $this->getActionView()
-                        ->set('authUser', $this->getUser());
-            }
+        $view = $this->getActionView();
+        $layoutView = $this->getLayoutView();
 
-            if ($this->getLayoutView()) {
-                $this->getLayoutView()
-                        ->set('authUser', $this->getUser());
-            }
+        if ($view) {
+            $view->set('authUser', $this->getUser())
+                    ->set('env', ENV);
+        }
+
+        if ($layoutView) {
+            $layoutView->set('authUser', $this->getUser())
+                    ->set('env', ENV);
         }
 
         parent::render();

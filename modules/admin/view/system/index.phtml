@@ -8,7 +8,7 @@
     <div class="one_fourth">
         <div class="contenttitle"><h2 class="form"><span>Smazat cache</span></h2></div>
         <form class="stdform stdform2" method="post" action="/admin/system/clearcache/">
-            <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+            <input type="hidden" name="csrf" id="csrf" value="{echo $token}" />
             <p class="stdformbutton">
                 <input name="clearCache" type="submit" value="Smazat cache" class="submit radius2" />
             </p>
@@ -17,7 +17,7 @@
     <div class="one_fourth">
         <div class="contenttitle"><h2 class="form"><span>Zálohovat databázi</span></h2></div>
         <form class="stdform stdform2" method="post" action="/admin/system/createdatabasebackup/">
-            <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+            <input type="hidden" name="csrf" id="csrf" value="{echo $token}" />
             <p class="stdformbutton">
                 <input name="createBackup" type="submit" value="Vytvořit zálohu" class="submit radius2" />
             </p>
@@ -26,7 +26,7 @@
     <div class="one_fourth">
         <div class="contenttitle"><h2 class="form"><span>Aktualizovat sitemap.xml</span></h2></div>
         <form class="stdform stdform2" method="post" action="/admin/system/generateSitemap/">
-            <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+            <input type="hidden" name="csrf" id="csrf" value="{echo $token}" />
             <p class="stdformbutton">
                 <input name="generateSitemap" type="submit" value="Aktualizovat sitemap.xml" class="submit radius2" />
             </p>

@@ -3,5 +3,6 @@
 /application/configuration/dbschema.sql
 /application/logs/
 /public/uploads/
-/temp/
+/temp/cache/
+/temp/db/
 /nbproject/

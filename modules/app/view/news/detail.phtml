@@ -4,7 +4,7 @@
         <span class="detailTitle">{echo $news->title}</span> <br/>
         <span class="detailCreated">{echo $news->created." ".$news->author}</span>
     </div>
-    <p class="detailBody">{echo $news->body}</p>
+    <p class="detailBody">{echo html_entity_decode($news->body)}</p>
 </div>
 {/if}
 {else}

@@ -41,7 +41,7 @@ class Admin_Controller_Dog extends Controller
                 ->set('users', $users);
 
         if (RequestMethods::post('submitAddDog')) {
-            if ($this->checkToken() !== true &&
+            if ($this->checkCSRFToken() !== true &&
                     $this->checkMutliSubmissionProtectionToken(RequestMethods::post('submstoken')) !== true) {
                 self::redirect('/admin/dog/');
             }
@@ -212,7 +212,7 @@ class Admin_Controller_Dog extends Controller
                 ->set('users', $users);
 
         if (RequestMethods::post('submitEditDog')) {
-            if ($this->checkToken() !== true) {
+            if ($this->checkCSRFToken() !== true) {
                 self::redirect('/admin/dog/');
             }
 
@@ -360,7 +360,7 @@ class Admin_Controller_Dog extends Controller
         $this->willRenderActionView = false;
         $this->willRenderLayoutView = false;
 
-        if ($this->checkToken()) {
+        if ($this->checkCSRFToken()) {
             $dog = App_Model_Dog::first(
                             array('id = ?' => (int) $id), array('id')
             );
@@ -393,7 +393,7 @@ class Admin_Controller_Dog extends Controller
         $this->willRenderActionView = false;
         $this->willRenderLayoutView = false;
 
-        if ($this->checkToken()) {
+        if ($this->checkCSRFToken()) {
             $dog = App_Model_Dog::first(array('id = ?' => (int) $id));
 
             if (NULL === $dog) {

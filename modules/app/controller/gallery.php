@@ -45,8 +45,8 @@ class App_Controller_Gallery extends Controller
 
         $returnYears = array();
 
-        foreach ($galleryYears as $year) {
-            $returnYears[] = $year->getYear();
+        foreach ($galleryYears as $galyear) {
+            $returnYears[] = $galyear->getYear();
         }
         $view->set('galleries', $galleries)
                 ->set('years', $returnYears);

@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta http-equiv="Content-Language" content="cs" />
-        {if $env == "live"}<meta http-equiv="CACHE-CONTROL" content="public, max-age=10800">{/if}
-        {else}<meta http-equiv="CACHE-CONTROL" content="no-store">{/else}
+        <meta charset="UTF-8">
+        {if $env == "dev"}<meta http-equiv="Cache-control" content="no-store">{/if}
 
         <meta name="viewport" content="width=device-width, maximum-scale=2.0, minimum-scale=1.0, initial-scale=1.0" />
-        <meta name="language" content="czech" />
         <meta name="description" content="{echo $metadescription}" />
         <meta name="revisit-after" content="2 Days" />
-        <meta name="distribution" content="global"/>
         <meta name="robots" content="{echo $metarobots}">
         
         {if isset($article)}
@@ -47,7 +43,7 @@
     <body lang="cs">
         <header>
             <div class="logo">
-                <img src="/public/images/logo.svg"/>
+                <a href="/" title="ZKO Kostelec n/L"><img src="/public/images/logo.svg"/></a>
             </div>
             <div class="nazev">
                 <img src="/public/images/cvicak_nadpis.png"/>

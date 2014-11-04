@@ -3,7 +3,7 @@
         <div class="news">
             <a href="/aktuality/r/{echo $new->urlKey}"><span class="newsTitle">{echo $new->title}</span></a><br/>
             <span class="newsCreated">{echo $new->created}</span><br/>
-            <p class="newsBody">{echo $new->shortBody}</p>
+            <p class="newsBody">{echo html_entity_decode($new->shortBody)}</p>
         </div>
     {/foreach}
     {if $newspagecount > 1}

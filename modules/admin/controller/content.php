@@ -59,7 +59,7 @@ class Admin_Controller_Content extends Controller
         $view->set('photos', $this->_getPhotos());
 
         if (RequestMethods::post('submitAddContent')) {
-            if($this->checkToken() !== true){
+            if($this->checkCSRFToken() !== true){
                 self::redirect('/admin/content/');
             }
             
@@ -111,7 +111,7 @@ class Admin_Controller_Content extends Controller
                 ->set('content', $content);
 
         if (RequestMethods::post('submitEditContent')) {
-            if($this->checkToken() !== true){
+            if($this->checkCSRFToken() !== true){
                 self::redirect('/admin/content/');
             }
             

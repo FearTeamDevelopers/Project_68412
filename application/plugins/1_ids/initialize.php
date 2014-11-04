@@ -24,7 +24,6 @@ use IDS\Monitor;
 try {
 
     $request = array(
-        'REQUEST' => $_REQUEST,
         'GET' => $_GET,
         'POST' => $_POST
     );

@@ -32,7 +32,7 @@ class Admin_Controller_Link extends Controller
         $view->set('submstoken', $this->mutliSubmissionProtectionToken());
 
         if (RequestMethods::post('submitAddLink')) {
-            if ($this->checkToken() !== true &&
+            if ($this->checkCSRFToken() !== true &&
                     $this->checkMutliSubmissionProtectionToken(RequestMethods::post('submstoken')) !== true) {
                 self::redirect('/admin/link/');
             }
@@ -76,7 +76,7 @@ class Admin_Controller_Link extends Controller
         $view->set('link', $link);
 
         if (RequestMethods::post('submitEditLink')) {
-            if ($this->checkToken() !== true) {
+            if ($this->checkCSRFToken() !== true) {
                 self::redirect('/admin/link/');
             }
 
@@ -108,7 +108,7 @@ class Admin_Controller_Link extends Controller
         $this->willRenderActionView = false;
         $this->willRenderLayoutView = false;
 
-        if ($this->checkToken()) {
+        if ($this->checkCSRFToken()) {
             $link = App_Model_Link::first(
                             array('id = ?' => (int) $id), array('id')
             );

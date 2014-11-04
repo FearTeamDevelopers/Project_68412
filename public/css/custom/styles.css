@@ -34,6 +34,18 @@ body{
     -moz-box-shadow: 0px 0px 10px 2px rgba(66,65,66,0.75);
     box-shadow: 0px 0px 10px 2px rgba(66,65,66,0.75);
 }
+
+/* Left & Right alignment */
+.left {float:left;}
+.right {float:right;}
+.left-10 {float:left; margin-right: 10px;}
+.right-10 {float:right; margin-left: 10px;}
+.relative {position:relative;}
+.aligncenter{text-align: center;}
+.nodisplay{display: none !important;}
+.fs10{font-size: 10px;}
+.clear{clear: both;}
+
 /***************HEADER***********************/
 header{
     background-color:rgb(235,235,235);
@@ -206,11 +218,12 @@ footer a:hover{
 }
 
 /************ AKTUALITY ***************/
+.news:first-child{margin-top: 35px;}
 .news{
     background-color:white;
     width:90%;
     float:left;
-    margin-top:35px;
+    margin-top:20px;
     margin-left:15px;
     padding:10px;
     color:black;

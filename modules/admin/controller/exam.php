@@ -32,7 +32,7 @@ class Admin_Controller_Exam extends Controller
         $view->set('submstoken', $this->mutliSubmissionProtectionToken());
 
         if (RequestMethods::post('submitAddExam')) {
-            if ($this->checkToken() !== true &&
+            if ($this->checkCSRFToken() !== true &&
                     $this->checkMutliSubmissionProtectionToken(RequestMethods::post('submstoken')) !== true) {
                 self::redirect('/admin/exam/');
             }
@@ -76,7 +76,7 @@ class Admin_Controller_Exam extends Controller
         $view->set('exam', $exam);
 
         if (RequestMethods::post('submitEditExam')) {
-            if ($this->checkToken() !== true) {
+            if ($this->checkCSRFToken() !== true) {
                 self::redirect('/admin/exam/');
             }
 
@@ -108,7 +108,7 @@ class Admin_Controller_Exam extends Controller
         $this->willRenderActionView = false;
         $this->willRenderLayoutView = false;
 
-        if ($this->checkToken()) {
+        if ($this->checkCSRFToken()) {
             $exam = App_Model_Exam::first(
                             array('id = ?' => (int) $id), array('id')
             );

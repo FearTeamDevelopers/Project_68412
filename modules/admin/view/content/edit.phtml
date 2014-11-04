@@ -11,11 +11,12 @@
             </div>
 
             <form class="stdform stdform2" method="post" action="#">
-                <input type="hidden" name="tk" id="tk" value="{echo $token}" />
+                <input type="hidden" name="csrf" id="csrf" value="{echo $token}" />
+                <input type="hidden" name="page" value="{echo $content->pageName}" />
                 <p>
-                    <label>Název stránky*<small>Neupravovat</small></label>
+                    <label>Název stránky</label>
                     <span class="field">
-                        <input type="text" name="page" required class="longinput" value="{echo $content->pageName}"/>
+                        <input type="text" name="name" disabled class="longinput" value="{echo $content->pageName}"/>
                         {if isset($errors["pageName"])}
                         <label class="error">{echo join("<br/>", $errors["pageName"])}</label>
                         {/if}
@@ -90,4 +91,5 @@
     </div>
 </div>
 <br class="clear-all"/>
+<div id="insert-photo-dialog"><p></p></div>
 <script type="text/javascript" src="/public/js/custom/news.js"></script>
