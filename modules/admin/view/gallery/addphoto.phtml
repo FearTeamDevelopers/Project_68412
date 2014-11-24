@@ -10,7 +10,7 @@
         <h2 class="table"><span>Nahrát foto do galerie</span></h2>
     </div><!--contenttitle-->
 
-    <form class="stdform stdform2 uploadCollectionPhotoForm" method="post" action="#" enctype="multipart/form-data">
+    <form class="stdform stdform2 uploadForm" method="post" action="#" enctype="multipart/form-data">
         <input type="hidden" name="MAX_FILE_SIZE" value="10000000"/>
         <input type="hidden" name="submstoken" id="submstoken" value="{echo $submstoken}" />
         <input type="hidden" name="galleryid" class="collid" value="{echo $gallery->id}" />
@@ -32,7 +32,7 @@
                 <a href="#" class="btn btn_folder multi_upload_dec"><span>-</span></a>
             </span>
             <span class="field file_inputs">
-                <input type="file" name="secondfile[]"/>
+                <input type="file" name="secondfile[]" accept="image/*"/>
             </span> 
             {if isset($errors["secondfile"])}
             <label class="error">

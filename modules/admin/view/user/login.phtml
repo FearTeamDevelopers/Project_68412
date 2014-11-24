@@ -11,9 +11,8 @@
         <!--[if lt IE 9]> 
             <script type="text/javascript" src="/public/js/plugins/html5.js"></script>
         <![endif]-->
-        <script type="text/javascript" src="/public/js/plugins/jquery-1.10.2.min.js"></script>
-        <script type="text/javascript" src="/public/js/plugins/jquery-ui-1.10.3.custom.min.js"></script>
-        <script type="text/javascript" src="/public/js/custom/general.min.js"></script>
+        <script type="text/javascript" src="/public/js/plugins/jquery-1.11.1.min.js" async></script>
+        <script type="text/javascript" src="/public/js/plugins/jquery-ui-1.10.4.custom.min.js" async></script>
 
         <title>ZKO - Administrace</title>
     </head>
@@ -32,19 +31,13 @@
                 <div class="loginform">
                     <div class="loginerror">
                         {if isset($account_error)}
-                        <p>
-                            {echo $account_error}
-                        </p>
+                            <p>{echo $account_error}</p>
                         {/if}
                         {if isset($email_error)}
-                        <p>
-                            {echo $email_error}
-                        </p>
+                            <p>{echo $email_error}</p>
                         {/if}
                         {if isset($password_error)}
-                        <p>
-                            {echo $password_error}
-                        </p>
+                            <p>{echo $password_error}</p>
                         {/if}
                     </div>
                     <form id="login" action="#" method="post">

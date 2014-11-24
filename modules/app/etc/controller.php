@@ -16,7 +16,7 @@ class Controller extends BaseController
 {
 
     private $_security;
-    
+
     /**
      * 
      * @param type $options
@@ -30,10 +30,11 @@ class Controller extends BaseController
             $database = Registry::get('database');
             $database->disconnect();
         });
-        
+
         $this->_security = Registry::get('security');
         $cache = Registry::get('cache');
-        
+        $cfg = Registry::get('configuration');
+
         $links = $cache->get('links');
 
         if (NULL !== $links) {
@@ -49,13 +50,13 @@ class Controller extends BaseController
             $metaData = $metaData;
         } else {
             $metaData = array(
-                'metadescription' => $this->loadConfigFromDb('meta_description'),
-                'metarobots' => $this->loadConfigFromDb('meta_robots'),
-                'metatitle' => $this->loadConfigFromDb('meta_title'),
-                'metaogurl' => $this->loadConfigFromDb('meta_og_url'),
-                'metaogtype' => $this->loadConfigFromDb('meta_og_type'),
-                'metaogimage' => $this->loadConfigFromDb('meta_og_image'),
-                'metaogsitename' => $this->loadConfigFromDb('meta_og_site_name')
+                'metadescription' => $cfg->meta_description,
+                'metarobots' => $cfg->meta_robots,
+                'metatitle' => $cfg->meta_title,
+                'metaogurl' => $cfg->meta_og_url,
+                'metaogtype' => $cfg->meta_og_type,
+                'metaogimage' => $cfg->meta_og_image,
+                'metaogsitename' => $cfg->meta_og_site_name
             );
 
             $cache->set('global_meta_data', $metaData);
@@ -86,7 +87,7 @@ class Controller extends BaseController
         $string = trim($string, '-');
         return strtolower($string);
     }
-    
+
     /**
      * load user from security context
      */

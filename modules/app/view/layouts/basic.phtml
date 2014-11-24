@@ -30,12 +30,11 @@
         <link href="/public/css/custom/reset.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="/public/css/plugins/smoothness/jquery-ui-1.10.4.custom.min.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="/public/css/custom/styles.min.css" media="screen" rel="stylesheet" type="text/css" />
-        <!--[if IE]> <link href="/public/css/styles.css" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
+        <link href="/public/css/plugins/lightbox2.min.css" rel="stylesheet"  type="text/css" />
+        <!--[if IE]> <link href="/public/css/custom/styles.min.css" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
 
         <!--[if lt IE 9]><script type="text/javascript" src="/public/js/plugins/html5.js"></script><![endif]-->
-        <link href="/public/css/plugins/lightbox2.css" rel="stylesheet"  type="text/css" />
-        <script type="text/javascript" src="/public/js/plugins/jquery-1.11.1.min.js"></script>
-        <script type="text/javascript" src="/public/js/plugins/jquery-ui-1.10.4.custom.min.js"></script>
+        <script type="text/javascript" src="/public/js/plugins/modernizr.js"></script>
 
         <link rel="canonical" href="{echo $canonical}" />
         
@@ -54,11 +53,11 @@
             <section class="navigation">
                 <nav>
                     <ul>
-                       <li><a href="/aktuality">Aktuality</a></li> 
-                       <li><a href="/clenove">Členové</a></li> 
-                       <li><a href="/galerie">Galerie</a></li> 
-                       <li><a href="/akce">Akce</a></li> 
-                       <li><a href="/historie">Historie</a></li> 
+                       <a href="/aktuality"><li>Aktuality</li></a>
+                       <a href="/clenove"><li>Členové</li></a>
+                       <a href="/galerie"><li>Galerie</li></a>
+                       <a href="/akce"><li>Akce</li></a>
+                       <a href="/historie"><li>Historie</li></a>
                     </ul>
                 </nav>
             </section>
@@ -87,8 +86,12 @@
                 <span>Lukáš a Tomáš Hodáň</span><br/><span> Tomáš Sláma</span>
             </section>
         </footer>
+        
         <!-- JS scripts --> 
-        <script type="text/javascript" src="/public/js/plugins/lightbox.min.js"></script> 
+        <script type="text/javascript" src="/public/js/plugins/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="/public/js/plugins/jquery-ui-1.10.4.custom.min.js"></script>
+        <script type="text/javascript" src="/public/js/plugins/lightbox.min.js"></script>
+        <script type="text/javascript" src="/public/js/custom/generalApp.min.js" async></script>
         <!-- End JS scripts -->
 </body>
 </html>

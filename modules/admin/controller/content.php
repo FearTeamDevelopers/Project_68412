@@ -28,13 +28,21 @@ class Admin_Controller_Content extends Controller
     }
 
     /**
-     * @before _secured, _member
+     * 
+     * @return type
      */
     private function _getPhotos()
     {
-        $photos = App_Model_Photo::all(array('galleryId = ?' => 3, 'active = ?' => true));
+        return App_Model_Photo::all(array('galleryId = ?' => 3, 'active = ?' => true));
+    }
 
-        return $photos;
+    /**
+     * 
+     * @return type
+     */
+    private function _getGalleries()
+    {
+        return App_Model_Gallery::all(array('active = ?' => true, 'isPublic = ?' => true));
     }
 
     /**
@@ -56,7 +64,8 @@ class Admin_Controller_Content extends Controller
     {
         $view = $this->getActionView();
 
-        $view->set('photos', $this->_getPhotos());
+        $view->set('photos', $this->_getPhotos())
+                ->set('galleries', $this->_getGalleries());
 
         if (RequestMethods::post('submitAddContent')) {
             if($this->checkCSRFToken() !== true){
@@ -108,6 +117,7 @@ class Admin_Controller_Content extends Controller
         }
 
         $view->set('photos', $this->_getPhotos())
+                ->set('galleries', $this->_getGalleries())
                 ->set('content', $content);
 
         if (RequestMethods::post('submitEditContent')) {
@@ -144,5 +154,13 @@ class Admin_Controller_Content extends Controller
                     ->set('content', $content);
             }
         }
+    }
+    
+    /**
+     * @before _secured, _admin
+     */
+    public function insertPhotoDialog()
+    {
+        $this->willRenderLayoutView = false;
     }
 }

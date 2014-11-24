@@ -128,6 +128,22 @@
                 {/if}
             </div>
         </div>
+        <br class="clear-all"/>
+        <div class="widgetbox">
+            <div class="contenttitle radiusbottom0">
+                <h2 class="table"><span>Odkaz na galerii</span></h2>
+            </div><!--contenttitle-->
+            <div class="news-photos">
+                {if ($galleries && !empty($galleries))}
+                    {foreach $gallery in $galleries}
+                        <span>{echo $gallery->getTitle()}
+                            <button class="stdbtn gal-to-text" value="{echo $gallery->getId()}">Txt</button>
+                            <button class="stdbtn gal-to-teaser" value="{echo $gallery->getId()}">Teaser</button>
+                        </span><br/>
+                    {/foreach}
+                {/if}
+            </div>
+        </div>
     </div>
     <br class="clear-all"/>
 </div>

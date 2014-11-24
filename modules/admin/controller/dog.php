@@ -4,6 +4,7 @@ use Admin\Etc\Controller;
 use THCFrame\Request\RequestMethods;
 use THCFrame\Events\Events as Event;
 use THCFrame\Filesystem\FileManager;
+use THCFrame\Registry\Registry;
 
 /**
  * Description of Admin_Controller_Dog
@@ -47,13 +48,14 @@ class Admin_Controller_Dog extends Controller
             }
 
             $errors = array();
+            $cfg = Registry::get('configuration');
 
             $fileManager = new FileManager(array(
-                'thumbWidth' => $this->loadConfigFromDb('thumb_width'),
-                'thumbHeight' => $this->loadConfigFromDb('thumb_height'),
-                'thumbResizeBy' => $this->loadConfigFromDb('thumb_resizeby'),
-                'maxImageWidth' => $this->loadConfigFromDb('photo_maxwidth'),
-                'maxImageHeight' => $this->loadConfigFromDb('photo_maxheight')
+                'thumbWidth' => $cfg->thumb_width,
+                'thumbHeight' => $cfg->thumb_height,
+                'thumbResizeBy' => $cfg->thumb_resizeby,
+                'maxImageWidth' => $cfg->photo_maxwidth,
+                'maxImageHeight' => $cfg->photo_maxheight
             ));
 
             $photoNameRaw = RequestMethods::post('user') . '-' . RequestMethods::post('dogname');
@@ -79,7 +81,7 @@ class Admin_Controller_Dog extends Controller
                         break;
                     }
                 }
-            }else{
+            } else {
                 $imgMain = '';
                 $imgThumb = '';
             }
@@ -192,7 +194,7 @@ class Admin_Controller_Dog extends Controller
             $view->warningMessage(self::ERROR_MESSAGE_2);
             self::redirect('/admin/dog/');
         }
-        
+
         $dogExams = $dog->exams;
         $dogExamIds = array();
         if (!empty($dogExams)) {
@@ -200,7 +202,7 @@ class Admin_Controller_Dog extends Controller
                 $dogExamIds[] = $dogExam->examId;
             }
         }
-        
+
         $exams = App_Model_Exam::all(array('active = ?' => true));
         $users = App_Model_User::all(
                         array('role = ?' => 'role_member'), array('id', 'firstname', 'lastname')
@@ -217,12 +219,14 @@ class Admin_Controller_Dog extends Controller
             }
 
             $errors = array();
+            $cfg = Registry::get('configuration');
+
             $fileManager = new FileManager(array(
-                'thumbWidth' => $this->loadConfigFromDb('thumb_width'),
-                'thumbHeight' => $this->loadConfigFromDb('thumb_height'),
-                'thumbResizeBy' => $this->loadConfigFromDb('thumb_resizeby'),
-                'maxImageWidth' => $this->loadConfigFromDb('photo_maxwidth'),
-                'maxImageHeight' => $this->loadConfigFromDb('photo_maxheight')
+                'thumbWidth' => $cfg->thumb_width,
+                'thumbHeight' => $cfg->thumb_height,
+                'thumbResizeBy' => $cfg->thumb_resizeby,
+                'maxImageWidth' => $cfg->photo_maxwidth,
+                'maxImageHeight' => $cfg->photo_maxheight
             ));
 
             $imgMain = $imgThumb = '';
@@ -267,7 +271,7 @@ class Admin_Controller_Dog extends Controller
 
             if (empty($errors) && $dog->validate()) {
                 $dog->save();
-                
+
                 $examsArr = (array) RequestMethods::post('chexam');
 
                 if ($examsArr[0] != '') {
@@ -370,7 +374,7 @@ class Admin_Controller_Dog extends Controller
             } else {
                 @unlink($dog->getUnlinkPath());
                 @unlink($dog->getUnlinkThumbPath());
-                
+
                 if ($dog->delete()) {
                     Event::fire('admin.log', array('success', 'Dog Id: ' . $id));
                     echo 'success';

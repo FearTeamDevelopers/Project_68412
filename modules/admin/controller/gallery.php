@@ -273,18 +273,19 @@ class Admin_Controller_Gallery extends Controller
                     $this->checkMutliSubmissionProtectionToken(RequestMethods::post('submstoken')) !== true) {
                 self::redirect('/admin/gallery/');
             }
-            
+
             $errors = array();
-            
+            $cfg = Registry::get('configuration');
+
             $fileManager = new FileManager(array(
-                'thumbWidth' => $this->loadConfigFromDb('thumb_width'),
-                'thumbHeight' => $this->loadConfigFromDb('thumb_height'),
-                'thumbResizeBy' => $this->loadConfigFromDb('thumb_resizeby'),
-                'maxImageWidth' => $this->loadConfigFromDb('photo_maxwidth'),
-                'maxImageHeight' => $this->loadConfigFromDb('photo_maxheight')
+                'thumbWidth' => $cfg->thumb_width,
+                'thumbHeight' => $cfg->thumb_height,
+                'thumbResizeBy' => $cfg->thumb_resizeby,
+                'maxImageWidth' => $cfg->photo_maxwidth,
+                'maxImageHeight' => $cfg->photo_maxheight
             ));
 
-            $fileErrors = $fileManager->upload('secondfile', 'gallery/' . $gallery->getId(), time().'_')->getUploadErrors();
+            $fileErrors = $fileManager->upload('secondfile', 'gallery/' . $gallery->getId(), time() . '_')->getUploadErrors();
             $files = $fileManager->getUploadedFiles();
 
             if (!empty($files)) {
@@ -349,7 +350,7 @@ class Admin_Controller_Gallery extends Controller
             } else {
                 @unlink($photo->getUnlinkPath());
                 @unlink($photo->getUnlinkThumbPath());
-                
+
                 if ($photo->delete()) {
 
                     Event::fire('admin.log', array('success', 'Photo id: ' . $id));

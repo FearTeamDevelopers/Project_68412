@@ -441,7 +441,7 @@ class FileManager extends Base
      * @param boolean $createThumb
      * @return self
      */
-    public function upload($postField, $uploadto, $namePrefix = '', $createThumb = true)
+    public function upload($postField, $uploadto, $namePrefix = '', $createThumb = true, $forceDocUpload = false)
     {
         $pathToImages = $this->getPathToImages() . '/' . $uploadto . '/';
         $pathToThumbs = $this->getPathToThumbs() . '/' . $uploadto . '/';
@@ -511,7 +511,7 @@ class FileManager extends Base
                         $this->_uploadErrors[] = sprintf('Your file %s size exceeds the maximum size limit', $filename);
                         continue;
                     } else {
-                        if (in_array($extension, $this->_imageExtensions)) {
+                        if (in_array($extension, $this->_imageExtensions) && !$forceDocUpload) {
                             $imageName = $filename . '.' . $extension;
                             $thumbName = $filename . '_thumb.' . $extension;
                             $imageLocName = $pathToImages . $namePrefix . $imageName;
@@ -585,8 +585,13 @@ class FileManager extends Base
                                 continue;
                             }
                         } else {
-                            $this->_uploadErrors[] = sprintf('File has unsupported extension. Images: %s | Files: %s', join(', ', $this->_imageExtensions), join(', ', $this->_fileExtensions));
-                            continue;
+                            if($forceDocUpload){
+                                $this->_uploadErrors[] = sprintf('File has unsupported extension. Files: %s', join(', ', $this->_fileExtensions));
+                                continue;
+                            }else{
+                                $this->_uploadErrors[] = sprintf('File has unsupported extension. Images: %s | Files: %s', join(', ', $this->_imageExtensions), join(', ', $this->_fileExtensions));
+                                continue;
+                            }
                         }
                     }
                 } else {
@@ -636,7 +641,7 @@ class FileManager extends Base
                 if ($size > self::MAX_FILE_UPLOAD_SIZE) {
                     $this->_uploadErrors[] = sprintf('Your file %s size exceeds the maximum size limit', $filename);
                 } else {
-                    if (in_array($extension, $this->_imageExtensions)) {
+                    if (in_array($extension, $this->_imageExtensions) && !$forceDocUpload) {
                         $imageName = $filename . '.' . $extension;
                         $thumbName = $filename . '_thumb.' . $extension;
                         $imageLocName = $pathToImages . $namePrefix . $imageName;
@@ -705,7 +710,11 @@ class FileManager extends Base
                             unset($file);
                         }
                     } else {
-                        $this->_uploadErrors[] = sprintf('File has unsupported extension. Images: %s | Files: %s', join(', ', $this->_imageExtensions), join(', ', $this->_fileExtensions));
+                        if($forceDocUpload){
+                            $this->_uploadErrors[] = sprintf('File has unsupported extension. Files: %s', join(', ', $this->_fileExtensions));
+                        }else{
+                            $this->_uploadErrors[] = sprintf('File has unsupported extension. Images: %s | Files: %s', join(', ', $this->_imageExtensions), join(', ', $this->_fileExtensions));
+                        }
                     }
                 }
             }

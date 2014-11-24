@@ -66,6 +66,10 @@ class Session extends Base
                     return new Driver\Server($this->options);
                     break;
                 }
+            case 'database': {
+                    return new Driver\Database($this->options);
+                    break;
+                }
             default: {
                     throw new Exception\Argument('Invalid type');
                     break;

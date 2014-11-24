@@ -61,12 +61,12 @@ jQuery(document).ready(function () {
         });
         return false;
     });
-    
+
     jQuery('#news-text-new-paragraph').click(function (event) {
         event.preventDefault();
         CKEDITOR.instances['ckeditor'].insertText('<br class="clear" />');
     });
-    
+
     jQuery('#news-teaser-new-paragraph').click(function (event) {
         event.preventDefault();
         CKEDITOR.instances['ckeditor2'].insertText('<br class="clear" />');
@@ -102,6 +102,17 @@ jQuery(document).ready(function () {
         event.preventDefault();
         var path = jQuery(this).attr('value');
         jQuery('input[name=metaimage]').val(path);
+    });
+    
+    jQuery('.gal-to-text').click(function (event) {
+        event.preventDefault();
+        var id = jQuery(this).attr('value');
+        CKEDITOR.instances['ckeditor'].insertText('(!gallery_' + id + '!)');
+    });
+    jQuery('.gal-to-teaser').click(function (event) {
+        event.preventDefault();
+        var id = jQuery(this).attr('value');
+        CKEDITOR.instances['ckeditor2'].insertText('(!gallery_' + id + '!)');
     });
 
     jQuery('.video-to-text').click(function (event) {

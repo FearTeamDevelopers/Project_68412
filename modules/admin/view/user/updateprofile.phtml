@@ -35,7 +35,7 @@
         <div class="par">
             <label>Profilová fotka*<small>*.jpg, *.jpeg, *.png, *.gif</small></label>
             {if $user->imgMain != ""}
-            <span class="field" id="currentImage">
+            <span class="field" id="currentLogo">
                 <img src="{echo $user->imgThumb}" alt="" height="100" />
                 <a href="/admin/user/deleteusermainphoto/{echo $user->id}" class="btn btn3 btn_trash deleteImg" title="Smazat"></a>
             </span>

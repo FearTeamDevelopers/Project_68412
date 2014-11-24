@@ -49,13 +49,13 @@ class App_Controller_Index extends Controller
      */
     private function _parseContentBody(Model $content, $parsedField = 'body')
     {
-        preg_match_all('/\(\!(video|photo|read)_[0-9a-z]+[a-z_]*\!\)/', $content->$parsedField, $matches);
+        preg_match_all('/\(\!(video|photo|read|gallery)_[0-9a-z]+[a-z_]*\!\)/', $content->$parsedField, $matches);
         $m = array_shift($matches);
 
         foreach ($m as $match) {
             $match = str_replace(array('(!', '!)'), '', $match);
             
-            if ($match == 'read_more') {
+            if ($match == 'read_more' || $match == 'gallery') {
                 $float = '';
                 list($type, $id) = explode('_', $match);
             } else {
@@ -100,6 +100,13 @@ class App_Controller_Index extends Controller
                         . "src=\"{$video->path}\" frameborder=\"0\" allowfullscreen></iframe>";
 
                 $body = str_replace("(!video_{$id}!)", $tag, $body);
+                $content->$parsedField = $body;
+            }
+            
+            if($type == 'gallery'){
+                $gallery = App_Model_Gallery::first(array('isPublic = ?' => true, 'id = ?' => $id));
+                $tag = "<a href=\"/galerie/r/{$gallery->urlKey}\">{$gallery->title}</a>";
+                $body = str_replace("(!gallery_{$id}!)", $tag, $body);
                 $content->$parsedField = $body;
             }
 

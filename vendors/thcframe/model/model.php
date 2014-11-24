@@ -130,7 +130,7 @@ class Model extends Base
      */
     protected function _validateRequired($value)
     {
-        return !empty($value) && $value !== 0;
+        return !empty($value) || is_numeric($value);
     }
 
     /**

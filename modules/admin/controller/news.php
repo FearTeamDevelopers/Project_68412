@@ -29,15 +29,23 @@ class Admin_Controller_News extends Controller
     }
 
     /**
-     * @before _secured, _admin
+     * 
+     * @return type
      */
     private function _getPhotos()
     {
-        $photos = App_Model_Photo::all(array('galleryId = ?' => 3, 'active = ?' => true));
-
-        return $photos;
+        return App_Model_Photo::all(array('galleryId = ?' => 3, 'active = ?' => true));
     }
 
+    /**
+     * 
+     * @return type
+     */
+    private function _getGalleries()
+    {
+        return App_Model_Gallery::all(array('active = ?' => true, 'isPublic = ?' => true));
+    }
+    
     /**
      * @before _secured, _admin
      */
@@ -56,6 +64,7 @@ class Admin_Controller_News extends Controller
         $view = $this->getActionView();
 
         $view->set('photos', $this->_getPhotos())
+                ->set('galleries', $this->_getGalleries())
                 ->set('submstoken', $this->mutliSubmissionProtectionToken());
 
         if (RequestMethods::post('submitAddNews')) {
@@ -80,7 +89,7 @@ class Admin_Controller_News extends Controller
                 'expirationDate' => RequestMethods::post('expiration'),
                 'rank' => RequestMethods::post('rank', 1),
                 'metaTitle' => RequestMethods::post('metatitle', RequestMethods::post('title')),
-                'metaDescription' => RequestMethods::post('metadescription', RequestMethods::post('shorttext')),
+                'metaDescription' => RequestMethods::post('metadescription'),
                 'metaImage' => RequestMethods::post('metaimage', '')
             ));
 
@@ -113,7 +122,8 @@ class Admin_Controller_News extends Controller
         }
 
         $view->set('news', $news)
-                ->set('photos', $this->_getPhotos());
+                ->set('photos', $this->_getPhotos())
+                ->set('galleries', $this->_getGalleries());
 
         if (RequestMethods::post('submitEditNews')) {
             if ($this->checkCSRFToken() !== true) {
@@ -136,7 +146,7 @@ class Admin_Controller_News extends Controller
             $news->rank = RequestMethods::post('rank', 1);
             $news->active = RequestMethods::post('active');
             $news->metaTitle = RequestMethods::post('metatitle', RequestMethods::post('title'));
-            $news->metaDescription = RequestMethods::post('metadescription', RequestMethods::post('shorttext'));
+            $news->metaDescription = RequestMethods::post('metadescription');
             $news->metaImage = RequestMethods::post('metaimage', '');
 
             if (empty($errors) && $news->validate()) {

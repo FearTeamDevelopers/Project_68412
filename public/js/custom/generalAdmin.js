@@ -24,15 +24,15 @@ jQuery(document).ready(function () {
         imageBackground: true,
         imageBackgroundBorderSize: 15
     });
-    
-    jQuery('.cropit-form').submit(function(){
+
+    jQuery('.cropit-form').submit(function () {
         var hi = jQuery(this).find('.cropit-hidden-resized-image');
         var a = jQuery('#image-cropper').cropit('export');
         hi.val(a);
         return true;
     });
-    
-    jQuery('.cropit-form-dual').submit(function(){
+
+    jQuery('.cropit-form-dual').submit(function () {
         var hi = jQuery(this).find('.cropit-hidden-resized-image');
         var hi2 = jQuery(this).find('.cropit-hidden-resized-image2');
         var a = jQuery('#image-cropper').cropit('export');
@@ -527,48 +527,32 @@ jQuery(document).ready(function () {
         jQuery('.headerinner2').remove();
     }
 
-
-
     /* ---------------------- UPLOAD FORMS --------------------------------*/
-    jQuery('.uploadPhotoForm .multi_upload').click(function () {
-        if (jQuery('.uploadPhotoForm .file_inputs input[type=file]').length < 7) {
-            jQuery('.uploadPhotoForm .file_inputs input[type=file]')
+    jQuery('.uploadForm .multi_upload').click(function () {
+        if (jQuery('.uploadForm .file_inputs input[type=file]').length < 7) {
+            jQuery('.uploadForm .file_inputs input[type=file]')
                     .last()
                     .after('<input type="file" name="secondfile[]" />');
         }
     });
 
-    jQuery('.uploadPhotoForm .multi_upload_dec').click(function () {
-        if (jQuery('.uploadPhotoForm .file_inputs input[type=file]').length > 1) {
-            jQuery('.uploadPhotoForm .file_inputs input[type=file]').last().remove();
+    jQuery('.uploadForm .multi_upload_dec').click(function () {
+        if (jQuery('.uploadForm .file_inputs input[type=file]').length > 1) {
+            jQuery('.uploadForm .file_inputs input[type=file]').last().remove();
         }
     });
 
-    jQuery('.uploadCollectionPhotoForm .multi_upload').click(function () {
-        if (jQuery('.uploadCollectionPhotoForm .file_inputs input[type=file]').length < 7) {
-            jQuery('.uploadCollectionPhotoForm .file_inputs input[type=file]')
-                    .last()
-                    .after('<input type="file" name="secondfile[]" />');
-        }
-    });
-
-    jQuery('.uploadCollectionPhotoForm .multi_upload_dec').click(function () {
-        if (jQuery('.uploadCollectionPhotoForm .file_inputs input[type=file]').length > 1) {
-            jQuery('.uploadCollectionPhotoForm .file_inputs input[type=file]').last().remove();
-        }
-    });
-
-    jQuery('.uploadPhotoForm, .uploadCollectionPhotoForm').submit(function () {
+    jQuery('.uploadForm').submit(function () {
         jQuery('#loader').show();
     });
 
     /* ---------------------- AJAX OPERATIONS --------------------------------*/
-    jQuery('.deleteImg').click(function() {
+    jQuery('.deleteImg').click(function () {
         event.preventDefault();
         var url = jQuery(this).attr('href');
         var csrf = jQuery('#csrf').val();
 
-        jQuery.post(url, {csrf: csrf}, function(msg) {
+        jQuery.post(url, {csrf: csrf}, function (msg) {
             if (msg == 'success') {
                 jQuery('#currentLogo').hide(500);
                 jQuery('.uploadNewImage').removeClass('nodisplay');

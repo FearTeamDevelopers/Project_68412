@@ -16,7 +16,7 @@ class Server extends Session\Driver
      * @readwrite
      */
     protected $_prefix;
-    
+
     /**
      * @readwrite
      */
@@ -30,11 +30,6 @@ class Server extends Session\Driver
     {
         parent::__construct($options);
         @session_start();
-        
-        if($this->get('origin') === null){
-            $this->set('origin', time());
-            $this->clearExpiredSession();
-        }
     }
 
     /**
@@ -84,15 +79,5 @@ class Server extends Session\Driver
         $_SESSION = array();
         return $this;
     }
-    
-    /**
-     * 
-     */
-    public function clearExpiredSession()
-    {
-        if(time() - $this->get('origin') > $this->ttl){
-            $this->clear();
-            @session_regenerate_id();
-        }
-    }
+
 }
