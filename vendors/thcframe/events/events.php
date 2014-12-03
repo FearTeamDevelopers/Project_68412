@@ -3,9 +3,7 @@
 namespace THCFrame\Events;
 
 /**
- * Events
- * 
- * @author Tomy
+ * Event listener
  */
 class Events
 {

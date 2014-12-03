@@ -36,7 +36,7 @@
                         </td>
                         <td>
                             <a href="/admin/link/edit/{echo $link->getId()}" class="btn btn3 btn_pencil" title="Upravit"></a> 
-                            {if $isAdmin}<a href="/admin/link/delete/{echo $link->getId()}" class="btn btn3 btn_trash deleteRow" title="Smazat"></a>{/if}
+                            {if $isAdmin}<a href="/admin/link/delete/{echo $link->getId()}" class="btn btn3 btn_trash ajaxDelete" title="Smazat"></a>{/if}
                         </td>
                     </tr>
                 {/foreach}

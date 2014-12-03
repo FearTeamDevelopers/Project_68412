@@ -12,8 +12,6 @@ use THCFrame\Database\Exception;
  * (in this case Database\Connector\Mysql). 
  * Connectors are the classes that do the actual interfacing with the 
  * specific database engine. They execute queries and return metadata
- * 
- * @author Tomy
  */
 class Database extends Base
 {

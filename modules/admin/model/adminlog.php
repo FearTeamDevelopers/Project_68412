@@ -3,9 +3,7 @@
 use THCFrame\Model\Model;
 
 /**
- * Description of Admin_Model_AdminLog
- *
- * @author Tomy
+ * 
  */
 class Admin_Model_AdminLog extends Model
 {

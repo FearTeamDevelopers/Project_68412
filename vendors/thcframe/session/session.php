@@ -8,9 +8,7 @@ use THCFrame\Registry\Registry;
 use THCFrame\Session\Exception;
 
 /**
- * Factory class
- * 
- * @author Tomy
+ * Session factory class
  */
 class Session extends Base
 {
@@ -27,7 +25,7 @@ class Session extends Base
 
     /**
      * 
-     * @param type $method
+     * @param string $method
      * @return \THCFrame\Session\Exception\Implementation
      */
     protected function _getImplementationException($method)

@@ -7,9 +7,7 @@ use THCFrame\Events\Events as Event;
 use THCFrame\Logger\Exception;
 
 /**
- * Factory class
- * 
- * @author Tomy
+ * Logger factory class
  */
 class Logger extends Base
 {

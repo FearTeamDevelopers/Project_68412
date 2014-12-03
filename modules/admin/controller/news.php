@@ -5,9 +5,7 @@ use THCFrame\Request\RequestMethods;
 use THCFrame\Events\Events as Event;
 
 /**
- * Description of Admin_Controller_News
- *
- * @author Tomy
+ * 
  */
 class Admin_Controller_News extends Controller
 {
@@ -45,7 +43,7 @@ class Admin_Controller_News extends Controller
     {
         return App_Model_Gallery::all(array('active = ?' => true, 'isPublic = ?' => true));
     }
-    
+
     /**
      * @before _secured, _admin
      */
@@ -170,27 +168,23 @@ class Admin_Controller_News extends Controller
         $this->willRenderActionView = false;
         $this->willRenderLayoutView = false;
 
-        if ($this->checkCSRFToken()) {
-            $news = App_Model_News::first(
-                            array('id = ?' => (int) $id), array('id')
-            );
+        $news = App_Model_News::first(
+                        array('id = ?' => (int) $id), array('id')
+        );
 
-            if (NULL === $news) {
-                echo self::ERROR_MESSAGE_2;
-            } else {
-                if ($news->delete()) {
-                    Event::fire('admin.log', array('success', 'News id: ' . $id));
-                    echo 'success';
-                } else {
-                    Event::fire('admin.log', array('fail', 'News id: ' . $id));
-                    echo self::ERROR_MESSAGE_1;
-                }
-            }
+        if (NULL === $news) {
+            echo self::ERROR_MESSAGE_2;
         } else {
-            echo self::ERROR_MESSAGE_1;
+            if ($news->delete()) {
+                Event::fire('admin.log', array('success', 'News id: ' . $id));
+                echo 'success';
+            } else {
+                Event::fire('admin.log', array('fail', 'News id: ' . $id));
+                echo self::ERROR_MESSAGE_1;
+            }
         }
     }
-    
+
     /**
      * @before _secured, _admin
      */

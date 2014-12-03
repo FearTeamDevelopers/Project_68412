@@ -6,7 +6,7 @@ use THCFrame\Session;
 use THCFrame\Session\Model\Session;
 
 /**
- * 
+ * Database session class
  */
 class Database extends Session\Driver
 {

@@ -5,9 +5,7 @@ namespace THCFrame\Session\Driver;
 use THCFrame\Session;
 
 /**
- * Description of Server
- *
- * @author Tomy
+ * Server session class
  */
 class Server extends Session\Driver
 {

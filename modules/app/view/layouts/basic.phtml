@@ -8,7 +8,7 @@
         <meta name="description" content="{echo $metadescription}" />
         <meta name="revisit-after" content="2 Days" />
         <meta name="robots" content="{echo $metarobots}">
-        <meta name="author" content="Tomas Hodan" />
+        <meta name="author" content="Tomas Hodan, Tomas Slama, Lukas Hodan" />
         
         {if isset($article)}
         <meta property="og:title" content="{echo $metatitle}" />
@@ -36,6 +36,8 @@
         <!--[if lt IE 9]><script type="text/javascript" src="/public/js/plugins/html5.js"></script><![endif]-->
         <script type="text/javascript" src="/public/js/plugins/modernizr.js"></script>
 
+        {if isset($pagedprev) && $pagedprev != 0}<link rel="prev" href="{echo $pagedprevlink}">{/if}
+        {if isset($pagednext) && $pagednext != 0}<link rel="next" href="{echo $pagednextlink}">{/if}
         <link rel="canonical" href="{echo $canonical}" />
         
         <title>{echo $metatitle}</title>

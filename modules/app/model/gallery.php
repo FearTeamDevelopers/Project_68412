@@ -3,9 +3,7 @@
 use THCFrame\Model\Model;
 
 /**
- * Description of App_Model_Gallery
- *
- * @author Tomy
+ * 
  */
 class App_Model_Gallery extends Model
 {
@@ -146,7 +144,7 @@ class App_Model_Gallery extends Model
 
         if (!empty($galleryArr)) {
             $gallery = array_shift($galleryArr);
-            return $gallery->getGalleryById();
+            return $gallery->getAllPhotos();
         } else {
             return null;
         }
@@ -169,7 +167,7 @@ class App_Model_Gallery extends Model
 
         if (!empty($galleryArr)) {
             $gallery = array_shift($galleryArr);
-            return $gallery->getGalleryById();
+            return $gallery->getActivePhotos();
         } else {
             return null;
         }
@@ -191,29 +189,31 @@ class App_Model_Gallery extends Model
                 ->order('gl.showDate', 'DESC');
 
         $galleries = self::initialize($galleryQuery);
-
-        if (!empty($galleries)) {
-            foreach ($galleries as $i => $gallery) {
-                $galleries[$i] = $gallery->getGalleryById();
-            }
             
-            return $galleries;
-        } else {
-            return null;
-        }
+        return $galleries;
     }
 
     /**
      * 
      * @return \App_Model_Gallery
      */
-    public function getGalleryById()
+    public function getAllPhotos()
     {
-        $photos = App_Model_Photo::all(array('galleryId = ?' => $this->getId()));
-
-        $this->_photos = $photos;
+        $this->_photos = App_Model_Photo::all(array('galleryId = ?' => $this->getId()));
 
         return $this;
     }
 
+    /**
+     * 
+     * @return \App_Model_Gallery
+     */
+    public function getActivePhotos()
+    {
+        $this->_photos = App_Model_Photo::all(
+                array('galleryId = ?' => $this->getId(), 'active = ?' => true));
+
+        return $this;
+    }
+    
 }

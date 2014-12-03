@@ -3,9 +3,7 @@
 use THCFrame\Model\Model;
 
 /**
- * Description of App_Model_PageContent
- *
- * @author Tomy
+ * 
  */
 class App_Model_PageContent extends Model
 {

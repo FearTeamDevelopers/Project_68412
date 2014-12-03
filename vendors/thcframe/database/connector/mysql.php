@@ -7,13 +7,10 @@ use THCFrame\Database\Exception as Exception;
 use THCFrame\Profiler\Profiler;
 
 /**
- * Description of Mysql
  * The Database\Connector\Mysql class defines a handful of adaptable 
  * properties and methods used to perform MySQLi class-specific functions, 
  * and return MySQLi class-specific properties. We want to isolate these from 
  * the outside so that our system is essentially plug-and-play
- * 
- * @author Tomy
  */
 class Mysql extends Database\Connector
 {

@@ -5,7 +5,7 @@ use THCFrame\Module\Module;
 /**
  * Description of Module
  *
- * @author Tomy
+
  */
 class Admin_Etc_Module extends Module
 {

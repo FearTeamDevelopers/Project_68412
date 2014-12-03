@@ -22,7 +22,7 @@ class Profiler
     /**
      * Profiles
      * 
-     * @var Profiler
+     * @var array
      */
     private $_profiles = array();
 
@@ -75,7 +75,9 @@ class Profiler
      */
     private function __construct()
     {
-        Event::fire('framework.profiler.construct');
+        Event::fire('framework.profiler.construct.before');
+        
+        Event::fire('framework.profiler.construct.after');
     }
 
     /**
@@ -110,8 +112,6 @@ class Profiler
      */
     private function isActive()
     {
-        Event::fire('framework.profiler.check');
-
         if ($this->_active === null) {
             $configuration = Registry::get('configuration');
             $active = (bool) $configuration->profiler->active;
@@ -219,7 +219,7 @@ class Profiler
 
     /**
      * Static wrapper for _display function
-     * @return type
+     * @return string
      */
     public static function display()
     {
@@ -228,7 +228,7 @@ class Profiler
     }
 
     /**
-     * 
+     * Loads profiler result from file and return it
      * @return string
      */
     public function _display()
@@ -245,7 +245,7 @@ class Profiler
     }
 
     /**
-     * Save informations into file and return it
+     * Save formated result into file
      */
     private function process()
     {

@@ -9,9 +9,7 @@ use THCFrame\Database\Exception as Exception;
 use THCFrame\Core\Core;
 
 /**
- * Description of Query
- *
- * @author Tomy
+ * Query class for OO query creating
  */
 class Query extends Base
 {

@@ -1,8 +1,6 @@
 <?php
 
 use App\Etc\Controller;
-use THCFrame\Request\RequestMethods;
-use THCFrame\Registry\Registry;
 
 /**
  * 
@@ -18,36 +16,42 @@ class App_Controller_Gallery extends Controller
     {
         $view = $this->getActionView();
         $layoutView = $this->getLayoutView();
-        $host = RequestMethods::server('HTTP_HOST');
-        $cache = Registry::get('cache');
 
         if ($year == null) {
             $year = date('Y');
-            $canonical = 'http://' . $host . '/gallerie';
+            $canonical = 'http://' . $this->getServerHost() . '/gallerie';
         } else {
-            $canonical = 'http://' . $host . '/gallerie/' . $year;
+            $canonical = 'http://' . $this->getServerHost() . '/gallerie/' . $year;
         }
 
-        $content = $cache->get('galerie');
+        $content = $this->getCache()->get('gallery-' . $year);
+        $cachedYears = $this->getCache()->get('gallery-years');
 
-        if (NULL !== $content) {
+        if ($content !== null) {
             $galleries = $content;
         } else {
             $galleries = App_Model_Gallery::fetchGalleriesByYear($year);
-            $cache->set('galerie', $galleries);
+            $this->getCache()->set('gallery-' . $year, $galleries);
         }
 
-        $galleryYears = App_Model_Gallery::all(
-                    array('showDate <> ?' => ''), 
+        if ($cachedYears !== null) {
+            $returnYears = $cachedYears;
+        } else {
+            $galleryYears = App_Model_Gallery::all(
+                            array('showDate <> ?' => ''), 
                     array('DISTINCT(EXTRACT(YEAR FROM showDate))' => 'year'), 
                     array('year' => 'ASC')
-        );
+            );
 
-        $returnYears = array();
+            $returnYears = array();
 
-        foreach ($galleryYears as $galyear) {
-            $returnYears[] = $galyear->getYear();
+            foreach ($galleryYears as $galyear) {
+                $returnYears[] = $galyear->getYear();
+            }
+            
+            $this->getCache()->set('gallery-years', $returnYears);
         }
+
         $view->set('galleries', $galleries)
                 ->set('years', $returnYears);
 
@@ -63,12 +67,11 @@ class App_Controller_Gallery extends Controller
     {
         $view = $this->getActionView();
         $layoutView = $this->getLayoutView();
-        $host = RequestMethods::server('HTTP_HOST');
 
         $gallery = App_Model_Gallery::fetchActivePublicGalleryByUrlkey($urlkey);
         
         if($gallery !== null){
-            $canonical = 'http://' . $host . '/galerie/r/' . $urlkey;
+            $canonical = 'http://' . $this->getServerHost() . '/galerie/r/' . $urlkey;
             $layoutView->set('canonical', $canonical)
                     ->set('metatitle', $gallery->getTitle());
         }

@@ -5,9 +5,7 @@ namespace THCFrame\Configuration\Model;
 use THCFrame\Model\Model;
 
 /**
- * Description of Config_Model
- *
- * @author Tomy
+ * ORM Config model 
  */
 class Config extends Model
 {

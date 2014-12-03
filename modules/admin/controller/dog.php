@@ -7,9 +7,7 @@ use THCFrame\Filesystem\FileManager;
 use THCFrame\Registry\Registry;
 
 /**
- * Description of Admin_Controller_Dog
- *
- * @author Tomy
+ * 
  */
 class Admin_Controller_Dog extends Controller
 {
@@ -69,7 +67,8 @@ class Admin_Controller_Dog extends Controller
             }
 
             if ((int) RequestMethods::post('isactive') == 1) {
-                App_Model_Dog::updateAll(array('isActive = ?' => true, 'userId = ?' => (int) RequestMethods::post('user')), array('isActive' => 0));
+                App_Model_Dog::updateAll(
+                        array('isActive = ?' => true, 'userId = ?' => (int) RequestMethods::post('user')), array('isActive' => 0));
             }
 
             if (!empty($files)) {
@@ -256,7 +255,8 @@ class Admin_Controller_Dog extends Controller
             }
 
             if ((int) RequestMethods::post('isactive') == 1) {
-                App_Model_Dog::updateAll(array('isActive = ?' => true, 'userId = ?' => (int) RequestMethods::post('user')), array('isActive' => 0));
+                App_Model_Dog::updateAll(
+                        array('isActive = ?' => true, 'userId = ?' => (int) RequestMethods::post('user')), array('isActive' => 0));
             }
 
             $dog->userId = RequestMethods::post('user');
@@ -364,27 +364,23 @@ class Admin_Controller_Dog extends Controller
         $this->willRenderActionView = false;
         $this->willRenderLayoutView = false;
 
-        if ($this->checkCSRFToken()) {
-            $dog = App_Model_Dog::first(
-                            array('id = ?' => (int) $id), array('id')
-            );
+        $dog = App_Model_Dog::first(
+                        array('id = ?' => (int) $id), array('id')
+        );
 
-            if (NULL === $dog) {
-                echo self::ERROR_MESSAGE_2;
-            } else {
-                @unlink($dog->getUnlinkPath());
-                @unlink($dog->getUnlinkThumbPath());
-
-                if ($dog->delete()) {
-                    Event::fire('admin.log', array('success', 'Dog Id: ' . $id));
-                    echo 'success';
-                } else {
-                    Event::fire('admin.log', array('fail', 'Dog Id: ' . $id));
-                    echo self::ERROR_MESSAGE_1;
-                }
-            }
+        if (NULL === $dog) {
+            echo self::ERROR_MESSAGE_2;
         } else {
-            echo self::ERROR_MESSAGE_1;
+            @unlink($dog->getUnlinkPath());
+            @unlink($dog->getUnlinkThumbPath());
+
+            if ($dog->delete()) {
+                Event::fire('admin.log', array('success', 'Dog Id: ' . $id));
+                echo 'success';
+            } else {
+                Event::fire('admin.log', array('fail', 'Dog Id: ' . $id));
+                echo self::ERROR_MESSAGE_1;
+            }
         }
     }
 

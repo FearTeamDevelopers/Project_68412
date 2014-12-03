@@ -8,9 +8,7 @@ use THCFrame\Registry\Registry;
 use THCFrame\Database\Exception;
 
 /**
- * Description of mysqldump
- *
- * @author Tomy
+ * Mysqldump
  */
 class Mysqldump extends Base
 {

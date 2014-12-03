@@ -10,9 +10,7 @@ use THCFrame\Security\Model\Authtoken;
 use THCFrame\Core\Rand;
 
 /**
- * Description of user
- *
- * @author Tomy
+ * Basic user class
  */
 class BasicUser extends Model
 {

@@ -6,13 +6,13 @@
         <div class="dogUser">
             <div class="dogImg">
                 <a data-lightbox="imageGr{echo $i}" 
-                   data-title="{echo $user->firstname.' '.$user->lastname}" 
+                   data-title="{echo $user->firstname." ".$user->lastname}" 
                    href="{echo $user->getImgMain()}">
                     <img src="{echo $user->getImgThumb()}"/>
                 </a>
             </div>
             <div class="dogInfo">
-                <span>Jméno:{echo $user->firstname.' '.$user->lastname}</span><br/>
+                <span>Jméno: {echo $user->firstname." ".$user->lastname}</span><br/>
                 {if $dog !== null}
                 <span>Pes: {echo $dog->getDogName()}</span><br/>
                 <span>Rasa: {echo $dog->getRace()}</span><br/>

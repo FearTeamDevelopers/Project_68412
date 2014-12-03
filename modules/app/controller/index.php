@@ -1,7 +1,6 @@
 <?php
 
 use App\Etc\Controller;
-use THCFrame\Request\RequestMethods;
 use THCFrame\Registry\Registry;
 use THCFrame\Model\Model;
 
@@ -16,8 +15,6 @@ class App_Controller_Index extends Controller
      */
     private function _checkMetaData($layoutView, Model $object)
     {
-        $host = RequestMethods::server('HTTP_HOST');
-
         if ($object->getMetaTitle() != '') {
             $layoutView->set('metatitle', $object->getMetaTitle());
         }
@@ -28,15 +25,13 @@ class App_Controller_Index extends Controller
 
         if ($object instanceof \App_Model_News) {
             if ($object->getMetaImage() != '') {
-                $layoutView->set('metaogimage', "http://{$host}/public/images/meta_image.jpg");
+                $layoutView->set('metaogimage', "http://{$this->getServerHost()}{$object->getMetaImage()}");
             }
 
-            $layoutView->set('metaogurl', "http://{$host}/aktuality/r/" . $object->getUrlKey() . '/');
+            $layoutView->set('metaogurl', "http://{$this->getServerHost()}/aktuality/r/" . $object->getUrlKey() . '/');
             $layoutView->set('metaogtype', 'article');
         } else {
-            $layoutView->set('metaogimage', "http://{$host}/public/images/meta_image.jpg");
-            $layoutView->set('metaogurl', "http://{$host}/" . $object->getUrlKey() . '/');
-
+            $layoutView->set('metaogurl', "http://{$this->getServerHost()}/" . $object->getUrlKey() . '/');
             $layoutView->set('metaogtype', 'website');
         }
 
@@ -81,7 +76,7 @@ class App_Controller_Index extends Controller
 
                 $tag = "<a data-lightbox=\"img\" data-title=\"{$photo->photoName}\" "
                         . "href=\"{$photo->imgMain}\" title=\"{$photo->photoName}\">"
-                        . "<img src=\"{$photo->imgThumb}\" {$floatClass} height=\"200px\" alt=\"Peďák\"/></a>";
+                        . "<img src=\"{$photo->imgThumb}\" {$floatClass} height=\"200px\" alt=\"ZKO KnL\"/></a>";
 
                 $body = str_replace("(!photo_{$id}_{$float}!)", $tag, $body);
 
@@ -124,15 +119,15 @@ class App_Controller_Index extends Controller
      * 
      * @param type $page
      */
-    public function index($page = 1)
+    public function index()
     {
         $view = $this->getActionView();
-        $cache = Registry::get('cache');
         $layoutView = $this->getLayoutView();
+        $config = Registry::get('configuration');
 
-        $content = $cache->get('aktuality');
+        $content = $this->getCache()->get('news-1');
 
-        $npp = (int) $this->loadConfigFromDb('news_per_page');
+        $npp = $config->news_per_page;
         
         if (NULL !== $content) {
             $news = $content;
@@ -140,14 +135,14 @@ class App_Controller_Index extends Controller
             $news = App_Model_News::all(
                             array('active = ?' => true, 'expirationDate >= ?' => date('Y-m-d H:i:s')),
                         array('id', 'urlKey', 'author', 'title', 'shortBody', 'created', 'rank'),
-                        array('rank' => 'asc', 'created' => 'DESC'), $npp, (int) $page);
+                        array('rank' => 'desc', 'created' => 'DESC'), (int)$npp, 1);
 
             if ($news !== null) {
                 foreach ($news as $_news) {
                     $this->_parseContentBody($_news, 'shortBody');
                 }
                 
-                $cache->set('aktuality', $news);
+                $this->getCache()->set('news-1', $news);
             } else {
                 $news = array();
             }
@@ -162,8 +157,8 @@ class App_Controller_Index extends Controller
         $view->set('newsbatch', $news)
             ->set('newspagecount', $newsPageCount);
         
-        $host = RequestMethods::server('HTTP_HOST');
-        $canonical = 'http://' . $host . '/';
+        
+        $canonical = 'http://' . $this->getServerHost() . '/';
         
         $layoutView->set('canonical', $canonical);
     }
@@ -175,20 +170,17 @@ class App_Controller_Index extends Controller
     {
         $view = $this->getActionView();
         $layoutView = $this->getLayoutView();
-        $cache = Registry::get('cache');
 
-        $content = $cache->get('clenove');
+        $content = $this->getCache()->get('clenove');
 
         if (NULL !== $content) {
             $members = $content;
         } else {
             $members = App_Model_User::fetchMembersWithDogs();
-            $cache->set('clenove', $members);
+            $this->getCache()->set('clenove', $members);
         }
 
-
-        $host = RequestMethods::server('HTTP_HOST');
-        $canonical = 'http://' . $host . '/clenove';
+        $canonical = 'http://' . $this->getServerHost() . '/clenove';
 
         $layoutView->set('canonical', $canonical)
                 ->set('metatitle', 'ZKO - Členové');
@@ -202,20 +194,19 @@ class App_Controller_Index extends Controller
     {
         $view = $this->getActionView();
         $layoutView = $this->getLayoutView();
-        $cache = Registry::get('cache');
 
-        $content = $cache->get('historie');
+        $content = $this->getCache()->get('historie');
 
         if (NULL !== $content) {
             $content = $content;
         } else {
             $content = App_Model_PageContent::first(array('active = ?' => true, 'urlKey = ?' => 'historie'));
-            $cache->set('historie', $content);
+            $this->getCache()->set('historie', $content);
         }
 
         $parsed = $this->_parseContentBody($content);
-        $host = RequestMethods::server('HTTP_HOST');
-        $canonical = 'http://' . $host . '/historie';
+
+        $canonical = 'http://' . $this->getServerHost() . '/historie';
 
         $view->set('content', $parsed);
 
@@ -231,20 +222,18 @@ class App_Controller_Index extends Controller
     {
         $view = $this->getActionView();
         $layoutView = $this->getLayoutView();
-        $cache = Registry::get('cache');
 
-        $content = $cache->get('akce');
+        $content = $this->getCache()->get('akce');
 
         if (NULL !== $content) {
             $content = $content;
         } else {
             $content = App_Model_PageContent::first(array('active = ?' => true, 'urlKey = ?' => 'akce'));
-            $cache->set('akce', $content);
+            $this->getCache()->set('akce', $content);
         }
 
         $parsed = $this->_parseContentBody($content);
-        $host = RequestMethods::server('HTTP_HOST');
-        $canonical = 'http://' . $host . '/akce';
+        $canonical = 'http://' . $this->getServerHost() . '/akce';
 
         $view->set('content', $parsed);
 

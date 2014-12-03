@@ -7,9 +7,7 @@ use THCFrame\Database\Exception as Exception;
 use THCFrame\Core\Core;
 
 /**
- * Description of Mysql
- *
- * @author Tomy
+ * Extension for Query class specificly for Mysql
  */
 class Mysql extends Database\Query
 {

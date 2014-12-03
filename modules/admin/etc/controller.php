@@ -10,7 +10,7 @@ use THCFrame\Core\StringMethods;
 /**
  * Description of Controller
  *
- * @author Tomy
+
  */
 class Controller extends BaseController
 {

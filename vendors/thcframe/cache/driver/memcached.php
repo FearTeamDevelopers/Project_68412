@@ -9,8 +9,6 @@ use THCFrame\Cache\Exception;
  * Memcached stores data in memory, in hash lookup tables so the data is 
  * quickly accessible without reading it from disk. Memcached is an open source 
  * HTTP caching system that can store huge amounts of key/value data.
- *
- * @author Tomy
  */
 class Memcached extends Cache\Driver
 {

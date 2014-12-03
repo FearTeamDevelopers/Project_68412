@@ -31,7 +31,7 @@ class Admin_Controller_Gallery extends Controller
     /**
      * Action method returns list of all galleries
      * 
-     * @before _secured, _member
+     * @before _secured, _admin
      */
     public function index()
     {
@@ -43,7 +43,7 @@ class Admin_Controller_Gallery extends Controller
     /**
      * Action method shows and processes form used for new gallery creation
      * 
-     * @before _secured, _member
+     * @before _secured, _admin
      */
     public function add()
     {
@@ -92,7 +92,7 @@ class Admin_Controller_Gallery extends Controller
      * Method shows detail of specific collection based on param id. 
      * From here can user upload photos and videos into collection.
      * 
-     * @before _secured, _member
+     * @before _secured, _admin
      * @param int $id   collection id
      */
     public function detail($id)
@@ -113,7 +113,7 @@ class Admin_Controller_Gallery extends Controller
      * Action method shows and processes form used for editing specific 
      * collection based on param id
      * 
-     * @before _secured, _member
+     * @before _secured, _admin
      * @param int $id   collection id
      */
     public function edit($id)
@@ -246,7 +246,7 @@ class Admin_Controller_Gallery extends Controller
      * Action method shows and processes form used for uploading photos into
      * collection specified by param id
      * 
-     * @before _secured, _member
+     * @before _secured, _admin
      * @param int $id   collection id
      */
     public function addPhoto($id)
@@ -332,7 +332,7 @@ class Admin_Controller_Gallery extends Controller
     /**
      * Method is called via ajax and deletes photo specified by param id
      * 
-     * @before _secured, _member
+     * @before _secured, _admin
      * @param int $id   photo id
      */
     public function deletePhoto($id)
@@ -340,28 +340,24 @@ class Admin_Controller_Gallery extends Controller
         $this->willRenderActionView = false;
         $this->willRenderLayoutView = false;
 
-        if ($this->checkCSRFToken()) {
-            $photo = App_Model_Photo::first(
-                            array('id = ?' => $id), array('id', 'imgMain', 'imgThumb')
-            );
+        $photo = App_Model_Photo::first(
+                        array('id = ?' => $id), array('id', 'imgMain', 'imgThumb')
+        );
 
-            if (null === $photo) {
-                echo self::ERROR_MESSAGE_2;
-            } else {
-                @unlink($photo->getUnlinkPath());
-                @unlink($photo->getUnlinkThumbPath());
-
-                if ($photo->delete()) {
-
-                    Event::fire('admin.log', array('success', 'Photo id: ' . $id));
-                    echo 'success';
-                } else {
-                    Event::fire('admin.log', array('fail', 'Photo id: ' . $id));
-                    echo self::ERROR_MESSAGE_1;
-                }
-            }
+        if (null === $photo) {
+            echo self::ERROR_MESSAGE_2;
         } else {
-            echo self::ERROR_MESSAGE_1;
+            @unlink($photo->getUnlinkPath());
+            @unlink($photo->getUnlinkThumbPath());
+
+            if ($photo->delete()) {
+
+                Event::fire('admin.log', array('success', 'Photo id: ' . $id));
+                echo 'success';
+            } else {
+                Event::fire('admin.log', array('fail', 'Photo id: ' . $id));
+                echo self::ERROR_MESSAGE_1;
+            }
         }
     }
 
@@ -369,7 +365,7 @@ class Admin_Controller_Gallery extends Controller
      * Method is called via ajax and activate or deactivate photo specified by
      * param id
      * 
-     * @before _secured, _member
+     * @before _secured, _admin
      * @param int $id   photo id
      */
     public function changePhotoStatus($id)
@@ -377,35 +373,31 @@ class Admin_Controller_Gallery extends Controller
         $this->willRenderLayoutView = false;
         $this->willRenderActionView = false;
 
-        if ($this->checkCSRFToken()) {
-            $photo = App_Model_Photo::first(array('id = ?' => $id));
+        $photo = App_Model_Photo::first(array('id = ?' => $id));
 
-            if (null === $photo) {
-                echo self::ERROR_MESSAGE_2;
-            } else {
-                if (!$photo->active) {
-                    $photo->active = true;
+        if (null === $photo) {
+            echo self::ERROR_MESSAGE_2;
+        } else {
+            if (!$photo->active) {
+                $photo->active = true;
 
-                    if ($photo->validate()) {
-                        $photo->save();
-                        Event::fire('admin.log', array('success', 'Photo id: ' . $id));
-                        echo 'active';
-                    } else {
-                        echo join('<br/>', $photo->getErrors());
-                    }
-                } elseif ($photo->active) {
-                    $photo->active = false;
-                    if ($photo->validate()) {
-                        $photo->save();
-                        Event::fire('admin.log', array('success', 'Photo id: ' . $id));
-                        echo 'inactive';
-                    } else {
-                        echo join('<br/>', $photo->getErrors());
-                    }
+                if ($photo->validate()) {
+                    $photo->save();
+                    Event::fire('admin.log', array('success', 'Photo id: ' . $id));
+                    echo 'active';
+                } else {
+                    echo join('<br/>', $photo->getErrors());
+                }
+            } elseif ($photo->active) {
+                $photo->active = false;
+                if ($photo->validate()) {
+                    $photo->save();
+                    Event::fire('admin.log', array('success', 'Photo id: ' . $id));
+                    echo 'inactive';
+                } else {
+                    echo join('<br/>', $photo->getErrors());
                 }
             }
-        } else {
-            echo self::ERROR_MESSAGE_1;
         }
     }
 

@@ -8,9 +8,7 @@ use THCFrame\Filesystem\FileManager;
 use THCFrame\Security\PasswordManager;
 
 /**
- * Description of Admin_Controller_User
- *
- * @author Tomy
+ * 
  */
 class Admin_Controller_User extends Controller
 {
@@ -78,9 +76,7 @@ class Admin_Controller_User extends Controller
         $view = $this->getActionView();
 
         $users = App_Model_User::all(
-                        array('role <> ?' => 'role_superadmin'), 
-                array('id', 'firstname', 'lastname', 'email', 'role', 'active', 'created'), 
-                array('id' => 'asc')
+                        array('role <> ?' => 'role_superadmin'), array('id', 'firstname', 'lastname', 'email', 'role', 'active', 'created'), array('id' => 'asc')
         );
 
         $view->set('users', $users);
@@ -394,27 +390,23 @@ class Admin_Controller_User extends Controller
         $this->willRenderActionView = false;
         $this->willRenderLayoutView = false;
 
-        if ($this->checkCSRFToken()) {
-            $user = App_Model_User::first(array('id = ?' => $id));
+        $user = App_Model_User::first(array('id = ?' => $id));
 
-            if (NULL === $user) {
-                echo self::ERROR_MESSAGE_2;
-            } else {
-                $pathMain = $user->getUnlinkPath();
-                $pathThumb = $user->getUnlinkThumbPath();
-
-                if ($user->delete()) {
-                    @unlink($pathMain);
-                    @unlink($pathThumb);
-                    Event::fire('admin.log', array('success', 'User id: ' . $id));
-                    echo 'success';
-                } else {
-                    Event::fire('admin.log', array('fail', 'User id: ' . $id));
-                    echo self::ERROR_MESSAGE_1;
-                }
-            }
+        if (NULL === $user) {
+            echo self::ERROR_MESSAGE_2;
         } else {
-            echo self::ERROR_MESSAGE_1;
+            $pathMain = $user->getUnlinkPath();
+            $pathThumb = $user->getUnlinkThumbPath();
+
+            if ($user->delete()) {
+                @unlink($pathMain);
+                @unlink($pathThumb);
+                Event::fire('admin.log', array('success', 'User id: ' . $id));
+                echo 'success';
+            } else {
+                Event::fire('admin.log', array('fail', 'User id: ' . $id));
+                echo self::ERROR_MESSAGE_1;
+            }
         }
     }
 

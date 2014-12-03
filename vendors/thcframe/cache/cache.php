@@ -8,9 +8,7 @@ use THCFrame\Registry\Registry;
 use THCFrame\Cache\Exception;
 
 /**
- * Factory class
- * 
- * @author Tomy
+ * Cache factory class
  */
 class Cache extends Base
 {

@@ -6,7 +6,7 @@ use THCFrame\Events\SubscriberInterface;
 /**
  * Observer class handling events defined in configuration file
  * 
- * @author Tomy
+
  */
 class Admin_Etc_Observer implements SubscriberInterface
 {

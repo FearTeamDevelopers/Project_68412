@@ -44,7 +44,7 @@
                             </td>
                             <td>
                                 <a href="/admin/news/edit/{echo $_news->id}" class="btn btn3 btn_pencil" title="Upravit"></a>
-                                {if $isAdmin}<a href="/admin/news/delete/{echo $_news->id}" class="btn btn3 btn_trash deleteRow" title="Smazat"></a>{/if}
+                                {if $isAdmin}<a href="/admin/news/delete/{echo $_news->id}" class="btn btn3 btn_trash ajaxDelete" title="Smazat"></a>{/if}
                             </td>
                         </tr>
                     {/foreach}

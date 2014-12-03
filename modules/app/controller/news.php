@@ -1,12 +1,10 @@
 <?php
 
 use App\Etc\Controller;
-use THCFrame\Request\RequestMethods;
+use THCFrame\Registry\Registry;
 
 /**
- * Description of App_Controller_News
- *
- * @author Tomy
+ * 
  */
 class App_Controller_News extends Controller
 {
@@ -16,8 +14,6 @@ class App_Controller_News extends Controller
      */
     private function _checkMetaData($layoutView, \App_Model_News $object)
     {
-        $host = RequestMethods::server('HTTP_HOST');
-
         if ($object->getMetaTitle() != '') {
             $layoutView->set('metatitle', $object->getMetaTitle());
         }
@@ -27,11 +23,12 @@ class App_Controller_News extends Controller
         }
 
         if ($object->getMetaImage() != '') {
-            $layoutView->set('metaogimage', "http://{$host}/public/images/meta_image.jpg");
+            $layoutView->set('metaogimage', "http://{$host}{$object->getMetaImage()}");
         }
 
-        $layoutView->set('metaogurl', "http://{$host}/aktuality/r/" . $object->getUrlKey() . '/');
-        $layoutView->set('metaogtype', 'article');
+        $layoutView->set('canonical', "http://{$this->getServerHost()}/aktuality/r/" . $object->getUrlKey() . '/')
+                ->set('metaogurl', "http://{$this->getServerHost()}/aktuality/r/" . $object->getUrlKey() . '/')
+                ->set('metaogtype', 'article');
 
         return;
     }
@@ -45,7 +42,7 @@ class App_Controller_News extends Controller
      */
     private function _parseNewsBody(\App_Model_News $content, $parsedField = 'body')
     {
-        preg_match_all('/\(\!(video|photo|read|gallery)_[0-9a-z]+[a-z_]*\!\)/', $content->$parsedField, $matches);
+        preg_match_all('/\(\!(photo|read|gallery)_[0-9a-z]+[a-z_]*\!\)/', $content->$parsedField, $matches);
         $m = array_shift($matches);
 
         foreach ($m as $match) {
@@ -84,21 +81,6 @@ class App_Controller_News extends Controller
                 $content->$parsedField = $body;
             }
 
-            if ($type == 'video') {
-                $video = App_Model_Video::first(
-                                array(
-                            'id = ?' => $id,
-                            'active = ?' => true
-                                ), array('title', 'path', 'width', 'height')
-                );
-
-                $tag = "<iframe width=\"{$video->width}\" height=\"{$video->height}\" "
-                        . "src=\"{$video->path}\" frameborder=\"0\" allowfullscreen></iframe>";
-
-                $body = str_replace("(!video_{$id}!)", $tag, $body);
-                $content->$parsedField = $body;
-            }
-
             if ($type == 'gallery') {
                 $gallery = App_Model_Gallery::first(array('isPublic = ?' => true, 'id = ?' => $id));
                 $tag = "<a href=\"/galerie/r/{$gallery->urlKey}\">{$gallery->title}</a>";
@@ -124,13 +106,25 @@ class App_Controller_News extends Controller
     {
         $view = $this->getActionView();
         $layoutView = $this->getLayoutView();
+        $config = Registry::get('configuration');
 
-        $npp = (int) $this->loadConfigFromDb('news_per_page');
+        $articlesPerPage = $config->news_per_page;
 
-        $news = App_Model_News::all(
+        if ($page == 1) {
+            $canonical = 'http://' . $this->getServerHost() . '/aktuality';
+        } else {
+            $canonical = 'http://' . $this->getServerHost() . '/aktuality/p/' . $page;
+        }
+        
+        $content = $this->getCache()->get('news-' . $page);
+        
+        if ($content !== null) {
+            $news = $content;
+        } else {
+            $news = App_Model_News::all(
                         array('active = ?' => true, 'expirationDate >= ?' => date('Y-m-d H:i:s')), 
                 array('id', 'urlKey', 'author', 'title', 'shortBody', 'created', 'rank'), 
-                array('rank' => 'asc', 'created' => 'DESC'), $npp, (int) $page);
+                array('rank' => 'asc', 'created' => 'DESC'), (int)$articlesPerPage, (int) $page);
 
         if ($news !== null) {
             foreach ($news as $_news) {
@@ -140,16 +134,31 @@ class App_Controller_News extends Controller
             $news = array();
         }
 
+            $this->getCache()->set('news-' . $page, $news);
+        }
+
         $newsCount = App_Model_News::count(
                         array('active = ?' => true,
                             'expirationDate >= ?' => date('Y-m-d H:i:s'))
         );
-        $newsPageCount = ceil($newsCount / $npp);
+        $newsPageCount = ceil($newsCount / $articlesPerPage);
         $view->set('newsbatch', $news)
                 ->set('newspagecount', $newsPageCount);
 
-        $host = RequestMethods::server('HTTP_HOST');
-        $canonical = 'http://' . $host . '/aktuality';
+        if ($newsPageCount > 1) {
+            $prevPage = $page - 1;
+            $nextPage = $page + 1;
+
+            if ($nextPage > $newsPageCount) {
+                $nextPage = 0;
+            }
+
+            $layoutView
+                    ->set('pagedprev', $prevPage)
+                    ->set('pagedprevlink', '/aktuality/p/' . $prevPage)
+                    ->set('pagednext', $nextPage)
+                    ->set('pagednextlink', '/aktuality/p/' . $nextPage);
+        }
 
         $layoutView->set('metatitle', 'ZKO - Aktuality')
                 ->set('canonical', $canonical);

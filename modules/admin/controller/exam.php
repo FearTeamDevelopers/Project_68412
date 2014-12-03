@@ -5,9 +5,7 @@ use THCFrame\Request\RequestMethods;
 use THCFrame\Events\Events as Event;
 
 /**
- * Description of Admin_Controller_Exam
- *
- * @author Tomy
+ * 
  */
 class Admin_Controller_Exam extends Controller
 {
@@ -108,24 +106,20 @@ class Admin_Controller_Exam extends Controller
         $this->willRenderActionView = false;
         $this->willRenderLayoutView = false;
 
-        if ($this->checkCSRFToken()) {
-            $exam = App_Model_Exam::first(
-                            array('id = ?' => (int) $id), array('id')
-            );
+        $exam = App_Model_Exam::first(
+                        array('id = ?' => (int) $id), array('id')
+        );
 
-            if (NULL === $exam) {
-                echo self::ERROR_MESSAGE_2;
-            } else {
-                if ($exam->delete()) {
-                    Event::fire('admin.log', array('success', 'Exam Id: ' . $id));
-                    echo 'success';
-                } else {
-                    Event::fire('admin.log', array('fail', 'Exam Id: ' . $id));
-                    echo self::ERROR_MESSAGE_1;
-                }
-            }
+        if (NULL === $exam) {
+            echo self::ERROR_MESSAGE_2;
         } else {
-            echo self::ERROR_MESSAGE_1;
+            if ($exam->delete()) {
+                Event::fire('admin.log', array('success', 'Exam Id: ' . $id));
+                echo 'success';
+            } else {
+                Event::fire('admin.log', array('fail', 'Exam Id: ' . $id));
+                echo self::ERROR_MESSAGE_1;
+            }
         }
     }
 

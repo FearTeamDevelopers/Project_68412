@@ -5,9 +5,7 @@ namespace THCFrame\Session\Model;
 use THCFrame\Model\Model;
 
 /**
- * Description of Session
- *
- * @author Tomy
+ * ORM class for session
  */
 class Session extends Model
 {

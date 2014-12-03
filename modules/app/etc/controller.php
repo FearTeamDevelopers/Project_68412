@@ -6,16 +6,35 @@ use THCFrame\Events\Events as Events;
 use THCFrame\Registry\Registry;
 use THCFrame\Controller\Controller as BaseController;
 use THCFrame\Core\StringMethods;
+use THCFrame\Request\RequestMethods;
 
 /**
  * Module specific controller class extending framework controller class
  *
- * @author Tomy
  */
 class Controller extends BaseController
 {
 
-    private $_security;
+    /**
+     * Store security context object
+     * @var type 
+     * @read
+     */
+    protected $_security;
+    
+    /**
+     * Store initialized cache object
+     * @var type 
+     * @read
+     */
+    protected $_cache;
+    
+    /**
+     * Store server host name
+     * @var type 
+     * @read
+     */
+    protected $_serverHost;
 
     /**
      * 
@@ -32,21 +51,22 @@ class Controller extends BaseController
         });
 
         $this->_security = Registry::get('security');
-        $cache = Registry::get('cache');
+        $this->_serverHost = RequestMethods::server('HTTP_HOST');
+        $this->_cache = Registry::get('cache');
         $cfg = Registry::get('configuration');
 
-        $links = $cache->get('links');
+        $links = $this->getCache()->get('links');
 
-        if (NULL !== $links) {
+        if ($links !== null) {
             $links = $links;
         } else {
             $links = \App_Model_Link::all(array('active = ?' => true));
-            $cache->set('links', $links);
+            $this->getCache()->set('links', $links);
         }
 
-        $metaData = $cache->get('global_meta_data');
+        $metaData = $this->getCache()->get('global_meta_data');
 
-        if (NULL !== $metaData) {
+        if ($metaData !== null) {
             $metaData = $metaData;
         } else {
             $metaData = array(
@@ -59,7 +79,7 @@ class Controller extends BaseController
                 'metaogsitename' => $cfg->meta_og_site_name
             );
 
-            $cache->set('global_meta_data', $metaData);
+            $this->getCache()->set('global_meta_data', $metaData);
         }
 
         $this->getLayoutView()

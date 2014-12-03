@@ -5,9 +5,7 @@ use THCFrame\Request\RequestMethods;
 use THCFrame\Events\Events as Event;
 
 /**
- * Description of Admin_Controller_Link
- *
- * @author Tomy
+ * 
  */
 class Admin_Controller_Link extends Controller
 {
@@ -108,24 +106,20 @@ class Admin_Controller_Link extends Controller
         $this->willRenderActionView = false;
         $this->willRenderLayoutView = false;
 
-        if ($this->checkCSRFToken()) {
-            $link = App_Model_Link::first(
-                            array('id = ?' => (int) $id), array('id')
-            );
+        $link = App_Model_Link::first(
+                        array('id = ?' => (int) $id), array('id')
+        );
 
-            if (NULL === $link) {
-                echo self::ERROR_MESSAGE_2;
-            } else {
-                if ($link->delete()) {
-                    Event::fire('admin.log', array('success', 'Link Id: ' . $id));
-                    echo 'success';
-                } else {
-                    Event::fire('admin.log', array('fail', 'Link Id: ' . $id));
-                    echo self::ERROR_MESSAGE_1;
-                }
-            }
+        if (NULL === $link) {
+            echo self::ERROR_MESSAGE_2;
         } else {
-            echo self::ERROR_MESSAGE_1;
+            if ($link->delete()) {
+                Event::fire('admin.log', array('success', 'Link Id: ' . $id));
+                echo 'success';
+            } else {
+                Event::fire('admin.log', array('fail', 'Link Id: ' . $id));
+                echo self::ERROR_MESSAGE_1;
+            }
         }
     }
 
