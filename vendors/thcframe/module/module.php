@@ -17,12 +17,12 @@ class Module extends Base
      * @read
      */
     protected $_routes = array();
-    
+
     /**
      * @read
      */
     protected $_redirects = array();
-    
+
     /**
      * @read
      */
@@ -45,8 +45,8 @@ class Module extends Base
         Event::fire('framework.module.initialize.before', array($this->moduleName));
 
         $this->addModuleEvents();
-        
-        Event::add('framework.router.construct.after', function($router){
+
+        Event::add('framework.router.construct.after', function($router) {
             $router->addRedirects($this->getRedirects());
             $router->addRoutes($this->getRoutes());
         });
@@ -67,11 +67,11 @@ class Module extends Base
                 $events = $moduleObserver->getSubscribedEvents();
 
                 foreach ($events as $name => $callback) {
-                    if(is_array($callback)){
-                        foreach ($callback as $call){
+                    if (is_array($callback)) {
+                        foreach ($callback as $call) {
                             Event::add($name, array($moduleObserver, $call));
                         }
-                    }else{
+                    } else {
                         Event::add($name, array($moduleObserver, $callback));
                     }
                 }

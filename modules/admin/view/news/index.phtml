@@ -7,61 +7,58 @@
     <div class="contenttitle radiusbottom0">
         <h2 class="image"><span>Novinky</span></h2>
     </div><!--contenttitle-->
+
+    {if $isAdmin}
+    <div class="tableoptions">
+        <select class="radius3" name="selection">
+            <option value="1">Označené</option>
+            <option value="2">Aktuální stránka</option>
+        </select>
+        <select class="radius3" name="action">
+            <option value="activate">Aktivovat</option>
+            <option value="deactivate">Deaktivovat</option>
+            <option value="delete">Smazat</option>
+        </select> &nbsp;
+        <a class="btn btn_document ajax-massaction" href="/admin/news/massaction/"><span>Proveď</span></a>
+    </div><!--tableoptions-->
+    {/if}
+
+    <input type="hidden" name="csrf" id="csrf" value="{echo $token}" />
+    <input type="hidden" name="type" id="type" value="news" />
     
-    <form method="post" class="massActionForm" action="/admin/news/massAction/">
-        <input type="hidden" name="csrf" id="csrf" value="{echo $token}" />
-        <table cellpadding="0" cellspacing="0" border="0" class="stdtable">
-            <colgroup>
-                <col class="con0" /> <col class="con1" />
-                <col class="con0" /> <col class="con1" />
-                <col class="con0" /> <col class="con1" />
-                <col class="con0" />
-            </colgroup>
-            <thead>
-                <tr>
-                    <td class="head0 width50"><input type="checkbox" class="checkall" /></td>
-                    <td class="head1">Název</td>
-                    <td class="head0">Autor</td>
-                    <td class="head1">Zobrazovat do</td>
-                    <td class="head0">Vytvořeno</td>
-                    <td class="head1">Status</td>
-                    <td class="head0">&nbsp;</td>
-                </tr>
-            </thead>
-            <tbody>
-                {if !empty($news)}
-                    {foreach $_news in $news}
-                        <tr>
-                            <td class="center">
-                                <input type="checkbox" name="newsids[]" value="{echo $_news->getId()}" />
-                            </td>
-                            <td>{echo $_news->getTitle()}</td>
-                            <td>{echo $_news->getAuthor()}</td>
-                            <td>{echo $_news->getExpirationDate()}</td>
-                            <td>{echo $_news->getCreated()}</td>
-                            <td>
-                                {if ($_news->active)}<span class="labelProduct labelProductGreen">Aktivní</span>{/if}
-                            </td>
-                            <td>
-                                <a href="/admin/news/edit/{echo $_news->id}" class="btn btn3 btn_pencil" title="Upravit"></a>
-                                {if $isAdmin}<a href="/admin/news/delete/{echo $_news->id}" class="btn btn3 btn_trash ajaxDelete" title="Smazat"></a>{/if}
-                            </td>
-                        </tr>
-                    {/foreach}
-                {/if}
-            </tbody>
-        </table>
-        {if $isAdmin}
-        <div class="tableoptions">
-            Selected:
-            <select class="radius3" name="action">
-                <option value="activate">Aktivovat</option>
-                <option value="deactivate">Deaktivovat</option>
-                <option value="delete">Smazat</option>
-            </select> &nbsp;
-            <input class="radius3" type="submit" name="performNewsAction" value="Provést"/>
-        </div><!--tableoptions-->
-        {/if}
-    </form>
+    <table cellpadding="0" cellspacing="0" border="0" class="stdtable2">
+        <colgroup>
+            <col class="con0" /> <col class="con1" />
+            <col class="con0" /> <col class="con1" />
+            <col class="con0" /> <col class="con1" />
+            <col class="con0" />
+        </colgroup>
+        <thead>
+            <tr>
+                <td class="head0 width50">Id</td>
+                <td class="head1">Název</td>
+                <td class="head0">Autor</td>
+                <td class="head1">Zobrazovat do</td>
+                <td class="head0">Vytvořeno</td>
+                <td class="head1">Status</td>
+                <td class="head0">&nbsp;</td>
+            </tr>
+        </thead>
+
+    </table>
+    {if $isAdmin}
+    <div class="tableoptions">
+        <select class="radius3" name="selection">
+            <option value="1">Označené</option>
+            <option value="2">Aktuální stránka</option>
+        </select>
+        <select class="radius3" name="action">
+            <option value="activate">Aktivovat</option>
+            <option value="deactivate">Deaktivovat</option>
+            <option value="delete">Smazat</option>
+        </select> &nbsp;
+        <a class="btn btn_document ajax-massaction" href="/admin/news/massaction/"><span>Proveď</span></a>
+    </div><!--tableoptions-->
+    {/if}
 </div>
 <br class="clear-all"/><br />

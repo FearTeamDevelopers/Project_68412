@@ -61,10 +61,6 @@ class Cache extends Base
             }
         }
 
-        if (!$this->type) {
-            throw new Exception\Argument('Invalid type');
-        }
-
         Event::fire('framework.cache.initialize.after', array($this->type, $this->options));
 
         switch ($this->type) {

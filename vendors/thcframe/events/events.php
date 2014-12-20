@@ -2,6 +2,8 @@
 
 namespace THCFrame\Events;
 
+use THCFrame\Events\Exception;
+
 /**
  * Event listener
  */

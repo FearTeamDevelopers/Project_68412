@@ -28,24 +28,6 @@ class Admin_Controller_Content extends Controller
     }
 
     /**
-     * 
-     * @return type
-     */
-    private function _getPhotos()
-    {
-        return App_Model_Photo::all(array('galleryId = ?' => 3, 'active = ?' => true));
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    private function _getGalleries()
-    {
-        return App_Model_Gallery::all(array('active = ?' => true, 'isPublic = ?' => true));
-    }
-
-    /**
      * @before _secured, _member
      */
     public function index()
@@ -63,9 +45,6 @@ class Admin_Controller_Content extends Controller
     public function add()
     {
         $view = $this->getActionView();
-
-        $view->set('photos', $this->_getPhotos())
-                ->set('galleries', $this->_getGalleries());
 
         if (RequestMethods::post('submitAddContent')) {
             if($this->checkCSRFToken() !== true){
@@ -116,9 +95,7 @@ class Admin_Controller_Content extends Controller
             self::redirect('/admin/content/');
         }
 
-        $view->set('photos', $this->_getPhotos())
-                ->set('galleries', $this->_getGalleries())
-                ->set('content', $content);
+        $view->set('content', $content);
 
         if (RequestMethods::post('submitEditContent')) {
             if($this->checkCSRFToken() !== true){
@@ -147,6 +124,7 @@ class Admin_Controller_Content extends Controller
                 Event::fire('admin.log', array('success', 'Content id: ' . $id));
                 $view->successMessage(self::SUCCESS_MESSAGE_2);
                 $cache->erase($content->getUrlKey());
+                
                 self::redirect('/admin/content/');
             } else {
                 Event::fire('admin.log', array('fail', 'Content id: ' . $id));
@@ -154,13 +132,5 @@ class Admin_Controller_Content extends Controller
                     ->set('content', $content);
             }
         }
-    }
-    
-    /**
-     * @before _secured, _admin
-     */
-    public function insertPhotoDialog()
-    {
-        $this->willRenderLayoutView = false;
     }
 }

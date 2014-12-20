@@ -4,6 +4,8 @@ namespace THCFrame\Cache\Driver;
 
 use THCFrame\Cache as Cache;
 use THCFrame\Cache\Exception;
+use THCFrame\Events\Events as Event;
+use THCFrame\Registry\Registry;
 
 /**
  * Memcached stores data in memory, in hash lookup tables so the data is 
@@ -53,6 +55,22 @@ class Memcached extends Cache\Driver
         return false;
     }
 
+    /**
+     * 
+     * @param type $options
+     */
+    public function __construct($options = array())
+    {
+        parent::__construct($options);
+        
+        $this->connect();
+        
+        Event::add('framework.controller.destruct.after', function($name) {
+            $cache = Registry::get('cache');
+            $cache->disconnect();
+        });
+    }
+    
     /**
      * Method attempts to connect to the Memcached server at the specified host/port
      * 
@@ -165,7 +183,7 @@ class Memcached extends Cache\Driver
     }
 
     /**
-     * Same as clearCache method
+     * Alias for clearCache
      */
     public function invalidate()
     {

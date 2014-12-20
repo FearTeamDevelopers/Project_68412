@@ -482,7 +482,7 @@ class Core
      */
     public static function getFrameworkVersion()
     {
-        return '1.1.2';
+        return '1.1.3';
     }
 
 }

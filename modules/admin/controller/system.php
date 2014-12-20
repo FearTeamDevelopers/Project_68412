@@ -57,8 +57,7 @@ class Admin_Controller_System extends Controller
         $dump->create();
         $view->successMessage('Záloha databáze byla úspěšně vytvořena');
         Event::fire('admin.log', array('success', 'Database backup ' . $dump->getBackupName()));
-        unset($fm);
-        unset($dump);
+
         self::redirect('/admin/system/');
     }
 
@@ -68,7 +67,7 @@ class Admin_Controller_System extends Controller
     public function showAdminLog()
     {
         $view = $this->getActionView();
-        $log = Admin_Model_AdminLog::all(array(), array('*'), array('created' => 'DESC'));
+        $log = Admin_Model_AdminLog::all(null, array('*'), array('created' => 'DESC'));
         $view->set('adminlog', $log);
     }
 

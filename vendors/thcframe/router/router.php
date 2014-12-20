@@ -108,7 +108,7 @@ class Router extends Base
     {
         parent::__construct($options);
 
-        Event::fire('framework.router.construct.before');
+        Event::fire('framework.router.construct.before', array());
 
         $this->_createRoutes(self::$_defaultRoutes);
 

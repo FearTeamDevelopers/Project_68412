@@ -144,7 +144,7 @@ class Filecache extends Cache\Driver
     }
 
     /**
-     * 
+     * Alias for clearCache
      */
     public function invalidate()
     {

@@ -1,93 +1,73 @@
 jQuery.noConflict();
 
 jQuery(document).ready(function () {
-    jQuery('input[name=title]').blur(function () {
-        var t = jQuery('input[name=title]').val();
-        var val = t.replace(/\s/g, '-');
-        jQuery('input[name=urlkey]').val(val);
+    jQuery('.nosubmit').submit(function(event){
+        event.preventDefault();
+        return false;
     });
-
-    jQuery('#news-text-to-teaser').click(function (event) {
+    
+    jQuery('#text-to-teaser').click(function (event) {
         event.preventDefault();
         var value = CKEDITOR.instances['ckeditor'].getData();
         var short = value.substr(0, 240);
         CKEDITOR.instances['ckeditor2'].setData(short);
     });
 
-    jQuery('#news-teaser-to-meta').click(function (event) {
+    jQuery('#teaser-to-meta').click(function (event) {
         event.preventDefault();
         var value = CKEDITOR.instances['ckeditor2'].getData();
         var short = value.substr(0, 250);
         jQuery('textarea[name=metadescription]').val(short);
     });
 
-    jQuery('#news-clear-text').click(function (event) {
+    jQuery('#clear-text').click(function (event) {
         event.preventDefault();
         CKEDITOR.instances['ckeditor'].setData('');
     });
 
-    jQuery('#news-clear-teaser').click(function (event) {
+    jQuery('#clear-teaser').click(function (event) {
         event.preventDefault();
         CKEDITOR.instances['ckeditor2'].setData('');
     });
 
-    jQuery('#news-readmore-link').click(function (event) {
+    jQuery('#teaser-readmore-link').click(function (event) {
         event.preventDefault();
-        CKEDITOR.instances['ckeditor2'].insertText('(!read_more!)');
+        CKEDITOR.instances['ckeditor2'].insertText('<a href="(!read_more_link!)">(!read_more_title!)</a>');
     });
 
-    jQuery('.img-to-text').click(function (event) {
-        event.preventDefault();
-        var btn = jQuery(this);
-
-        jQuery('#insert-photo-dialog p').load('/admin/news/insertphotodialog/');
-
-        jQuery('#insert-photo-dialog').dialog({
-            title: 'InsertPhoto',
-            width: 600,
-            modal: true,
-            position: {my: 'center', at: 'top', of: window},
-            buttons: {
-                'Insert photo': function () {
-                    var id = btn.attr('value');
-                    var float = jQuery('#photo-float').val();
-                    CKEDITOR.instances['ckeditor'].insertText('(!photo_' + id + '_' + float + '!)');
-                    jQuery(this).dialog('close');
-                },
-                Close: function () {
-                    jQuery(this).dialog('close');
-                }
-            }
-        });
-        return false;
-    });
-
-    jQuery('#news-text-new-paragraph').click(function (event) {
+    jQuery('#text-new-paragraph').click(function (event) {
         event.preventDefault();
         CKEDITOR.instances['ckeditor'].insertText('<br class="clear" />');
     });
 
-    jQuery('#news-teaser-new-paragraph').click(function (event) {
+    jQuery('#teaser-new-paragraph').click(function (event) {
         event.preventDefault();
         CKEDITOR.instances['ckeditor2'].insertText('<br class="clear" />');
     });
 
-    jQuery('.img-to-teaser').click(function (event) {
+    jQuery('#text-link-to-gallery, #teaser-link-to-gallery').click(function (event) {
         event.preventDefault();
-        var btn = jQuery(this);
+        var type = jQuery(this).attr('id');
 
-        jQuery('#insert-photo-dialog p').load('/admin/news/insertphotodialog/');
+        jQuery('#insert-dialog p').load('/admin/gallery/inserttocontent/');
 
-        jQuery('#insert-photo-dialog').dialog({
-            title: 'InsertPhoto',
+        jQuery('#insert-dialog').dialog({
+            title: 'Insert',
             width: 600,
             modal: true,
-            position: {my: 'center', at: 'top', of: window},
             buttons: {
-                'Insert photo': function () {
-                    var id = btn.attr('value');
-                    var float = jQuery('#photo-float').val();
-                    CKEDITOR.instances['ckeditor2'].insertText('(!photo_' + id + '_' + float + '!)');
+                'Insert': function () {
+                    var src = jQuery('#content').val();
+                    var target = jQuery('#link-target').val();
+                    var name = jQuery('#link-name').val();
+                    var tag = "<a href=\"/galerie/r/" + src + "\" target=" + target + ">" + name + "</a>";
+
+                    if (type.substr(0, 4) == 'text') {
+                        CKEDITOR.instances['ckeditor'].insertText(tag);
+                    } else {
+                        CKEDITOR.instances['ckeditor2'].insertText(tag);
+                    }
+
                     jQuery(this).dialog('close');
                 },
                 Close: function () {
@@ -97,33 +77,37 @@ jQuery(document).ready(function () {
         });
         return false;
     });
-
-    jQuery('.img-to-meta').click(function (event) {
-        event.preventDefault();
-        var path = jQuery(this).attr('value');
-        jQuery('input[name=metaimage]').val(path);
-    });
     
-    jQuery('.gal-to-text').click(function (event) {
+    jQuery('#text-link-to-news, #teaser-link-to-news').click(function (event) {
         event.preventDefault();
-        var id = jQuery(this).attr('value');
-        CKEDITOR.instances['ckeditor'].insertText('(!gallery_' + id + '!)');
-    });
-    jQuery('.gal-to-teaser').click(function (event) {
-        event.preventDefault();
-        var id = jQuery(this).attr('value');
-        CKEDITOR.instances['ckeditor2'].insertText('(!gallery_' + id + '!)');
-    });
+        var type = jQuery(this).attr('id');
 
-    jQuery('.video-to-text').click(function (event) {
-        event.preventDefault();
-        var id = jQuery(this).attr('value');
-        CKEDITOR.instances['ckeditor'].insertText('(!video_' + id + '!)');
-    });
+        jQuery('#insert-dialog p').load('/admin/news/inserttocontent/');
 
-    jQuery('.video-to-teaser').click(function (event) {
-        event.preventDefault();
-        var id = jQuery(this).attr('value');
-        CKEDITOR.instances['ckeditor2'].insertText('(!video_' + id + '!)');
+        jQuery('#insert-dialog').dialog({
+            title: 'Insert',
+            width: 600,
+            modal: true,
+            buttons: {
+                'Insert': function () {
+                    var src = jQuery('#content').val();
+                    var target = jQuery('#link-target').val();
+                    var name = jQuery('#link-name').val();
+                    var tag = "<a href=\"/aktuality/r/" + src + "\" target=" + target + ">" + name + "</a>";
+
+                    if (type.substr(0, 4) == 'text') {
+                        CKEDITOR.instances['ckeditor'].insertText(tag);
+                    } else {
+                        CKEDITOR.instances['ckeditor2'].insertText(tag);
+                    }
+
+                    jQuery(this).dialog('close');
+                },
+                Close: function () {
+                    jQuery(this).dialog('close');
+                }
+            }
+        });
+        return false;
     });
 });

@@ -75,9 +75,7 @@ class Profiler
      */
     private function __construct()
     {
-        Event::fire('framework.profiler.construct.before');
         
-        Event::fire('framework.profiler.construct.after');
     }
 
     /**
@@ -134,10 +132,14 @@ class Profiler
     public function start($identifier = 'CORE')
     {
         if ($this->isActive()) {
+            Event::fire('framework.profiler.start.before', array($identifier));
+            
             $this->dbStart($identifier);
             $this->_profiles[$identifier]['startTime'] = microtime(true);
             $this->_profiles[$identifier]['startMemoryPeakUsage'] = $this->convert(memory_get_peak_usage());
             $this->_profiles[$identifier]['startMomoryUsage'] = $this->convert(memory_get_usage());
+            
+            Event::fire('framework.profiler.start.after', array($identifier));
         }
     }
 
@@ -149,6 +151,8 @@ class Profiler
     public function stop($identifier = 'CORE')
     {
         if ($this->isActive()) {
+            Event::fire('framework.profiler.stop.before', array($identifier));
+            
             $this->_profiles[$identifier]['requestUri'] = RequestMethods::server('REQUEST_URI');
             $this->_profiles[$identifier]['totalTime'] = round(microtime(true) - $this->_profiles[$identifier]['startTime'], 8);
             $this->_profiles[$identifier]['endMemoryPeakUsage'] = $this->convert(memory_get_peak_usage());
@@ -160,6 +164,8 @@ class Profiler
 
             $this->dbStop($identifier);
             $this->process();
+            
+            Event::fire('framework.profiler.stop.after', array($identifier));
         }
     }
 

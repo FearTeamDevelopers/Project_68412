@@ -58,12 +58,11 @@ class Controller extends BaseController
      */
     protected function _createUrlKey($string)
     {
-        $string = StringMethods::removeDiacriticalMarks($string);
-        $string = str_replace(array('.', ',', '_', '(', ')', '[', ']', '|', ' '), '-', $string);
-        $string = str_replace(array('?', '!', '@', '&', '*', ':', '+', '=', '~', '°', '´', '`', '%', "'", '"'), '', $string);
-        $string = trim($string);
-        $string = trim($string, '-');
-        return strtolower($string);
+        $neutralChars = array('.', ',', '_', '(', ')', '[', ']', '|', ' ');
+        $preCleaned = StringMethods::fastClean($string, $neutralChars, '-');
+        $cleaned = StringMethods::fastClean($preCleaned);
+        $return = trim(trim($cleaned), '-');
+        return strtolower($return);
     }
 
     /**
@@ -72,15 +71,15 @@ class Controller extends BaseController
     public function _secured()
     {
         $session = Registry::get('session');
-        $user = $this->getUser();
+        $user = $this->_security->getUser();
 
         if (!$user) {
             $this->_security->logout();
             self::redirect('/login');
         }
 
-        //15min inactivity till logout
-        if (time() - $session->get('lastActive') < 900) {
+        //30 min inactivity till logout
+        if (time() - $session->get('lastActive') < 1800) {
             $session->set('lastActive', time());
         } else {
             $view = $this->getActionView();

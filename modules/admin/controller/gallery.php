@@ -401,4 +401,19 @@ class Admin_Controller_Gallery extends Controller
         }
     }
 
+    /**
+     * @before _secured, _admin
+     */
+    public function insertToContent()
+    {
+        $view = $this->getActionView();
+        $this->willRenderLayoutView = false;
+        
+        $galleries = App_Model_Gallery::all(
+                array('isPublic = ?' => 1, 'active = ?' => true)
+        );
+        
+        $view->set('galleries', $galleries);
+    }
+    
 }

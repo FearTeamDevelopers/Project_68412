@@ -18,7 +18,7 @@ class Security extends Base implements SecurityInterface
 {
 
     /**
-     * Instance of authentication class
+     * Authentication object
      * 
      * @read
      * @var THCFrame\Security\Authentication\Authentication 
@@ -26,7 +26,7 @@ class Security extends Base implements SecurityInterface
     protected $_authentication;
 
     /**
-     * Instance of authorization class
+     * Authorization object
      * 
      * @read
      * @var THCFrame\Security\Authorization\Authorization 
@@ -42,7 +42,7 @@ class Security extends Base implements SecurityInterface
     protected $_csrf;
 
     /**
-     * Instance of PasswordManager class
+     * PasswordManager object
      * 
      * @read
      * @var THCFrame\Security\PasswordManager 
@@ -251,7 +251,7 @@ class Security extends Base implements SecurityInterface
     /**
      * Function for user to log-in forcefully i.e without providing user-credentials
      * 
-     * @param type $userId
+     * @param integer $userId
      * @return boolean
      * @throws Exception\UserNotExists
      */

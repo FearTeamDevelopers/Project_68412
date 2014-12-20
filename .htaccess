@@ -6,7 +6,7 @@ RewriteBase /
 SetEnvIf user-agent "Indy Library" stayout=1
 # WARNING: Disabling wget will also block the most common method for
 # running CRON jobs. Remove if you have issues with CRON jobs.
-SetEnvIf user-agent "Wget" stayout=1
+#SetEnvIf user-agent "Wget" stayout=1
 # The following rules are for bandwidth-hogging download tools
 SetEnvIf user-agent "libwww-perl" stayout=1
 SetEnvIf user-agent "Download Demon" stayout=1
@@ -161,6 +161,7 @@ Deny from all
 ## Disallow access to rogue PHP files throughout the site, unless they are explicitly allowed
 RewriteCond %{REQUEST_FILENAME} \.php$
 RewriteCond %{REQUEST_FILENAME} !/index[23]?\.php$
+RewriteCond %{REQUEST_FILENAME} !/public/js/plugins/filemanager/.*\.php.*$
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^([^/]+/)*([^/.]+\.)+php$ - [F]
 
@@ -249,7 +250,6 @@ RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R,L]
 ########## End - Redirect non-www to www
 
 ########## Begin - Preventing Bandwidth Image Theft
-RewriteCond %{HTTP_REFERER} !^$
 RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?(cvicak|cvicak\.fear-team)\.(cz|dev) [NC]
 RewriteRule \.(jpe?g|gif|bmp|png|ico)$ - [F]
 ########## End - Preventing Bandwidth Image Theft

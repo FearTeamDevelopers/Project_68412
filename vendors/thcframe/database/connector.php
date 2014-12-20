@@ -4,6 +4,7 @@ namespace THCFrame\Database;
 
 use THCFrame\Core\Base;
 use THCFrame\Database\Exception;
+use THCFrame\Model\Model;
 
 /**
  * Factory allows many different kinds of configuration driver classes to be used, 
@@ -20,7 +21,7 @@ abstract class Connector extends Base
     {
         return $this;
     }
-    
+
     /**
      * 
      * @param type $method
@@ -47,5 +48,11 @@ abstract class Connector extends Base
 
     public abstract function getLastError();
 
-    public abstract function sync(\THCFrame\Model\Model $model);
+    public abstract function beginTransaction();
+
+    public abstract function commitTransaction();
+
+    public abstract function rollbackTransaction();
+
+    public abstract function sync(Model $model);
 }

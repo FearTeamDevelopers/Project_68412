@@ -3,7 +3,7 @@
     <div class="historyHeader">
         <span class="historyTitle">{echo $content->pageName}</span>
     </div>
-    <p class="historyBody">{echo $content->body}</p>
+    <p class="historyBody">{echo html_entity_decode($content->body)}</p>
 </div>
 {/if}
 {else}<div class="whiteBg">Žádné akce</div>{/else}

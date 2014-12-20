@@ -54,7 +54,7 @@ class Session extends Base
         }
 
         if (!$this->type) {
-            throw new Exception\Argument('Invalid type');
+            throw new Exception\Argument('Invalid session type');
         }
 
         Event::fire('framework.session.initialize.after', array($this->type, $this->options));
@@ -69,7 +69,7 @@ class Session extends Base
                     break;
                 }
             default: {
-                    throw new Exception\Argument('Invalid type');
+                    throw new Exception\Argument('Invalid session type');
                     break;
                 }
         }

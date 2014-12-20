@@ -100,12 +100,11 @@ class Controller extends BaseController
      */
     protected function _createUrlKey($string)
     {
-        $string = StringMethods::removeDiacriticalMarks($string);
-        $string = str_replace(array('.', ',', '_', '(', ')', '[', ']', '|', ' '), '-', $string);
-        $string = str_replace(array('?', '!', '@', '&', '*', ':', '+', '=', '~', '°', '´', '`', '%', "'", '"'), '', $string);
-        $string = trim($string);
-        $string = trim($string, '-');
-        return strtolower($string);
+        $neutralChars = array('.', ',', '_', '(', ')', '[', ']', '|', ' ');
+        $preCleaned = StringMethods::fastClean($string, $neutralChars, '-');
+        $cleaned = StringMethods::fastClean($preCleaned);
+        $return = trim(trim($cleaned), '-');
+        return strtolower($return);
     }
 
     /**

@@ -5,6 +5,8 @@ namespace THCFrame\Database\Connector;
 use THCFrame\Database as Database;
 use THCFrame\Database\Exception as Exception;
 use THCFrame\Profiler\Profiler;
+use THCFrame\Model\Model;
+use THCFrame\Core\Core;
 
 /**
  * The Database\Connector\Mysql class defines a handful of adaptable 
@@ -81,6 +83,19 @@ class Mysql extends Database\Connector
     }
 
     /**
+     * 
+     * @param type $error
+     * @param type $sql
+     */
+    protected function _logError($error, $sql)
+    {
+        $errMessage = sprintf('There was an error in the query %s', $error) . PHP_EOL;
+        $errMessage .= 'SQL: ' . $sql;
+
+        Core::getLogger()->log($errMessage);
+    }
+    
+    /**
      * Method is used to ensure that the value of the
      * $_service is a valid MySQLi instance
      * 
@@ -98,7 +113,7 @@ class Mysql extends Database\Connector
     }
 
     /**
-     * Method attempts to connect to the MySQLi server at the specified host/port
+     * Method attempts to connect to the MySQL server at the specified host/port
      * 
      * @return \THCFrame\Database\Connector\Mysql
      * @throws Exception\Service
@@ -125,7 +140,7 @@ class Mysql extends Database\Connector
     }
 
     /**
-     * Method attempts to disconnect the $_service instance from the MySQLi service
+     * Method attempts to disconnect the $_service instance from the MySQL service
      * 
      * @return \THCFrame\Database\Connector\Mysql
      */
@@ -140,6 +155,7 @@ class Mysql extends Database\Connector
     }
 
     /**
+     * Return query object for specific connector
      * 
      * @return \THCFrame\Database\Database\Query\Mysql
      */
@@ -154,7 +170,7 @@ class Mysql extends Database\Connector
      * Method execute sql query by using prepared statements
      * 
      * @param string $sql
-     * @return mixed
+     * @return mysqli_stmt
      * @throws Exception\Service
      */
     public function execute($sql)
@@ -164,16 +180,21 @@ class Mysql extends Database\Connector
         }
 
         $profiler = Profiler::getInstance();
-        $profiler->dbQueryStart($sql);
+
         $args = func_get_args();
 
         if (count($args) == 1) {
+            $profiler->dbQueryStart($sql);
             $result = $this->_service->query($sql);
             $profiler->dbQueryStop($this->getAffectedRows());
+
             return $result;
         }
 
+        $profiler->dbQueryStart($sql);
         if (!$stmt = $this->_service->prepare($sql)) {
+            $this->_logError($this->_service->error, $sql);
+
             if (ENV == 'dev') {
                 throw new Exception\Sql(sprintf('There was an error in the query %s', $this->_service->error));
             } else {
@@ -203,7 +224,7 @@ class Mysql extends Database\Connector
             $stmtRow = array();
             $rowReferences = array();
 
-            while ($field = $this->fetchField($meta)) {
+            while ($field = $meta->fetch_field()) {
                 $rowReferences[] = &$stmtRow[$field->name];
             }
 
@@ -257,7 +278,7 @@ class Mysql extends Database\Connector
     /**
      * Returns last inserted id
      * 
-     * @return number
+     * @return integer
      * @throws Exception\Service
      */
     public function getLastInsertId()
@@ -272,7 +293,7 @@ class Mysql extends Database\Connector
     /**
      * Returns count of affected rows by last query
      * 
-     * @return type
+     * @return integer
      * @throws Exception\Service
      */
     public function getAffectedRows()
@@ -297,16 +318,6 @@ class Mysql extends Database\Connector
         }
 
         return $this->_service->error;
-    }
-
-    /**
-     * 
-     * @param Result $result
-     * @return array
-     */
-    public function fetchField($result)
-    {
-        return $result->fetch_field();
     }
 
     /**
@@ -336,7 +347,7 @@ class Mysql extends Database\Connector
     }
 
     /**
-     * method converts the class/properties into a valid SQL query, and 
+     * Method converts the class/properties into a valid SQL query, and 
      * ultimately into a physical database table. It does this by first 
      * getting a list of the columns, by calling the model’s getColumns() method. 
      * Looping over the columns, it creates arrays of indices and field strings.
@@ -347,7 +358,7 @@ class Mysql extends Database\Connector
      * @return \THCFrame\Database\Connector\Mysql
      * @throws Exception\Sql
      */
-    public function sync(\THCFrame\Model\Model $model)
+    public function sync(Model $model)
     {
         $lines = array();
         $indices = array();
@@ -413,8 +424,10 @@ class Mysql extends Database\Connector
 
         $result = $this->execute("DROP TABLE IF EXISTS {$table};");
         if ($result === false) {
+            $this->_logError($this->_service->error, $sql);
+            
             if (ENV == 'dev') {
-                $error = $this->lastError;
+                $error = $this->getLastError();
                 throw new Exception\Sql(sprintf('There was an error in the query: %s', $error));
             } else {
                 throw new Exception\Sql(sprintf('There was an error in the query'));
@@ -423,8 +436,10 @@ class Mysql extends Database\Connector
 
         $result2 = $this->execute($sql);
         if ($result2 === false) {
+            $this->_logError($this->_service->error, $sql);
+            
             if (ENV == 'dev') {
-                $error = $this->lastError;
+                $error = $this->getLastError();
                 throw new Exception\Sql(sprintf('There was an error in the query: %s', $error));
             } else {
                 throw new Exception\Sql(sprintf('There was an error in the query'));
