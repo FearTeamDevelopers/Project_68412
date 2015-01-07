@@ -91,7 +91,8 @@ class Admin_Controller_Content extends Controller
         $content = App_Model_PageContent::first(array('id = ?' => (int) $id));
 
         if (NULL === $content) {
-            $view->errorMessage('Obsah nenalezen');
+            $view->warningMessage('Obsah nenalezen');
+            $this->_willRenderActionView = false;
             self::redirect('/admin/content/');
         }
 

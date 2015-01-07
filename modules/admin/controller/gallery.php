@@ -124,6 +124,7 @@ class Admin_Controller_Gallery extends Controller
 
         if (NULL === $gallery) {
             $view->warningMessage(self::ERROR_MESSAGE_2);
+            $this->_willRenderActionView = false;
             self::redirect('/admin/gallery/');
         }
 
@@ -236,7 +237,7 @@ class Admin_Controller_Gallery extends Controller
                 self::redirect('/admin/gallery/');
             } else {
                 Event::fire('admin.log', array('fail', 'Gallery id: ' . $id));
-                $view->errorMessage(self::ERROR_MESSAGE_1);
+                $view->warningMessage(self::ERROR_MESSAGE_1);
                 self::redirect('/admin/gallery/');
             }
         }
@@ -285,7 +286,7 @@ class Admin_Controller_Gallery extends Controller
                 'maxImageHeight' => $cfg->photo_maxheight
             ));
 
-            $fileErrors = $fileManager->upload('secondfile', 'gallery/' . $gallery->getId(), time() . '_')->getUploadErrors();
+            $fileErrors = $fileManager->uploadImage('secondfile', 'gallery/' . $gallery->getId(), time() . '_')->getUploadErrors();
             $files = $fileManager->getUploadedFiles();
 
             if (!empty($files)) {

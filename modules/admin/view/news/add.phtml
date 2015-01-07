@@ -62,7 +62,7 @@
                 </span>
             </p>
             <p>
-                <label>Teaser*<small>Max. 5000 znaků</small></label>
+                <label>Teaser*</label>
                 <span class="field">
                     <textarea rows="20" name="shorttext" id="ckeditor2">{echo isset($news)? $news->shortBody: ""}</textarea>
                     {if isset($errors["shortBody"])}
@@ -90,7 +90,7 @@
                 </span>
             </p>
             <p>
-                <label>Meta-popis<small>Max. 250 znaků<br/>Pouze text<br/>Vyplnit pokud se liší od Teaser</small></label>
+                <label>Meta-popis<small>Max. 1000 znaků<br/>Pouze text</small></label>
                 <span class="field">
                     <textarea rows="5" name="metadescription" class="longinput" >{echo isset($news)? $news->metaDescription: ""}</textarea>
                     {if isset($errors["metaDescription"])}

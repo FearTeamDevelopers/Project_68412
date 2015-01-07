@@ -68,6 +68,7 @@ class Admin_Controller_Exam extends Controller
 
         if ($exam === null) {
             $view->warningMessage(self::ERROR_MESSAGE_2);
+            $this->_willRenderActionView = false;
             self::redirect('/admin/exam/');
         }
 

@@ -105,6 +105,12 @@ class App_Controller_News extends Controller
                             'urlKey = ?' => $urlkey,
                             'active = ?' => true
         ));
+        
+        if(null === $news){
+            $view->warningMessage(self::ERROR_MESSAGE_2);
+            $this->_willRenderActionView = false;
+            self::redirect('/aktuality');
+        }
 
         $this->_checkMetaData($layoutView, $news);
         $layoutView

@@ -13,6 +13,10 @@ class App_Etc_Module extends Module
      */
     protected $_moduleName = 'App';
 
+    /**
+     * @read
+     * @var array
+     */
     protected $_routes = array(
         array(
             'pattern' => '/clenove',

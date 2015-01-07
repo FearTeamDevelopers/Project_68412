@@ -114,7 +114,7 @@ class Admin_Controller_Dog extends Controller
                 }
 
                 if (RequestMethods::post('uploadmorephotos') == '1') {
-                    $fileErrors = $fileManager->newUpload()->upload('secondfile', 'dog', time() . '_')->getUploadErrors();
+                    $fileErrors = $fileManager->newUpload()->uploadImage('secondfile', 'dog', time() . '_')->getUploadErrors();
                     $files = $fileManager->getUploadedFiles();
 
                     if (!empty($fileErrors)) {
@@ -191,6 +191,7 @@ class Admin_Controller_Dog extends Controller
 
         if ($dog === null) {
             $view->warningMessage(self::ERROR_MESSAGE_2);
+            $this->_willRenderActionView = false;
             self::redirect('/admin/dog/');
         }
 
@@ -292,7 +293,7 @@ class Admin_Controller_Dog extends Controller
                 }
 
                 if (RequestMethods::post('uploadmorephotos') == '1') {
-                    $fileErrors = $fileManager->newUpload()->upload('secondfile', 'dog', time() . '_')->getUploadErrors();
+                    $fileErrors = $fileManager->newUpload()->uploadImage('secondfile', 'dog', time() . '_')->getUploadErrors();
                     $files = $fileManager->getUploadedFiles();
 
                     if (!empty($fileErrors)) {

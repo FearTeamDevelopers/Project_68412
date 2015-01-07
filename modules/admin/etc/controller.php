@@ -96,7 +96,8 @@ class Controller extends BaseController
     {
         if ($this->_security->getUser() && $this->_security->isGranted('role_member') !== true) {
             $view = $this->getActionView();
-            $view->infoMessage(self::ERROR_MESSAGE_6);
+            $view->warningMessage(self::ERROR_MESSAGE_6);
+            $this->_willRenderActionView = false;
             self::redirect('/logout');
         }
     }
@@ -108,7 +109,8 @@ class Controller extends BaseController
     {
         if ($this->_security->getUser() && $this->_security->isGranted('role_admin') !== true) {
             $view = $this->getActionView();
-            $view->infoMessage(self::ERROR_MESSAGE_6);
+            $view->warningMessage(self::ERROR_MESSAGE_6);
+            $this->_willRenderActionView = false;
             self::redirect('/logout');
         }
     }
@@ -133,7 +135,8 @@ class Controller extends BaseController
     {
         if ($this->_security->getUser() && $this->_security->isGranted('role_superadmin') !== true) {
             $view = $this->getActionView();
-            $view->infoMessage(self::ERROR_MESSAGE_6);
+            $view->warningMessage(self::ERROR_MESSAGE_6);
+            $this->_willRenderActionView = false;
             self::redirect('/logout');
         }
     }

@@ -7,7 +7,9 @@
     {if !empty($photos)}
         {foreach $bla in $photos}
             <div class="galDetailImgs">
-                <a data-lightbox="imageGr" data-title="echo {$bla->getTitle()}" href="{$bla->getImgMain()}" alt="{echo $bla->getTitle()}"> <img src="{echo $bla->getImgThumb()}"/></a>
+                <a data-lightbox="imageGr" data-title="echo {$bla->getTitle()}" href="{$bla->getImgMain()}" alt="{echo $bla->getTitle()}">
+                    <img src="{echo $bla->getImgThumb()}"/>
+                </a>
             </div>
         {/foreach}
     {/if}

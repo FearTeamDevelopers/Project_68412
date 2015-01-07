@@ -1,3 +1,11 @@
+<?php 
+session_start();
+
+if(!isset($_SESSION['app_authUser'])){
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html>
     <head>

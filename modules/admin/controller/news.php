@@ -100,6 +100,7 @@ class Admin_Controller_News extends Controller
 
         if ($news === null) {
             $view->warningMessage(self::ERROR_MESSAGE_2);
+            $this->_willRenderActionView = false;
             self::redirect('/admin/news/');
         }
 
@@ -227,7 +228,8 @@ class Admin_Controller_News extends Controller
                 break;
             case 'activate':
                 $news = App_Model_News::all(array(
-                            'id IN ?' => $ids
+                            'id IN ?' => $ids,
+                            'active = ?' => false
                 ));
 
                 if (NULL !== $news) {
@@ -255,7 +257,8 @@ class Admin_Controller_News extends Controller
                 break;
             case 'deactivate':
                 $news = App_Model_News::all(array(
-                            'id IN ?' => $ids
+                            'id IN ?' => $ids,
+                            'active = ?' => true
                 ));
 
                 if (NULL !== $news) {

@@ -76,7 +76,9 @@ class Admin_Controller_User extends Controller
         $view = $this->getActionView();
 
         $users = App_Model_User::all(
-                        array('role <> ?' => 'role_superadmin'), array('id', 'firstname', 'lastname', 'email', 'role', 'active', 'created'), array('id' => 'asc')
+                        array('role <> ?' => 'role_superadmin'), 
+                        array('id', 'firstname', 'lastname', 'email', 'role', 'active', 'created'), 
+                        array('id' => 'asc')
         );
 
         $view->set('users', $users);
@@ -179,6 +181,7 @@ class Admin_Controller_User extends Controller
 
         if (NULL === $user) {
             $view->warningMessage(self::ERROR_MESSAGE_2);
+            $this->_willRenderActionView = false;
             self::redirect('/admin/user/');
         }
 
@@ -282,9 +285,11 @@ class Admin_Controller_User extends Controller
 
         if (NULL === $user) {
             $view->warningMessage(self::ERROR_MESSAGE_2);
+            $this->_willRenderActionView = false;
             self::redirect('/admin/user/');
         } elseif ($user->role == 'role_superadmin' && $this->getUser()->getRole() != 'role_superadmin') {
-            $view->errorMessage(self::ERROR_MESSAGE_4);
+            $view->warningMessage(self::ERROR_MESSAGE_4);
+            $this->_willRenderActionView = false;
             self::redirect('/admin/user/');
         }
 

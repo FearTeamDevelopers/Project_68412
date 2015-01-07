@@ -70,12 +70,16 @@ class App_Controller_Gallery extends Controller
 
         $gallery = App_Model_Gallery::fetchActivePublicGalleryByUrlkey($urlkey);
         
-        if($gallery !== null){
-            $canonical = 'http://' . $this->getServerHost() . '/galerie/r/' . $urlkey;
-            $layoutView->set('canonical', $canonical)
-                    ->set('metatitle', $gallery->getTitle());
+        if(null === $gallery){
+            $view->warningMessage(self::ERROR_MESSAGE_2);
+            $this->_willRenderActionView = false;
+            self::redirect('/galerie');
         }
         
+        $canonical = 'http://' . $this->getServerHost() . '/galerie/r/' . $urlkey;
+        $layoutView->set('canonical', $canonical)
+                ->set('metatitle', $gallery->getTitle());
+
         $view->set('gallery', $gallery);
     }
 

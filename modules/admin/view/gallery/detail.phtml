@@ -39,9 +39,10 @@
                     {/if}{else}
                 <li class="photoinactive">
                     {/else}
-                    <img src="{echo $photo->imgThumb}" alt="" height="120px" />
+                    <a href="{echo $photo->imgMain}" data-lightbox="gallery">
+                        <img src="{echo $photo->imgThumb}" alt="" height="120px" />
+                    </a>
                     <span>
-                        <a href="{echo $photo->imgMain}" class="view"></a>
                         <a href="/admin/gallery/changephotostatus/{echo $photo->id}" class="activate" value="Aktivovat/Deaktivovat"></a>
                         <a href="/admin/gallery/deletephoto/{echo $photo->id}" class="delete" value="Smazat"></a>
                     </span>

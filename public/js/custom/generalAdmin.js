@@ -10,6 +10,13 @@ jQuery(document).ready(function () {
         });
     });
 
+    /***** WIDGET LIST HOVER *****/
+    jQuery('.widgetlist a').hover(function () {
+        jQuery(this).switchClass('default', 'hover');
+    }, function () {
+        jQuery(this).switchClass('hover', 'default');
+    });
+
     jQuery("[title]").tooltip({
         position: {
             my: "left top",
@@ -17,7 +24,6 @@ jQuery(document).ready(function () {
         }
     });
 
-    jQuery('a.view').lightBox();
     jQuery('#tabs, .tabs').tabs();
 
     jQuery('#image-cropper, #image-cropper2').cropit({
@@ -901,12 +907,12 @@ jQuery(document).ready(function () {
 });
 
 CKEDITOR.replace('ckeditor', {
-    filebrowserBrowseUrl: '/public/js/plugins/filemanager/elfinder.html',
-    filebrowserImageBrowseUrl: '/public/js/plugins/filemanager/elfinder.html',
-    filebrowserFlashBrowseUrl:  '/public/js/plugins/filemanager/elfinder.html'
+    filebrowserBrowseUrl: '/public/js/plugins/filemanager/elfinder.php',
+    filebrowserImageBrowseUrl: '/public/js/plugins/filemanager/elfinder.php',
+    filebrowserFlashBrowseUrl: '/public/js/plugins/filemanager/elfinder.php'
 });
 CKEDITOR.replace('ckeditor2', {
-    filebrowserBrowseUrl: '/public/js/plugins/filemanager/elfinder.html',
-    filebrowserImageBrowseUrl: '/public/js/plugins/filemanager/elfinder.html',
-    filebrowserFlashBrowseUrl:  '/public/js/plugins/filemanager/elfinder.html'
+    filebrowserBrowseUrl: '/public/js/plugins/filemanager/elfinder.php',
+    filebrowserImageBrowseUrl: '/public/js/plugins/filemanager/elfinder.php',
+    filebrowserFlashBrowseUrl: '/public/js/plugins/filemanager/elfinder.php'
 });

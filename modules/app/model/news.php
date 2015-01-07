@@ -70,7 +70,7 @@ class App_Model_News extends Model
      * @type text
      * @length 256
      * 
-     * @validate required, html, max(5000)
+     * @validate required, html
      * @label teaser
      */
     protected $_shortBody;
@@ -81,7 +81,7 @@ class App_Model_News extends Model
      * @type text
      * @length 256
      * 
-     * @validate required, html, max(30000)
+     * @validate required, html
      * @label text
      */
     protected $_body;
@@ -122,9 +122,9 @@ class App_Model_News extends Model
      * @column
      * @readwrite
      * @type text
-     * @length 255
+     * @length 256
      * 
-     * @validate alphanumeric, max(250)
+     * @validate alphanumeric, max(1000)
      * @label meta-popis
      */
     protected $_metaDescription;
